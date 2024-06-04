@@ -1,0 +1,6 @@
+@Concept2LogbookHelper.Server_HostAddress = http://localhost:5160
+
+GET {{Concept2LogbookHelper.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
