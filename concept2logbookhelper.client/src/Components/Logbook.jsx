@@ -6,7 +6,7 @@ function Logbook() {
     const authCode = searchParams.get("code");
 
   return (
-      <p>{authCode}</p>
+      <h1>LogBook goes here</h1>
   );
 }
 
