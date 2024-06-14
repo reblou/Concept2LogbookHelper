@@ -1,7 +1,10 @@
-﻿namespace Concept2LogbookHelper.Server.Services
+﻿using Concept2LogbookHelper.Server.Models;
+
+namespace Concept2LogbookHelper.Server.Services
 {
     public interface IAuthenticationService
     {
-        string GetAccessToken(string accessCode);
+        Task<SessionData> GetStoredAccessToken(string sessionId);
+        Task<string> GetAndStoreNewAccessToken(string accessCode);
     }
 }

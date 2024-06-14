@@ -10,47 +10,41 @@ namespace Concept2LogbookHelper.Server.Services
     public class AuthenticationService : IAuthenticationService
     {
 
-        private readonly IDistributedCache cache;
+        private readonly IDistributedCache _cache;
         private readonly IConfiguration _config;
         private readonly HttpClient _httpClient;
+        private readonly IConcept2APIService _concept2APIService;
 
-        public AuthenticationService(IDistributedCache cache, IConfiguration config, HttpClient httpClient)
+        public AuthenticationService(IDistributedCache cache, IConfiguration config, HttpClient httpClient, )
         {
-            this.cache = cache;
+            this._cache = cache;
             this._config = config;
             this._httpClient = httpClient;
         }
 
-        public string GetAccessToken(string accessCode)
+        public async Task<string> GetAndStoreNewAccessToken(string accessCode)
         {
-            string url = $"{_config["Authentication:Concept2APIUrl"]}oauth/access_token";
+            AccessToken accessToken = await _concept2APIService.GetAccessToken(accessCode);
 
-            FormUrlEncodedContent body = new FormUrlEncodedContent(new Dictionary<string, string>() {
-                { "client_id", _config["client_id"]},
-                { "client_secret", _config["client_secret"]},
-                {"code", accessCode },
-                {"grant_type", _config["Authentication:GrantType"]},
-                {"scope", _config["Authentication:Scope"] },
-                {"redirect_uri",  _config["Authentication:RedirectURI"]}
-
-
-            });
-
-            HttpResponseMessage response = _httpClient.PostAsync(url, body).Result;
-
-            if (!response.IsSuccessStatusCode) throw new BadHttpRequestException("Failed to authenticate user");
-
-            string content = response.Content.ReadAsStringAsync().Result;
-            AccessToken accessToken = JsonConvert.DeserializeObject<AccessToken>(content);
             SessionData sessionData = new SessionData()
             {
                 accessCode = accessToken.access_token,
                 refreshCode = accessToken.refresh_token
             };
             string sessionID = Guid.NewGuid().ToString();
-            cache.SetRecordAsync<SessionData>(sessionID, sessionData, TimeSpan.FromSeconds(accessToken.expires_in), TimeSpan.FromHours(1));
+
+            //TODO: do we want to store refresh token? record will expire and will be lost therefore cannot use refresh call...
+            _cache.SetRecordAsync<SessionData>(sessionID, sessionData, TimeSpan.FromSeconds(accessToken.expires_in), TimeSpan.FromHours(1));
 
             return sessionID;
+        }
+
+        public async Task<SessionData> GetStoredAccessToken(string sessionId)
+        {
+            SessionData data =  await _cache.GetRecordAsync<SessionData>(sessionId);
+
+            if (data is null) throw new KeyNotFoundException($"No access token found for session Id: {sessionId}");
+            return data;
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Web;
 using Concept2LogbookHelper.Extensions;
 using Microsoft.Extensions.Caching.Distributed;
 using Concept2LogbookHelper.Server.Services;
+using System.ComponentModel;
 
 namespace Concept2LogbookHelper.Server.Controllers
 {
@@ -18,11 +19,13 @@ namespace Concept2LogbookHelper.Server.Controllers
     {
         private readonly IConfiguration _config;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IConcept2APIService _concept2APIService;
 
-        public AuthenticationController(IConfiguration config, IAuthenticationService authService)
+        public AuthenticationController(IConfiguration config, IAuthenticationService authService, IConcept2APIService concept2APIService)
         {
             _config = config;
             _authenticationService = authService;
+            _concept2APIService = concept2APIService;
         }
 
         [HttpGet]
@@ -33,12 +36,19 @@ namespace Concept2LogbookHelper.Server.Controllers
         }
 
         [HttpGet]
-        public RedirectResult GetAccessToken([FromQuery] string code)
+        public async Task<RedirectResult> GetAccessToken([FromQuery] string code)
         {
-            string sessionID = _authenticationService.GetAccessToken(code);
-
+            string sessionID = await _authenticationService.GetAndStoreNewAccessToken(code);
             //TODO: redir back to react front end with session ID
+            //      front end receive to access code and call fetch here instead? 
+
             return Redirect($"../logbook");
+        }
+
+        [HttpGet]
+        public async Task<int> GetTotalResults(string sessionId)
+        {
+            return await _concept2APIService.GetNumberOfResults(sessionId);
         }
     }
 }
