@@ -11,9 +11,9 @@ namespace Concept2LogbookHelper.Server.Services
     {
         private HttpClient _httpClient;
         private IConfiguration _config;
-        private IAuthenticationService _authenticationService;
+        private ISessionService _authenticationService;
 
-        public Concept2APIService(HttpClient httpClient, IConfiguration configuration, IAuthenticationService authenticationService)
+        public Concept2APIService(HttpClient httpClient, IConfiguration configuration, ISessionService authenticationService)
         {
             this._httpClient = httpClient;
             this._config = configuration;

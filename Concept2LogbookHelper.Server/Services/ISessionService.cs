@@ -2,9 +2,9 @@
 
 namespace Concept2LogbookHelper.Server.Services
 {
-    public interface IAuthenticationService
+    public interface ISessionService
     {
         Task<SessionData> GetStoredAccessToken(string sessionId);
-        Task<string> StoreNewAccessToken(AccessToken accessToken);
+        Task<string> StoreNewAccessToken(string access_token, string refresh_token, int expires_in);
     }
 }

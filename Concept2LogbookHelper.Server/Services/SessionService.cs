@@ -7,31 +7,31 @@ using System.Security.Permissions;
 
 namespace Concept2LogbookHelper.Server.Services
 {
-    public class AuthenticationService : IAuthenticationService
+    public class SessionService : ISessionService
     {
 
         private readonly IDistributedCache _cache;
         private readonly IConfiguration _config;
         private readonly HttpClient _httpClient;
 
-        public AuthenticationService(IDistributedCache cache, IConfiguration config, HttpClient httpClient)
+        public SessionService(IDistributedCache cache, IConfiguration config, HttpClient httpClient)
         {
             this._cache = cache;
             this._config = config;
             this._httpClient = httpClient;
         }
 
-        public async Task<string> StoreNewAccessToken(AccessToken accessToken)
+        public async Task<string> StoreNewAccessToken(string access_token, string refresh_token, int expires_in)
         {
             SessionData sessionData = new SessionData()
             {
-                accessCode = accessToken.access_token,
-                refreshCode = accessToken.refresh_token
+                accessCode = access_token,
+                refreshCode = refresh_token
             };
             string sessionID = Guid.NewGuid().ToString();
 
             //TODO: how do we want to store refresh token? record will expire and will be lost therefore cannot use for refresh call here
-            _cache.SetRecordAsync<SessionData>(sessionID, sessionData, TimeSpan.FromSeconds(accessToken.expires_in), TimeSpan.FromHours(1));
+            _cache.SetRecordAsync<SessionData>(sessionID, sessionData, TimeSpan.FromSeconds(expires_in), TimeSpan.FromHours(1));
 
             return sessionID;
         }

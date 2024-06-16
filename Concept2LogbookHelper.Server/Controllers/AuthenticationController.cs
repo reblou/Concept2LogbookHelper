@@ -19,10 +19,10 @@ namespace Concept2LogbookHelper.Server.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly ISessionService _authenticationService;
         private readonly IConcept2APIService _concept2APIService;
 
-        public AuthenticationController(IConfiguration config, IAuthenticationService authService, IConcept2APIService concept2APIService)
+        public AuthenticationController(IConfiguration config, ISessionService authService, IConcept2APIService concept2APIService)
         {
             _config = config;
             _authenticationService = authService;
@@ -41,7 +41,7 @@ namespace Concept2LogbookHelper.Server.Controllers
         { 
             AccessToken accessToken = await _concept2APIService.GetAccessToken(code);
 
-            string sessionID = await _authenticationService.StoreNewAccessToken(accessToken);
+            string sessionID = await _authenticationService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in);
 
             Response.Headers.Append("Set-Cookie", $"session-id={sessionID}; Secure; HttpOnly");
 
