@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Extensions;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Concept2LogbookHelper.Server.Services
 {
@@ -20,11 +21,11 @@ namespace Concept2LogbookHelper.Server.Services
             _authenticationService = authenticationService;
         }
 
-        public async Task<int> GetNumberOfResults(string sessionId)
+        private async Task<T> SendRequest<T>(string sessionId, string url, HttpMethod method)
         {
             SessionData sessionData = await _authenticationService.GetStoredAccessToken(sessionId);
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results")
+            HttpRequestMessage request = new HttpRequestMessage(method, url)
             {
                 Headers =
                 {
@@ -36,12 +37,15 @@ namespace Concept2LogbookHelper.Server.Services
             HttpResponseMessage response = await _httpClient.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
-
             string content = await response.Content.ReadAsStringAsync();
 
-            GetResults results = JsonConvert.DeserializeObject<GetResults>(content);
+            T results = JsonConvert.DeserializeObject<T>(content);
+            return results;
+        }
 
-            if (results is null) return 0;
+        public async Task<int> GetNumberOfResults(string sessionId)
+        {
+            GetResults results = await SendRequest<GetResults>(sessionId, $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results", HttpMethod.Get);
 
             return results.data.Count;
         }
@@ -65,6 +69,12 @@ namespace Concept2LogbookHelper.Server.Services
 
             string content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<AccessToken>(content);
+        }
+
+        public async Task<List<Result>> GetResults(string sessionId)
+        {
+            GetResults results = await SendRequest<GetResults>(sessionId, $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results", HttpMethod.Get);
+            return results.data;
         }
     }
 }

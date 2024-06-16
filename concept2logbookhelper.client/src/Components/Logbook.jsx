@@ -17,9 +17,8 @@ function Logbook() {
 
 
     async function populateTotalResults() {
-        var response = await fetch("api/authentication/totalresults")
+        var response = await fetch("api/logbook/getresults")
         var data = await response.json();
-        setTotalResults(data);
     }
 }
 

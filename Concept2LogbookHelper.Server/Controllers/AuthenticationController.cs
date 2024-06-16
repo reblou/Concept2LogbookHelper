@@ -47,15 +47,5 @@ namespace Concept2LogbookHelper.Server.Controllers
 
             return StatusCode(200);
         }
-
-
-        //TODO: for debug only move to another controller
-        [HttpGet]
-        [Route("totalresults")]
-        public async Task<int> GetTotalResults()
-        {
-            string sessionId = Request.Cookies["session-id"] ?? "";
-            return await _concept2APIService.GetNumberOfResults(sessionId);
-        }
     }
 }

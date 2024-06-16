@@ -1,4 +1,5 @@
 ﻿using Concept2LogbookHelper.Server.Models;
+using Concept2LogbookHelper.Server.Models.Concept2;
 
 namespace Concept2LogbookHelper.Server.Services
 {
@@ -6,5 +7,6 @@ namespace Concept2LogbookHelper.Server.Services
     {
         Task<AccessToken> GetAccessToken(string accessCode);
         Task<int> GetNumberOfResults(string sessionId);
+        Task<List<Result>> GetResults(string sessionId);
     }
 }
