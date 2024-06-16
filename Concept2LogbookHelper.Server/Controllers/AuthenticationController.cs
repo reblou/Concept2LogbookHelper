@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Specialized;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text.Json.Serialization;
 using System.Web;
@@ -36,18 +37,24 @@ namespace Concept2LogbookHelper.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<RedirectResult> GetAccessToken([FromQuery] string code)
-        {
-            string sessionID = await _authenticationService.GetAndStoreNewAccessToken(code);
-            //TODO: redir back to react front end with session ID
-            //      front end receive to access code and call fetch here instead? 
+        public async Task<StatusCodeResult> GetSessionId([FromQuery] string code)
+        { 
+            AccessToken accessToken = await _concept2APIService.GetAccessToken(code);
 
-            return Redirect($"../logbook");
+            string sessionID = await _authenticationService.StoreNewAccessToken(accessToken);
+
+            Response.Headers.Append("Set-Cookie", $"session-id={sessionID}; Secure; HttpOnly");
+
+            return StatusCode(200);
         }
 
+
+        //TODO: for debug only move to another controller
         [HttpGet]
-        public async Task<int> GetTotalResults(string sessionId)
+        [Route("totalresults")]
+        public async Task<int> GetTotalResults()
         {
+            string sessionId = Request.Cookies["session-id"] ?? "";
             return await _concept2APIService.GetNumberOfResults(sessionId);
         }
     }

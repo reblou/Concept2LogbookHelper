@@ -13,19 +13,16 @@ namespace Concept2LogbookHelper.Server.Services
         private readonly IDistributedCache _cache;
         private readonly IConfiguration _config;
         private readonly HttpClient _httpClient;
-        private readonly IConcept2APIService _concept2APIService;
 
-        public AuthenticationService(IDistributedCache cache, IConfiguration config, HttpClient httpClient, )
+        public AuthenticationService(IDistributedCache cache, IConfiguration config, HttpClient httpClient)
         {
             this._cache = cache;
             this._config = config;
             this._httpClient = httpClient;
         }
 
-        public async Task<string> GetAndStoreNewAccessToken(string accessCode)
+        public async Task<string> StoreNewAccessToken(AccessToken accessToken)
         {
-            AccessToken accessToken = await _concept2APIService.GetAccessToken(accessCode);
-
             SessionData sessionData = new SessionData()
             {
                 accessCode = accessToken.access_token,
@@ -33,7 +30,7 @@ namespace Concept2LogbookHelper.Server.Services
             };
             string sessionID = Guid.NewGuid().ToString();
 
-            //TODO: do we want to store refresh token? record will expire and will be lost therefore cannot use refresh call...
+            //TODO: how do we want to store refresh token? record will expire and will be lost therefore cannot use for refresh call here
             _cache.SetRecordAsync<SessionData>(sessionID, sessionData, TimeSpan.FromSeconds(accessToken.expires_in), TimeSpan.FromHours(1));
 
             return sessionID;

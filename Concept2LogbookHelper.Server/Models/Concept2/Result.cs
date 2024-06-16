@@ -5,7 +5,7 @@
         public int id { get; set; }
         public string user_id { get; set; }
         public DateTime date { get; set; }
-        public TimeZone TimeZone { get; set; }
+        public string TimeZone { get; set; }
         public DateTime date_utc { get; set; }
         public string type { get; set; }
         public int time { get; set; }

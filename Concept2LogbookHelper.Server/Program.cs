@@ -10,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
+builder.Services.AddSingleton<IConcept2APIService,  Concept2APIService>();
 IConfiguration configuration = builder.Configuration;
 
 builder.Services.AddStackExchangeRedisCache(options =>
