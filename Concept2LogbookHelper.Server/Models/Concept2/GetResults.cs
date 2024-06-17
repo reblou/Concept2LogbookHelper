@@ -3,5 +3,6 @@
     public class GetResults
     {
         public List<Result> data { get; set; }
+        public Meta meta { get; set; }
     }
 }
