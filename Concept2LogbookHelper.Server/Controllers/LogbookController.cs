@@ -28,7 +28,7 @@ namespace Concept2LogbookHelper.Server.Controllers
         {
             string sessionId = GetSessionId();
 
-            return await _concept2APIService.GetResults(sessionId);
+            return await _concept2APIService.GetAllResults(sessionId);
         }
     }
 }

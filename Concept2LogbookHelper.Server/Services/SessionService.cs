@@ -30,7 +30,6 @@ namespace Concept2LogbookHelper.Server.Services
             };
             string sessionID = Guid.NewGuid().ToString();
 
-            //TODO: how do we want to store refresh token? record will expire and will be lost therefore cannot use for refresh call here
             _cache.SetRecordAsync<SessionData>(sessionID, sessionData, TimeSpan.FromSeconds(expires_in), TimeSpan.FromHours(1));
 
             return sessionID;

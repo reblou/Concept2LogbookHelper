@@ -1,7 +1,9 @@
 ﻿using Concept2LogbookHelper.Server.Models;
 using Concept2LogbookHelper.Server.Models.Concept2;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.OpenApi.Extensions;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -10,6 +12,10 @@ namespace Concept2LogbookHelper.Server.Services
 {
     public class Concept2APIService : IConcept2APIService
     {
+        // Concept2 API limit on paged results
+        const int max_returned_per_page = 250;
+
+
         private HttpClient _httpClient;
         private IConfiguration _config;
         private ISessionService _authenticationService;
@@ -47,7 +53,7 @@ namespace Concept2LogbookHelper.Server.Services
         {
             GetResults results = await SendRequest<GetResults>(sessionId, $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results", HttpMethod.Get);
 
-            return results.data.Count;
+            return results.meta.pagination.total;
         }
 
         public async Task<AccessToken> GetAccessToken(string accessCode)
@@ -71,10 +77,25 @@ namespace Concept2LogbookHelper.Server.Services
             return JsonConvert.DeserializeObject<AccessToken>(content);
         }
 
-        public async Task<List<Result>> GetResults(string sessionId)
+        public async Task<GetResults> GetResults(string sessionId, int page = 1)
         {
-            GetResults results = await SendRequest<GetResults>(sessionId, $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results", HttpMethod.Get);
-            return results.data;
+            return await SendRequest<GetResults>(sessionId, $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results?number={max_returned_per_page}&page={page}", HttpMethod.Get);
+        }
+
+        public async Task<List<Result>> GetAllResults(string sessionId)
+        {
+            GetResults results = await GetResults(sessionId);
+
+            List<Result> data = results.data;
+
+            // iterate any further pages to return all results
+            for(int i = 2; i < results.meta.pagination.total_pages+1; i++)
+            {
+                var res = await GetResults(sessionId, i);
+                data.AddRange(res.data);
+            }
+
+            return data;
         }
     }
 }
