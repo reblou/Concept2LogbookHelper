@@ -1,25 +1,12 @@
-import { useEffect, useState } from "react";
-
-
+import ResultsTable from "./ResultsTable";
 function Logbook() {
-    const [totalResults, setTotalResults] = useState();
-
-    useEffect(() => { populateTotalResults() }, []);
-
-    const total = totalResults === undefined ? "" : totalResults
 
     return (
       <div>
             <h1>LogBook goes here</h1>
-            <p>Total: {total}</p>
+            <ResultsTable></ResultsTable>
       </div>
     );
-
-
-    async function populateTotalResults() {
-        var response = await fetch("api/logbook/getresults")
-        var data = await response.json();
-    }
 }
 
 export default Logbook;
