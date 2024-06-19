@@ -30,7 +30,7 @@ namespace Concept2LogbookHelper.Server.Services
             };
             string sessionID = Guid.NewGuid().ToString();
 
-            _cache.SetRecordAsync<SessionData>(sessionID, sessionData, TimeSpan.FromSeconds(expires_in), TimeSpan.FromHours(1));
+            await _cache.SetRecordAsync<SessionData>(sessionID, sessionData, TimeSpan.FromSeconds(expires_in), TimeSpan.FromHours(1));
 
             return sessionID;
         }

@@ -6,7 +6,7 @@ function Result(props) {
           <td>N/A</td>
           <td>{props.distance}m</td>
           <td>{props.time}</td>
-          <td>N/A</td>
+          <td>{props.pace}</td>
           <td>N/A</td>
       </tr>
   );

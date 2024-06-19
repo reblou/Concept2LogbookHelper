@@ -9,6 +9,8 @@
         public DateTime? date_utc { get; set; }
         public int distance { get; set; }
         public string type { get; set; }
+
+        // time in 10ths of a second/ decisecond
         public int time { get; set; }
         public string time_formatted { get; set; }
         public string workout_type { get; set; }
@@ -27,6 +29,16 @@
         public Workout workout { get; set; }
         public object real_time { get; set; }
 
-        public string pretty_workout_type { get; set; }
+        //average pace/ 500m in seconds with one decimal place
+        public double average_pace { get {
+                return 500 * ((time/10d)/distance);
+            } }
+
+        public string pretty_average_pace
+        { get {
+                return TimeSpan.FromSeconds(average_pace).ToString(@"mm\:ss\.f"); ;
+
+            } }
+        public string pretty_workout_type { get;set ; }
     }
 }
