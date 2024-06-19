@@ -2,7 +2,8 @@
 {
     public class Workout
     {
-        List<Split> splits { get; set; }
+        public List<Split> splits { get; set; }
+        public List<Interval> intervals { get; set; }
     }
     
 }
