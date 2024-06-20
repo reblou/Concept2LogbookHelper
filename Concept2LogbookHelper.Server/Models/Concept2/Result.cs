@@ -48,16 +48,17 @@
         private string GetPrettyWorkoutType()
         {
             //TODO: add all other possible workout types
-            //      "FixedTimeInterval"
             switch (workout_type)
             {
                 case "JustRow":
                     return "JustRow";
                 case "FixedDistanceInterval": //8x 500m
-                case "VariableInterval": //v250, 500, 750 etc.
+                case "VariableInterval": //v250, 500, 750 etc. // could be time/distance/ or calorie intervals
                     return FormatDistanceIntervals();
                 case "FixedDistanceSplits": // fixed distance
                     return $"{distance}m";
+                case "FixedTimeInterval":
+                    return FormatTimeIntervals();
                 case "unknown":
                     return "Web";
                 default:
@@ -79,5 +80,35 @@
                 return $"v{intervalDists[0]}m,{intervalDists[1]}m..";
             }
         }
+
+        private string FormatTimeIntervals()
+        {            
+            //workout.intervals.First().type == "time";
+
+            //interval time in deciseconds
+            List<int> intervalTimes = workout.intervals.Select(i => i.time).ToList();
+
+            if (intervalTimes.Distinct().Count() == 1)
+            {
+                // fixed intervals
+                var time = TimeSpan.FromSeconds(intervalTimes[0] / 10d);
+                return $"{intervalTimes.Count}x{FormatMinutesAndSeconds(time)}";
+            }
+            else
+            {
+                var time = TimeSpan.FromSeconds(intervalTimes[0] / 10d);
+                var secondTime = TimeSpan.FromSeconds(intervalTimes[1] / 10d);
+
+                return $"v{FormatMinutesAndSeconds(time)},{FormatMinutesAndSeconds(secondTime)}..";
+            }
+
+
+        }
+
+        private string FormatMinutesAndSeconds(TimeSpan t)
+        {
+            return $"{t.TotalMinutes}:{t.Seconds.ToString("D2")}";
+        }
     }
+
 }

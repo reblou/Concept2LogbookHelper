@@ -1,7 +1,9 @@
+import moment from 'moment';
+
 function Result(props) {
   return (
       <tr>
-          <td>{props.date}</td>
+          <td>{moment(props.date).format('YYYY-MM-DD HH:mm')}</td>
           <td>{props.type}</td>
           <td>{props.distance}m</td>
           <td>{props.time}</td>
