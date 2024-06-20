@@ -53,12 +53,11 @@
                 case "JustRow":
                     return "JustRow";
                 case "FixedDistanceInterval": //8x 500m
+                case "FixedTimeInterval":
                 case "VariableInterval": //v250, 500, 750 etc. // could be time/distance/ or calorie intervals
-                    return FormatDistanceIntervals();
+                    return FormatUnknownIntervalsTypes();
                 case "FixedDistanceSplits": // fixed distance
                     return $"{distance}m";
-                case "FixedTimeInterval":
-                    return FormatTimeIntervals();
                 case "unknown":
                     return "Web";
                 default:
@@ -66,47 +65,33 @@
             }
         }
 
-        private string FormatDistanceIntervals()
+        private string FormatUnknownIntervalsTypes()
         {
-            List<int> intervalDists = workout.intervals.Select(i => i.distance).ToList();
-
-            if(intervalDists.Distinct().Count() == 1)
+            switch(workout.intervals.First().type)
             {
-                // fixed intervals
-                return $"{intervalDists.Count}x{intervalDists[0]}m";
+                case "time":
+                    return FormatIntervals(workout.intervals.Select(i => i.time).ToList(), DecisecondsToMinutesAndSeconds);
+                case "distance":
+                    return FormatIntervals(workout.intervals.Select(i => i.distance).ToList(), i => $"{i}m");
+                default:
+                    return "Unknown Intervals";
             }
-            else
+        }
+        private string FormatIntervals(List<int> intervalMeasurable, Func<int, string> formatter)
+        {
+            if (intervalMeasurable.Distinct().Count() == 1) // fixed intervals
             {
-                return $"v{intervalDists[0]}m,{intervalDists[1]}m..";
+                return $"{intervalMeasurable.Count}x{formatter(intervalMeasurable[0])}";
+            }
+            else // variable intervals
+            {
+                return $"v{formatter(intervalMeasurable[0])},{formatter(intervalMeasurable[1])}..";
             }
         }
 
-        private string FormatTimeIntervals()
-        {            
-            //workout.intervals.First().type == "time";
-
-            //interval time in deciseconds
-            List<int> intervalTimes = workout.intervals.Select(i => i.time).ToList();
-
-            if (intervalTimes.Distinct().Count() == 1)
-            {
-                // fixed intervals
-                var time = TimeSpan.FromSeconds(intervalTimes[0] / 10d);
-                return $"{intervalTimes.Count}x{FormatMinutesAndSeconds(time)}";
-            }
-            else
-            {
-                var time = TimeSpan.FromSeconds(intervalTimes[0] / 10d);
-                var secondTime = TimeSpan.FromSeconds(intervalTimes[1] / 10d);
-
-                return $"v{FormatMinutesAndSeconds(time)},{FormatMinutesAndSeconds(secondTime)}..";
-            }
-
-
-        }
-
-        private string FormatMinutesAndSeconds(TimeSpan t)
+        private string DecisecondsToMinutesAndSeconds(int d)
         {
+            var t = TimeSpan.FromSeconds(d / 10d);
             return $"{t.TotalMinutes}:{t.Seconds.ToString("D2")}";
         }
     }
