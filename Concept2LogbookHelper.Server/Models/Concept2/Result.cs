@@ -52,7 +52,7 @@
             switch (workout_type)
             {
                 case "JustRow":
-                    return null;
+                    return "JustRow";
                 case "FixedDistanceInterval": //8x 500m
                 case "VariableInterval": //v250, 500, 750 etc.
                     return FormatDistanceIntervals();
@@ -61,7 +61,7 @@
                 case "unknown":
                     return "Web";
                 default:
-                    return null;
+                    return "Unknown";
             }
         }
 
