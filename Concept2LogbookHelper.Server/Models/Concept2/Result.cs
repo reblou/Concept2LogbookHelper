@@ -41,28 +41,41 @@
                 return TimeSpan.FromSeconds(average_pace).ToString(@"mm\:ss\.f"); ;
 
             } }
-        public string pretty_workout_type { get {
-                return GetPrettyWorkoutType();
-                    } }
+        public string pretty_workout_type { get; set; }
 
-        private string GetPrettyWorkoutType()
+        public void CalculateAndSetPrettyWorkoutType()
         {
             //TODO: add all other possible workout types
+            var pretty_workout = "";
             switch (workout_type)
             {
                 case "JustRow":
-                    return "JustRow";
+                    pretty_workout = "JustRow";
+                    break;
                 case "FixedDistanceInterval": //8x 500m
                 case "FixedTimeInterval":
+                case "VariableIntervalUndefinedRest":
+                case "FixedCalorieInterval":
                 case "VariableInterval": //v250, 500, 750 etc. // could be time/distance/ or calorie intervals
-                    return FormatUnknownIntervalsTypes();
+                    pretty_workout = FormatUnknownIntervalsTypes();
+                    break;
                 case "FixedDistanceSplits": // fixed distance
-                    return $"{distance}m";
+                    pretty_workout = $"{distance}m";
+                    break;
+                case "FixedCalorie":
+                    pretty_workout = $"{calories_total}cal";
+                    break;
+                case "FixedTimeSplits":
+                    pretty_workout = time_formatted;
+                    break;
                 case "unknown":
-                    return "Web";
+                    pretty_workout = "Web";
+                    break;
                 default:
-                    return "Unknown";
+                    pretty_workout = "Unknown";
+                    break;
             }
+            this.pretty_workout_type = pretty_workout;
         }
 
         private string FormatUnknownIntervalsTypes()
@@ -70,9 +83,11 @@
             switch(workout.intervals.First().type)
             {
                 case "time":
-                    return FormatIntervals(workout.intervals.Select(i => i.time).ToList(), DecisecondsToMinutesAndSeconds);
+                    return FormatIntervals(workout.intervals.Select(i => i.time).ToList(), FormatDeciseconds);
                 case "distance":
                     return FormatIntervals(workout.intervals.Select(i => i.distance).ToList(), i => $"{i}m");
+                case "calorie":
+                    return FormatIntervals(workout.intervals.Select(i => i.calories_total).ToList(), i=> $"{i}cal");
                 default:
                     return "Unknown Intervals";
             }
@@ -89,7 +104,7 @@
             }
         }
 
-        private string DecisecondsToMinutesAndSeconds(int d)
+        private string FormatDeciseconds(int d)
         {
             var t = TimeSpan.FromSeconds(d / 10d);
             return $"{t.TotalMinutes}:{t.Seconds.ToString("D2")}";

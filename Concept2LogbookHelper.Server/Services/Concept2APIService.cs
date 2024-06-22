@@ -95,6 +95,8 @@ namespace Concept2LogbookHelper.Server.Services
                 data.AddRange(res.data);
             }
 
+            data.ForEach(result => result.CalculateAndSetPrettyWorkoutType());
+
             return data;
         }
     }
