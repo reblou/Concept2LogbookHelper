@@ -33,6 +33,7 @@ namespace Concept2LogbookHelper.Server.Controllers
         [Route("redirect")]
         public RedirectResult RedirectToC2Login()
         {
+            //TODO: implement Options pattern
             return Redirect($"{_config["Authentication:Concept2APIUrl"]}oauth/authorize?client_id={_config["client_id"]}&scope={_config["Authentication:Scope"]}&response_type={_config["Authentication:ResponseType"]}&redirect_uri={_config["Authentication:RedirectURI"]}");
         }
 
@@ -43,7 +44,7 @@ namespace Concept2LogbookHelper.Server.Controllers
 
             string sessionID = await _authenticationService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in);
 
-            Response.Headers.Append("Set-Cookie", $"session-id={sessionID}; Secure; HttpOnly");
+            Response.Headers.Append("Set-Cookie", $"session-id={sessionID}; Secure; HttpOnly; Expires={DateTime.Now.AddMonths(6).ToString("ddd, dd MMM, yyyy HH:mm:ss G'M'T")}");
 
             return StatusCode(200);
         }
