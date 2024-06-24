@@ -1,13 +1,15 @@
 import moment from 'moment';
 
-function Result(props) {
+function Result({date, type, distance, time, pace, spm, calories }) {
   return (
       <tr>
-          <td>{moment(props.date).format('YYYY-MM-DD HH:mm')}</td>
-          <td>{props.type}</td>
-          <td>{props.distance}m</td>
-          <td>{props.time}</td>
-          <td>{props.pace}</td>
+          <td>{moment(date).format('YYYY-MM-DD HH:mm')}</td>
+          <td><div className={'workout_type ' + type}>{type}</div></td>
+          <td>{distance}m</td>
+          <td>{time}</td>
+          <td>{pace}</td>
+          <td>{spm}</td>
+          <td>{calories}</td>
           <td>N/A</td>
       </tr>
   );

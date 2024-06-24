@@ -14,9 +14,11 @@ function ResultsTable() {
               <tr>
                   <th>Date</th>
                   <th>Type</th>
-                  <th>Distance</th>
                   <th>Time</th>
+                  <th>Distance</th>
                   <th>Pace</th>
+                  <th>Avg SPM</th>
+                  <th>Calories</th>
                   <th>Avg HR</th>
               </tr>
           </thead>
@@ -33,7 +35,15 @@ function ResultsTable() {
         let data = await response.json();
 
         let jsx = data.map((result) => (
-            <Result key={result.id} date={result.date} type={result.pretty_workout_type} distance={result.distance} time={result.time_formatted} pace={result.pretty_average_pace}/>
+            <Result key={result.id}
+                date={result.date}
+                type={result.pretty_workout_type}
+                distance={result.distance}
+                time={result.time_formatted}
+                pace={result.pretty_average_pace}
+                spm={result.stroke_rate}
+                calories={result.calories_total }
+            />
         ));
 
         setResults(jsx);
