@@ -19,13 +19,13 @@ namespace Concept2LogbookHelper.Server.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly ISessionService _authenticationService;
+        private readonly ISessionService _sessionService;
         private readonly IConcept2APIService _concept2APIService;
 
         public AuthenticationController(IConfiguration config, ISessionService authService, IConcept2APIService concept2APIService)
         {
             _config = config;
-            _authenticationService = authService;
+            _sessionService = authService;
             _concept2APIService = concept2APIService;
         }
 
@@ -42,9 +42,20 @@ namespace Concept2LogbookHelper.Server.Controllers
         { 
             AccessToken accessToken = await _concept2APIService.GetAccessToken(code);
 
-            string sessionID = await _authenticationService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in);
+            string sessionID = await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in);
 
             Response.Headers.Append("Set-Cookie", $"session-id={sessionID}; Secure; HttpOnly; Expires={DateTime.Now.AddMonths(6).ToString("ddd, dd MMM, yyyy HH:mm:ss G'M'T")}");
+
+            return StatusCode(200);
+        }
+
+        [HttpGet]
+        [Route("validSessionCheck")]
+        public async Task<StatusCodeResult> ValidSession()
+        {
+            string sessionId = Request.Cookies["session-id"] ?? throw new ArgumentException("No valid session ID received");
+
+            var stuff = await _sessionService.GetStoredAccessToken(sessionId);
 
             return StatusCode(200);
         }

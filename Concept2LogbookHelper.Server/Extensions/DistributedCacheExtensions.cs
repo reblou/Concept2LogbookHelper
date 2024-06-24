@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
+using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
 namespace Concept2LogbookHelper.Extensions

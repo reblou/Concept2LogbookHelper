@@ -45,37 +45,34 @@
 
         public void CalculateAndSetPrettyWorkoutType()
         {
-            //TODO: add all other possible workout types
-            var pretty_workout = "";
             switch (workout_type)
             {
                 case "JustRow":
-                    pretty_workout = "JustRow";
+                    this.pretty_workout_type = "JustRow";
                     break;
                 case "FixedDistanceInterval": //8x 500m
                 case "FixedTimeInterval":
                 case "VariableIntervalUndefinedRest":
                 case "FixedCalorieInterval":
                 case "VariableInterval": //v250, 500, 750 etc. // could be time/distance/ or calorie intervals
-                    pretty_workout = FormatUnknownIntervalsTypes();
+                    this.pretty_workout_type = FormatUnknownIntervalsTypes();
                     break;
                 case "FixedDistanceSplits": // fixed distance
-                    pretty_workout = $"{distance}m";
+                    this.pretty_workout_type = $"{distance}m";
                     break;
                 case "FixedCalorie":
-                    pretty_workout = $"{calories_total}cal";
+                    this.pretty_workout_type = $"{calories_total}cal";
                     break;
                 case "FixedTimeSplits":
-                    pretty_workout = time_formatted;
+                    this.pretty_workout_type = time_formatted;
                     break;
                 case "unknown":
-                    pretty_workout = "Web";
+                    this.pretty_workout_type = "Web";
                     break;
                 default:
-                    pretty_workout = "Unknown";
+                    this.pretty_workout_type = "Unknown";
                     break;
             }
-            this.pretty_workout_type = pretty_workout;
         }
 
         private string FormatUnknownIntervalsTypes()

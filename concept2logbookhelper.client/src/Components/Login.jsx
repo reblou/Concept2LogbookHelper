@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom'
+
 function Login() {
+    const navigate = useNavigate();
+
   return (
       <div>
           <h1 id="tabelLabel">Logbook Helper</h1>
@@ -7,8 +11,15 @@ function Login() {
     );
 
 
-    function Login() {
-        window.location.replace('api/authentication/redirect');
+    async function Login() {
+        // check for valid session ID first
+        await fetch('api/authentication/validSessionCheck').then(function (response) {
+            if (response.ok) {
+               navigate('/logbook')
+            } else {
+                window.location.replace('api/authentication/redirect');
+            }
+        })
     }
 }
 
