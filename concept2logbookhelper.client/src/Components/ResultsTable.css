@@ -17,7 +17,7 @@ th, td {
 
 .workout_type {
     border-radius: 25px;
-    background: green; /* TODO set colour randomy from set list based on workout type*/
+    /* background: green; /* TODO set colour randomy from set list based on workout type*/
     margin: 5px;
     padding: 1px;
 }

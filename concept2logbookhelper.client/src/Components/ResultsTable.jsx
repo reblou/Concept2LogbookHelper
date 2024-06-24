@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Result from "./Result";
 import "./ResultsTable.css";
 
 function ResultsTable() {
     const [results, setResults] = useState();
+    const workoutTypeColours = useRef({});
 
     useEffect(() => { populateTotalResults() }, []);
 
@@ -42,11 +43,23 @@ function ResultsTable() {
                 time={result.time_formatted}
                 pace={result.pretty_average_pace}
                 spm={result.stroke_rate}
-                calories={result.calories_total }
+                calories={result.calories_total}
+                tag_colour={GetTypeColour(result.pretty_workout_type)}
             />
         ));
 
         setResults(jsx);
+    }
+
+    function GetTypeColour(value) {
+        if (value in workoutTypeColours === false) {
+            workoutTypeColours[value] = RandomColour();
+        }
+        return workoutTypeColours[value];
+    }
+
+    function RandomColour() {
+        return '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
     }
 }
 
