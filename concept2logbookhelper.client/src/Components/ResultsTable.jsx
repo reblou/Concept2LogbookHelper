@@ -52,10 +52,10 @@ function ResultsTable() {
     }
 
     function GetTypeColour(value) {
-        if (value in workoutTypeColours === false) {
-            workoutTypeColours[value] = RandomColour();
+        if (value in workoutTypeColours.current === false) {
+            workoutTypeColours.current[value] = RandomColour();
         }
-        return workoutTypeColours[value];
+        return workoutTypeColours.current[value];
     }
 
     function RandomColour() {
