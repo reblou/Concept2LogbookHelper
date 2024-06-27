@@ -17,6 +17,46 @@ th, td {
 
 .workout_type {
     border-radius: 25px;
-    margin: 6px;
-    padding: 2px;
+    margin: 3px;
+    padding: 3px;
+}
+
+.JustRow {
+    background: #004343;
+}
+
+.FixedDistanceInterval {
+    background: #74a892;
+}
+
+.FixedTimeInterval {
+    background: #b8cdab;
+}
+
+.VariableIntervalUndefinedRest {
+    background: #f0daa5;
+}
+
+.FixedCalorieInterval {
+    background: #c7522a;
+}
+
+.VariableInterval {
+    background: #008585;
+}
+
+.FixedDistanceSplits {
+    background: #74a892;
+}
+
+.FixedCalorie {
+    background: #e5c185;
+}
+
+.FixedTimeSplits {
+    background: #c3774c;
+}
+
+.unknown {
+    background: #006464;
 }
