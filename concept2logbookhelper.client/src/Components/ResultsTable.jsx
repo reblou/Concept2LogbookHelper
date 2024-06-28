@@ -1,11 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import Result from "./Result";
 import "./ResultsTable.css";
+import FilterList from "./FilterList";
 
 function ResultsTable() {
     const [resultsJsx, setResultsJsx] = useState();
     const [workoutTypesJsx, setWorkoutTypesJsx] = useState();
-    const workoutTypes = useRef([]);
+    const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
 
     useEffect(() => { populateTotalResults() }, []);
@@ -39,38 +40,34 @@ function ResultsTable() {
     async function populateTotalResults() {
         let response = await fetch("api/logbook/getresults")
         let data = await response.json();
-
-        data.forEach(GetUniqueWorkoutTypes);
-        setWorkoutTypesJsx(workoutTypes.current.map((value) => (<button key={value} onClick={() => FilterButton(value)}>{value}</button>)))
         fullResults.current = data;
 
-        let jsx = data.map((result) => (
-            <Result key={result.id}
-                date={result.date}
-                type_pretty={result.pretty_workout_type}
-                type={result.workout_type }
-                distance={result.distance}
-                time={result.time_formatted}
-                pace={result.pretty_average_pace}
-                spm={result.stroke_rate}
-                calories={result.calories_total}
-            />
-        ));
+        data.forEach(GetUniqueWorkoutTypes);
+        setWorkoutTypesJsx(<FilterList filterOptionList={workoutTypesUnique.current} onClick={FilterButton} />);
 
-        setResultsJsx(jsx);
+        PopulateResultTable(data);
     }
 
     function GetUniqueWorkoutTypes(result)
     {
-        if (workoutTypes.current.indexOf(result.pretty_workout_type) === -1) {
-            workoutTypes.current.push(result.pretty_workout_type)
+        if (workoutTypesUnique.current.indexOf(result.pretty_workout_type) === -1) {
+            workoutTypesUnique.current.push(result.pretty_workout_type)
         }
     }
 
     function FilterButton(value) {
+        if (value === '*') {
+            PopulateResultTable(fullResults.current);
+        } else {
+            let filtered = fullResults.current.filter(result => result.pretty_workout_type === value);
+            PopulateResultTable(filtered);
+        }
+        
+    }
 
-        let filtered = fullResults.current.filter(result => result.pretty_workout_type === value);
-        let jsx = filtered.map((result) => (
+    function PopulateResultTable(results)
+    {
+        setResultsJsx(results.map((result) => (
             <Result key={result.id}
                 date={result.date}
                 type_pretty={result.pretty_workout_type}
@@ -81,12 +78,8 @@ function ResultsTable() {
                 spm={result.stroke_rate}
                 calories={result.calories_total}
             />
-        ));
-
-
-        setResultsJsx(jsx);
+        )));
     }
-
 
 }
 
