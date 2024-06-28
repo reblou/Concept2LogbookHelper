@@ -5,6 +5,7 @@ import FilterList from "./FilterList";
 
 function ResultsTable() {
     const [resultsJsx, setResultsJsx] = useState();
+    const [popup, setPopup] = useState(false);
     const [workoutTypesJsx, setWorkoutTypesJsx] = useState();
     const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
@@ -14,12 +15,12 @@ function ResultsTable() {
 
     return (
         <div>
-            {workoutTypesJsx}
+            {popup && workoutTypesJsx}
             <table>
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>Type</th>
+                        <th>Type <button className='FilterMenuButton' onClick={() => setPopup(!popup)} /></th>
                         <th>Time</th>
                         <th>Distance</th>
                         <th>Pace</th>
