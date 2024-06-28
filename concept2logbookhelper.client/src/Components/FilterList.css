@@ -1,7 +1,25 @@
-.FilterList {
-    list-style-type: none;
+.FilterListMenu {
+    background: #74a892;
+    position: absolute;
+    z-index: 1;
+    align-content: center;
+    align-items: center;
+    text-align: center;
 }
 
-.FilterButton {
+.FilterList {
+    display: inline;
+    float: none;
+    list-style-type: none;
+    align-content: center;
+    align-items: center;
+    margin-block-start: 0em;
+    margin-inline-start: 0px;
+    padding-inline-start: 0px;
+    margin-block-end: 0px;
+}
+
+.FilterList li button {
     padding: 3px;
+    background: #004343;
 }

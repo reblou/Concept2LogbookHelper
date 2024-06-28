@@ -15,12 +15,11 @@ function ResultsTable() {
 
     return (
         <div>
-            {popup && workoutTypesJsx}
             <table>
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>Type <button className='FilterMenuButton' onClick={() => setPopup(!popup)} /></th>
+                        <th>Type <button className='FilterMenuButton' onClick={() => setPopup(!popup)}/> {popup && workoutTypesJsx}</th>
                         <th>Time</th>
                         <th>Distance</th>
                         <th>Pace</th>
@@ -63,7 +62,7 @@ function ResultsTable() {
             let filtered = fullResults.current.filter(result => result.pretty_workout_type === value);
             PopulateResultTable(filtered);
         }
-        
+        setPopup(!popup);
     }
 
     function PopulateResultTable(results)
