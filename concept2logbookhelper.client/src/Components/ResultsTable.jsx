@@ -1,18 +1,15 @@
 import { useEffect, useState, useRef } from "react";
 import Result from "./Result";
 import "./ResultsTable.css";
-import FilterList from "./FilterList";
+import ResultTableHeader from "./ResultTableHeader";
 
 function ResultsTable() {
     const [resultsJsx, setResultsJsx] = useState();
-    const [popup, setPopup] = useState(false);
-    const [workoutTypesJsx, setWorkoutTypesJsx] = useState();
 
     const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
 
     useEffect(() => { populateTotalResults() }, []);
-
 
     return (
         <div>
@@ -20,7 +17,7 @@ function ResultsTable() {
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>Type <button className='FilterMenuButton' onClick={() => setPopup(!popup)}/> {popup && workoutTypesJsx}</th>
+                        <ResultTableHeader label='Type' filterMenuItems={workoutTypesUnique.current} filterCallback={FilterButton} />
                         <th>Time</th>
                         <th>Distance</th>
                         <th>Pace</th>
@@ -44,13 +41,11 @@ function ResultsTable() {
         fullResults.current = data;
 
         data.forEach(GetUniqueWorkoutTypes);
-        setWorkoutTypesJsx(<FilterList filterOptionList={workoutTypesUnique.current} onClick={FilterButton} />);
 
         PopulateResultTable(data);
     }
 
-    function GetUniqueWorkoutTypes(result)
-    {
+    function GetUniqueWorkoutTypes(result) {
         if (workoutTypesUnique.current.indexOf(result.pretty_workout_type) === -1) {
             workoutTypesUnique.current.push(result.pretty_workout_type)
         }
@@ -63,11 +58,9 @@ function ResultsTable() {
             let filtered = fullResults.current.filter(result => result.pretty_workout_type === value);
             PopulateResultTable(filtered);
         }
-        setPopup(false);
     }
 
-    function PopulateResultTable(results)
-    {
+    function PopulateResultTable(results) {
         setResultsJsx(results.map((result) => (
             <Result key={result.id}
                 date={result.date}

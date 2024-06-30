@@ -13,8 +13,6 @@ function Result({date, type_pretty, type, distance, time, pace, spm, calories}) 
           <td>N/A</td>
       </tr>
     );
-
-
 }
 
 export default Result;
