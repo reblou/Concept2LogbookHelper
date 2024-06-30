@@ -9,7 +9,7 @@ function FilterList({ filterOptionList, onClick }) {
             <li><button onClick={() => onClick('*')}>Clear</button></li>
         </ul>;
 
-
+        
     return (
         <div className='FilterListMenu'>
             {contents}

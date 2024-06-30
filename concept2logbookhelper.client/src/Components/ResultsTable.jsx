@@ -40,15 +40,20 @@ function ResultsTable() {
         let data = await response.json();
         fullResults.current = data;
 
-        data.forEach(GetUniqueWorkoutTypes);
+        workoutTypesUnique.current = GetUniqueWorkoutTypes(data);
 
         PopulateResultTable(data);
     }
 
-    function GetUniqueWorkoutTypes(result) {
-        if (workoutTypesUnique.current.indexOf(result.pretty_workout_type) === -1) {
-            workoutTypesUnique.current.push(result.pretty_workout_type)
-        }
+    function GetUniqueWorkoutTypes(results) {
+        let typesUnique = [];
+
+        results.forEach(results => {
+            if (typesUnique.indexOf(results.pretty_workout_type) === -1) {
+                typesUnique.push(results.pretty_workout_type);
+            }
+        });
+        return typesUnique;
     }
 
     function FilterButton(value) {
