@@ -46,14 +46,14 @@ function ResultsTable() {
     }
 
     function GetUniqueWorkoutTypes(results) {
-        let typesUnique = [];
+        var map = results.map(result => result.pretty_workout_type).reduce(function (p, c) {
+            p[c] = (p[c] || 0) + 1;
+            return p;
+        }, {});
 
-        results.forEach(results => {
-            if (typesUnique.indexOf(results.pretty_workout_type) === -1) {
-                typesUnique.push(results.pretty_workout_type);
-            }
-        });
-        return typesUnique;
+        return Object.keys(map).sort(function (a, b) {
+            return map[b] - map[a];
+        })
     }
 
     function FilterButton(value) {
