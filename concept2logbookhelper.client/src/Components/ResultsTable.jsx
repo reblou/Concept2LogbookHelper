@@ -7,6 +7,7 @@ function ResultsTable() {
     const [resultsJsx, setResultsJsx] = useState();
     const [popup, setPopup] = useState(false);
     const [workoutTypesJsx, setWorkoutTypesJsx] = useState();
+
     const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
 
@@ -62,7 +63,7 @@ function ResultsTable() {
             let filtered = fullResults.current.filter(result => result.pretty_workout_type === value);
             PopulateResultTable(filtered);
         }
-        setPopup(!popup);
+        setPopup(false);
     }
 
     function PopulateResultTable(results)
