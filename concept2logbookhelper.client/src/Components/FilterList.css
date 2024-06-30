@@ -1,10 +1,12 @@
 .FilterListMenu {
-    background: #74a892;
+    background: #3e3e3e;
     position: absolute;
     z-index: 1;
     align-content: center;
     align-items: center;
     text-align: center;
+    overflow-y: auto;
+    height: 20em;
 }
 
 .FilterList {
@@ -19,7 +21,9 @@
     margin-block-end: 0px;
 }
 
-.FilterList li button {
-    padding: 3px;
-    background: #004343;
-}
+    .FilterList li button {
+        padding: 3px;
+        width: 100%;
+        height: 100%;
+        background: none;
+    }
