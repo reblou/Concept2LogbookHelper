@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import FilterList from "./FilterList";
+import './ResultTableHeader.css';
 
 function ResultTableHeader({label, filterMenuItems, filterCallback }) {
     const [popup, setPopup] = useState(false);
@@ -7,7 +8,10 @@ function ResultTableHeader({label, filterMenuItems, filterCallback }) {
     return (
         <th>{label}<button className='FilterMenuButton' onClick={() => setPopup(!popup)} />
             {popup &&
-                <FilterList filterOptionList={filterMenuItems} onClick={FilterItemClick} />}
+                <div>
+                    <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
+                    <FilterList filterOptionList={filterMenuItems} onClick={FilterItemClick} />
+                </div>}
         </th> 
     );
 

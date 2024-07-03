@@ -60,11 +60,3 @@ th, td {
 .unknown {
     background: #006464;
 }
-
-.FilterMenuButton {
-    padding: 2px;
-    margin: 0rem;
-    width: 1rem;
-    height: 1rem;
-    background: #74a892;
-}

@@ -15,7 +15,7 @@ function FilterList({ filterOptionList, onClick }) {
         
     return (
         <div className='FilterListMenu'>
-            <input type='text' placeholder="Search..." onInput={SearchTyped}></input>
+            <input autoFocus type='text' placeholder="Search..." onInput={SearchTyped}></input>
             {contents}
         </div>
     );
