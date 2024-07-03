@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import FilterList from "./FilterList";
 
 function ResultTableHeader({label, filterMenuItems, filterCallback }) {
