@@ -28,6 +28,7 @@ function ResultsTable() {
                         <th>Avg SPM</th>
                         <th>Calories</th>
                         <th>Avg HR</th>
+                        <th>Link</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,11 +93,16 @@ function ResultsTable() {
                 pace={result.pretty_average_pace}
                 spm={result.stroke_rate}
                 calories={result.calories_total}
-                avg_hr={result.heart_rate?.average }
+                avg_hr={result.heart_rate?.average}
+                link={BuildResultUrl(result)}
             />
         )));
     }
 
+
+    function BuildResultUrl(result) {
+        return 'https://log.concept2.com/profile/' + result.user_id + '/log/' + result.id;
+    }
 }
 
 export default ResultsTable;

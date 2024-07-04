@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-function Result({date, type_pretty, type, distance, time, pace, spm, calories, avg_hr}) {
+function Result({date, type_pretty, type, distance, time, pace, spm, calories, avg_hr, link}) {
   return (
       <tr>
           <td>{moment(date).format('YYYY-MM-DD HH:mm')}</td>
@@ -11,6 +11,7 @@ function Result({date, type_pretty, type, distance, time, pace, spm, calories, a
           <td>{spm}</td>
           <td>{calories}</td>
           <td>{avg_hr === undefined || avg_hr === 0 ? 'N/A' : avg_hr}</td>
+          <td><a href={link} target='_blank'>Page</a></td>
       </tr>
     );
 }
