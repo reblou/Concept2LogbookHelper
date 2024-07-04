@@ -10,13 +10,13 @@ function ResultTableHeader({label, filterMenuItems, filterCallback }) {
             {popup &&
                 <div>
                     <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
-                    <FilterList filterOptionList={filterMenuItems} onClick={FilterItemClick} />
+                    <FilterList filterOptionList={filterMenuItems} filterResultsCallback={FilterItemClick} />
                 </div>}
         </th> 
     );
 
-    function FilterItemClick(value) {
-        filterCallback(value);
+    function FilterItemClick(value, exact) {
+        filterCallback(value, exact);
         setPopup(false);
     }
 }

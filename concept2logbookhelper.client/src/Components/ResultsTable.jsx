@@ -60,18 +60,20 @@ function ResultsTable() {
     }
 
     function GetMaxHR() {
-
         var maxs = fullResults.current.map(result => result.heart_rate?.max ?? 0);
         return Math.max(maxs.reduce((a, b) => Math.max(a, b), -Infinity));
     }
 
-    function FilterButton(value) {
+    function FilterButton(value, exact) {
+        var filtered = [];
         if (value === '*') {
-            PopulateResultTable(fullResults.current);
+            filtered = fullResults.current;
+        } else if (exact) {
+            filtered = fullResults.current.filter(result => result.pretty_workout_type === value);
         } else {
-            let filtered = fullResults.current.filter(result => result.pretty_workout_type === value);
-            PopulateResultTable(filtered);
+            filtered = fullResults.current.filter(result => result.pretty_workout_type.toLowerCase().indexOf(value.toLowerCase()) !== -1);
         }
+        PopulateResultTable(filtered);
     }
 
     function PopulateResultTable(results) {

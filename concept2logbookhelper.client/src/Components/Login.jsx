@@ -13,7 +13,7 @@ function Login() {
 
     async function Login() {
         // check for valid session ID first
-        await fetch('api/authentication/validSessionCheck').then(function (response) {
+        await fetch('api/authentication/validSessionCheck', { signal: AbortSignal.timeout(5000) }).then(function (response) {
             if (response.ok) {
                navigate('/logbook')
             } else {
