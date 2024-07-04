@@ -6,6 +6,8 @@ import ResultTableHeader from "./ResultTableHeader";
 function ResultsTable() {
     const [resultsJsx, setResultsJsx] = useState();
     const [maxHR, setMaxHR] = useState(0);
+    const [totalM, setTotalM] = useState(0);
+    const [totalResults, setTotalResults] = useState(0);
 
     const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
@@ -14,7 +16,7 @@ function ResultsTable() {
 
     return (
         <div>
-            <p>Max HR: {maxHR}</p>
+            <p>Total Workouts: {totalResults} | Total Meters: {totalM}m | Max HR: {maxHR}</p>
             <table>
                 <thead>
                     <tr>
@@ -43,6 +45,9 @@ function ResultsTable() {
         fullResults.current = data;
 
         workoutTypesUnique.current = GetUniqueWorkoutTypes(data);
+
+        setTotalResults(fullResults.current.length);
+        setTotalM(fullResults.current.reduce((a, c) => a + c.distance, 0));
 
         PopulateResultTable(data);
         setMaxHR(GetMaxHR());
