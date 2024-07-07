@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import Result from "./Result";
 import "./ResultsTable.css";
 import ResultTableHeader from "./ResultTableHeader";
+import FilterButtonList from "./FilterButtonList";
+import FilterComparisons from "./FilterComparisons";
 
 function ResultsTable() {
     const [resultsJsx, setResultsJsx] = useState();
@@ -21,9 +23,9 @@ function ResultsTable() {
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <ResultTableHeader label='Type' filterMenuItems={workoutTypesUnique.current} filterCallback={FilterButton} />
+                        <ResultTableHeader label='Type' filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} filterResultsCallback={FilterButton} />} />
                         <th>Time</th>
-                        <th>Distance</th>
+                        <ResultTableHeader label='Distance' filterMenuContentsComponent={<FilterComparisons filterResultsCallback={() => console.log("testing")} />} />
                         <th>Pace</th>
                         <th>Avg SPM</th>
                         <th>Calories</th>

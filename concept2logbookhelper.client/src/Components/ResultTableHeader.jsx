@@ -1,8 +1,9 @@
 import { useState, useRef } from 'react';
-import FilterList from "./FilterList";
+import FilterMenu from "./FilterMenu";
 import './ResultTableHeader.css';
+import FilterButtonList from './FilterButtonList';
 
-function ResultTableHeader({label, filterMenuItems, filterCallback }) {
+function ResultTableHeader({label, filterMenuContentsComponent }) {
     const [popup, setPopup] = useState(false);
 
     return (
@@ -10,7 +11,7 @@ function ResultTableHeader({label, filterMenuItems, filterCallback }) {
             {popup &&
                 <div>
                     <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
-                    <FilterList filterOptionList={filterMenuItems} filterResultsCallback={FilterItemClick} />
+                    <FilterMenu filterMenuContentsComponent={filterMenuContentsComponent} />
                 </div>}
         </th> 
     );
