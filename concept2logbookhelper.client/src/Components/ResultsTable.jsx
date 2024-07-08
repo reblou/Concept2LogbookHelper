@@ -23,9 +23,9 @@ function ResultsTable() {
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <ResultTableHeader label='Type' filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} filterResultsCallback={FilterButton} />} />
+                        <ResultTableHeader label='Type' filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} filterResultsCallback={FilterButton} filterCallback={FilterButton} />} />
                         <th>Time</th>
-                        <ResultTableHeader label='Distance' filterMenuContentsComponent={<FilterComparisons filterResultsCallback={() => console.log("testing")} />} />
+                        <ResultTableHeader label='Distance' filterMenuContentsComponent={<FilterComparisons filterResultsCallback={FilterButton} />} filterCallback={FilterButton} />
                         <th>Pace</th>
                         <th>Avg SPM</th>
                         <th>Calories</th>
