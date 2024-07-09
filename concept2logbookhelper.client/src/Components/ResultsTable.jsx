@@ -8,23 +8,27 @@ import FilterComparisons from "./FilterComparisons";
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
 
 function ResultsTable() {
-    const [resultsJsx, setResultsJsx] = useState();
-    const [maxHR, setMaxHR] = useState(0);
-    const [totalM, setTotalM] = useState(0);
-    const [totalResults, setTotalResults] = useState(0);
-
+    const [resultsToDisplay, setResultsToDisplay] = useState();
     const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
 
-    useEffect(() => { populateTotalResults() }, []);
+
+    const maxHR = Math.max(
+        fullResults.current.map(result => result.heart_rate?.max ?? 0)
+            .reduce((a, b) => Math.max(a, b), 0));
+
+    const totalMeters = fullResults.current.reduce((a, c) => a + c.distance, 0)
+    const totalResults = fullResults.current.length;
+
+    useEffect(() => { populateTotalResults() });
 
     return (
         <div>
-            <p>Total Workouts: {totalResults} | Total Meters: {totalM}m | Max HR: {maxHR}</p>
+            <p>Total Workouts: {totalResults} | Total Meters: {totalMeters}m | Max HR: {maxHR}</p>
             <table>
 
                 <thead>
-                    <FilterCallbackContext.Provider value={FilterButton}>
+                    <FilterCallbackContext.Provider value={Filter}>
                         <tr>
                             <th>Date</th>
                             <ResultTableHeader label='Type' filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current}/>} />
@@ -39,12 +43,24 @@ function ResultsTable() {
                     </FilterCallbackContext.Provider>
                 </thead>
                 <tbody>
-                    {resultsJsx}
+                    {resultsToDisplay?.map((result) => (
+                        <Result key={result.id}
+                            date={result.date}
+                            type_pretty={result.pretty_workout_type}
+                            type={result.workout_type}
+                            distance={result.distance}
+                            time={result.time_formatted}
+                            pace={result.pretty_average_pace}
+                            spm={result.stroke_rate}
+                            calories={result.calories_total}
+                            avg_hr={result.heart_rate?.average}
+                            link={BuildResultUrl(result)}
+                        />
+                    ))}
                 </tbody>
             </table>
       </div>
     );
-
 
 
     async function populateTotalResults() {
@@ -53,12 +69,7 @@ function ResultsTable() {
         fullResults.current = data;
 
         workoutTypesUnique.current = GetUniqueWorkoutTypes(data);
-
-        setTotalResults(fullResults.current.length);
-        setTotalM(fullResults.current.reduce((a, c) => a + c.distance, 0));
-
-        PopulateResultTable(data);
-        setMaxHR(GetMaxHR());
+        setResultsToDisplay(data);
     }
 
     function GetUniqueWorkoutTypes(results) {
@@ -72,12 +83,7 @@ function ResultsTable() {
         })
     }
 
-    function GetMaxHR() {
-        var maxs = fullResults.current.map(result => result.heart_rate?.max ?? 0);
-        return Math.max(maxs.reduce((a, b) => Math.max(a, b), -Infinity));
-    }
-
-    function FilterButton(value, exact) {
+    function Filter(value, exact) {
         var filtered = [];
         if (value === '*') {
             filtered = fullResults.current;
@@ -86,26 +92,8 @@ function ResultsTable() {
         } else {
             filtered = fullResults.current.filter(result => result.pretty_workout_type.toLowerCase().indexOf(value.toLowerCase()) !== -1);
         }
-        PopulateResultTable(filtered);
+        setResultsToDisplay(filtered);
     }
-
-    function PopulateResultTable(results) {
-        setResultsJsx(results.map((result) => (
-            <Result key={result.id}
-                date={result.date}
-                type_pretty={result.pretty_workout_type}
-                type={result.workout_type}
-                distance={result.distance}
-                time={result.time_formatted}
-                pace={result.pretty_average_pace}
-                spm={result.stroke_rate}
-                calories={result.calories_total}
-                avg_hr={result.heart_rate?.average}
-                link={BuildResultUrl(result)}
-            />
-        )));
-    }
-
 
     function BuildResultUrl(result) {
         return 'https://log.concept2.com/profile/' + result.user_id + '/log/' + result.id;

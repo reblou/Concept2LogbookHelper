@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react';
-import { PopupContext } from '../Contexts/PopupContext.js';
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 
 function FilterButtonList({ filterOptionList }) {
