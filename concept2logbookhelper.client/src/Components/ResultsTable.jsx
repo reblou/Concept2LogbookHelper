@@ -9,18 +9,19 @@ import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
 
 function ResultsTable() {
     const [resultsToDisplay, setResultsToDisplay] = useState();
+
     const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
 
 
     const maxHR = Math.max(
-        fullResults.current.map(result => result.heart_rate?.max ?? 0)
-            .reduce((a, b) => Math.max(a, b), 0));
+        fullResults.current?.map(result => result.heart_rate?.max ?? 0)
+            ?.reduce((a, b) => Math.max(a, b), 0)) || 0;
 
-    const totalMeters = fullResults.current.reduce((a, c) => a + c.distance, 0)
-    const totalResults = fullResults.current.length;
+    const totalMeters = fullResults.current?.reduce((a, c) => a + c.distance, 0) ?? 0
+    const totalResults = fullResults.current?.length ?? 0;
 
-    useEffect(() => { populateTotalResults() });
+    useEffect(() => { populateTotalResults() }, []);
 
     return (
         <div>
@@ -54,7 +55,7 @@ function ResultsTable() {
                             spm={result.stroke_rate}
                             calories={result.calories_total}
                             avg_hr={result.heart_rate?.average}
-                            link={BuildResultUrl(result)}
+                            link={'https://log.concept2.com/profile/' + result.user_id + '/log/' + result.id}
                         />
                     ))}
                 </tbody>
@@ -62,23 +63,21 @@ function ResultsTable() {
       </div>
     );
 
-
     async function populateTotalResults() {
         let response = await fetch("api/logbook/getresults")
         let data = await response.json();
-        fullResults.current = data;
-
         workoutTypesUnique.current = GetUniqueWorkoutTypes(data);
+        fullResults.current = data;
         setResultsToDisplay(data);
     }
 
     function GetUniqueWorkoutTypes(results) {
-        var map = results.map(result => result.pretty_workout_type).reduce(function (accumulator, currentValue) {
+        var map = results?.map(result => result.pretty_workout_type).reduce(function (accumulator, currentValue) {
             accumulator[currentValue] = (accumulator[currentValue] || 0) + 1;
             return accumulator;
         }, {});
 
-        return Object.keys(map).sort(function (a, b) {
+        return map && Object.keys(map).sort(function (a, b) {
             return map[b] - map[a];
         })
     }
@@ -93,10 +92,6 @@ function ResultsTable() {
             filtered = fullResults.current.filter(result => result.pretty_workout_type.toLowerCase().indexOf(value.toLowerCase()) !== -1);
         }
         setResultsToDisplay(filtered);
-    }
-
-    function BuildResultUrl(result) {
-        return 'https://log.concept2.com/profile/' + result.user_id + '/log/' + result.id;
     }
 }
 
