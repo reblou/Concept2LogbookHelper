@@ -5,6 +5,8 @@ import ResultTableHeader from "./ResultTableHeader";
 import FilterButtonList from "./FilterButtonList";
 import FilterComparisons from "./FilterComparisons";
 
+import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
+
 function ResultsTable() {
     const [resultsJsx, setResultsJsx] = useState();
     const [maxHR, setMaxHR] = useState(0);
@@ -20,18 +22,21 @@ function ResultsTable() {
         <div>
             <p>Total Workouts: {totalResults} | Total Meters: {totalM}m | Max HR: {maxHR}</p>
             <table>
+
                 <thead>
-                    <tr>
-                        <th>Date</th>
-                        <ResultTableHeader label='Type' filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} filterResultsCallback={FilterButton} filterCallback={FilterButton} />} />
-                        <th>Time</th>
-                        <ResultTableHeader label='Distance' filterMenuContentsComponent={<FilterComparisons filterResultsCallback={FilterButton} />} filterCallback={FilterButton} />
-                        <th>Pace</th>
-                        <th>Avg SPM</th>
-                        <th>Calories</th>
-                        <th>Avg HR</th>
-                        <th>Link</th>
-                    </tr>
+                    <FilterCallbackContext.Provider value={FilterButton}>
+                        <tr>
+                            <th>Date</th>
+                            <ResultTableHeader label='Type' filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current}/>} />
+                            <th>Time</th>
+                            <ResultTableHeader label='Distance' filterMenuContentsComponent={<FilterComparisons/>}/>
+                            <th>Pace</th>
+                            <th>Avg SPM</th>
+                            <th>Calories</th>
+                            <th>Avg HR</th>
+                            <th>Link</th>
+                        </tr>
+                    </FilterCallbackContext.Provider>
                 </thead>
                 <tbody>
                     {resultsJsx}

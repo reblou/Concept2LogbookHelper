@@ -1,27 +1,27 @@
 import { useState, useRef, React, useContext } from 'react';
 import FilterMenu from "./FilterMenu";
 import './ResultTableHeader.css';
-import FilterButtonList from './FilterButtonList';
-import { PopupContext } from '../Contexts/PopupContext.js';
+import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 
 function ResultTableHeader({label, filterMenuContentsComponent }) {
     const [popup, setPopup] = useState(false);
-    //TODO: read filter callback context and add in the set popup
+    const filterResultsCallback = useContext(FilterCallbackContext);
 
     return (
         <th>{label}<button className='FilterMenuButton' onClick={() => setPopup(!popup)} />
-            <PopupContext.Provider value={FilterItemClick}>
+            <FilterCallbackContext.Provider value={FilterItemClick}>
             {popup &&
                 <div>
                     <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
                     <FilterMenu filterMenuContentsComponent={filterMenuContentsComponent} />
                     </div>}
-            </PopupContext.Provider>
+            </FilterCallbackContext.Provider>
         </th> 
     );
 
-    function FilterItemClick() {
+    function FilterItemClick(value, exact) {
         setPopup(false);
+        filterResultsCallback(value, exact);
     }
 }
 

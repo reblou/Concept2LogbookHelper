@@ -1,11 +1,12 @@
 import { useState, useRef, useContext } from 'react';
 import './FilterComparisons.css'
-import { PopupContext } from '../Contexts/PopupContext';
+import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 
-//TODO: pass whole callback as context? 
-function FilterComparisons({ filterResultsCallback }) {
+
+function FilterComparisons() {
     const [dropDown, setDropDown] = useState(false);
-    const popupCallback = useContext(PopupContext);
+
+    const filterResultsCallback = useContext(FilterCallbackContext);
 
   return (
       <div>
@@ -27,7 +28,6 @@ function FilterComparisons({ filterResultsCallback }) {
     function SearchTyped(e) {
         if (e.key === 'Enter') {
             filterResultsCallback(e.target.value, false);
-            popupCallback();
         }
     }
 }
