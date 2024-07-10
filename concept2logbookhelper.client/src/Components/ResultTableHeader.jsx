@@ -3,7 +3,7 @@ import FilterMenu from "./FilterMenu";
 import './ResultTableHeader.css';
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 
-function ResultTableHeader({label, filterMenuContentsComponent }) {
+function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelector }) {
     const [popup, setPopup] = useState(false);
     const filterResultsCallback = useContext(FilterCallbackContext);
 
@@ -19,9 +19,9 @@ function ResultTableHeader({label, filterMenuContentsComponent }) {
         </th> 
     );
 
-    function FilterItemClick(value, exact) {
+    function FilterItemClick(condition) {
         setPopup(false);
-        filterResultsCallback(value, exact);
+        filterResultsCallback(ResultPropSelector, condition);
     }
 }
 

@@ -27,7 +27,7 @@ function FilterComparisons() {
 
     function SearchTyped(e) {
         if (e.key === 'Enter') {
-            filterResultsCallback(e.target.value, false);
+            filterResultsCallback((property => property === + e.target.value));
         }
     }
 }

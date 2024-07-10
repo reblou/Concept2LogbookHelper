@@ -32,9 +32,9 @@ function ResultsTable() {
                     <FilterCallbackContext.Provider value={Filter}>
                         <tr>
                             <th>Date</th>
-                            <ResultTableHeader label='Type' filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current}/>} />
+                            <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />}/>
                             <th>Time</th>
-                            <ResultTableHeader label='Distance' filterMenuContentsComponent={<FilterComparisons/>}/>
+                            <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons/>}/>
                             <th>Pace</th>
                             <th>Avg SPM</th>
                             <th>Calories</th>
@@ -82,16 +82,8 @@ function ResultsTable() {
         })
     }
 
-    function Filter(value, exact) {
-        var filtered = [];
-        if (value === '*') {
-            filtered = fullResults.current;
-        } else if (exact) {
-            filtered = fullResults.current.filter(result => result.pretty_workout_type === value);
-        } else {
-            filtered = fullResults.current.filter(result => result.pretty_workout_type.toLowerCase().indexOf(value.toLowerCase()) !== -1);
-        }
-        setResultsToDisplay(filtered);
+    function Filter(ResultPropSelectorFunction, FilterConditionFunction) {
+        setResultsToDisplay(fullResults.current.filter(result => FilterConditionFunction(ResultPropSelectorFunction(result))));
     }
 }
 
