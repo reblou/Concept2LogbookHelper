@@ -13,6 +13,7 @@ function ResultsTable() {
     const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
 
+    const lastFilterSetterColumn = undefined;
 
     const maxHR = Math.max(
         fullResults.current?.map(result => result.heart_rate?.max ?? 0)
@@ -26,6 +27,7 @@ function ResultsTable() {
     return (
         <div>
             <p>Total Workouts: {totalResults} | Total Meters: {totalMeters}m | Max HR: {maxHR}</p>
+            <button onClick={() => Filter((result) => result, () => true, undefined)}>Clear All Filters</button>
             <table>
 
                 <thead>
@@ -82,8 +84,10 @@ function ResultsTable() {
         })
     }
 
-    function Filter(ResultPropSelectorFunction, FilterConditionFunction) {
-        setResultsToDisplay(fullResults.current.filter(result => FilterConditionFunction(ResultPropSelectorFunction(result))));
+    function Filter(ResultPropSelectorFunction, FilterConditionFunction, label) {
+        var resultSetToFilter = label === lastFilterSetterColumn ? fullResults.current : resultsToDisplay;
+
+        setResultsToDisplay(resultSetToFilter.filter(result => FilterConditionFunction(ResultPropSelectorFunction(result))));
     }
 }
 

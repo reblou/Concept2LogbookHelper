@@ -21,7 +21,7 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
 
     function FilterItemClick(condition) {
         setPopup(false);
-        filterResultsCallback(ResultPropSelector, condition);
+        filterResultsCallback(ResultPropSelector, condition, label);
     }
 }
 
