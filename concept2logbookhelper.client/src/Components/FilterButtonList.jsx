@@ -13,7 +13,7 @@ function FilterButtonList({ filterOptionList }) {
         <div>
             <input autoFocus type='text' placeholder="Search..." onKeyDown={SearchTyped}></input>
             <ul className='FilterList'>
-                <li><button onClick={() => filterResultsCallback(property => property)}>Clear Filter</button></li>
+                <li><button onClick={() => filterResultsCallback(property => true)}>Clear Filter</button></li>
                 {contents }
             </ul>
         </div>

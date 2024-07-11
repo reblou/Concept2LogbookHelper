@@ -12,8 +12,7 @@ function ResultsTable() {
 
     const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
-
-    const lastFilterSetterColumn = undefined;
+    const filterMap = useRef(new Map());
 
     const maxHR = Math.max(
         fullResults.current?.map(result => result.heart_rate?.max ?? 0)
@@ -27,7 +26,7 @@ function ResultsTable() {
     return (
         <div>
             <p>Total Workouts: {totalResults} | Total Meters: {totalMeters}m | Max HR: {maxHR}</p>
-            <button onClick={() => Filter((result) => result, () => true, undefined)}>Clear All Filters</button>
+            <button onClick={() => {filterMap.current.clear(); ApplyAllFilters();}}>Clear All Filters</button>
             <table>
 
                 <thead>
@@ -85,9 +84,20 @@ function ResultsTable() {
     }
 
     function Filter(ResultPropSelectorFunction, FilterConditionFunction, label) {
-        var resultSetToFilter = label === lastFilterSetterColumn ? fullResults.current : resultsToDisplay;
+        filterMap.current.set(label, {selector: ResultPropSelectorFunction, condition: FilterConditionFunction})
 
-        setResultsToDisplay(resultSetToFilter.filter(result => FilterConditionFunction(ResultPropSelectorFunction(result))));
+        //var resultSetToFilter = label === lastFilterSetterColumn ? fullResults.current : resultsToDisplay;
+        //setResultsToDisplay(resultSetToFilter.filter(result => FilterConditionFunction(ResultPropSelectorFunction(result))));
+        ApplyAllFilters();
+    }
+
+    function ApplyAllFilters() {
+        var resultSetToFilter = fullResults.current;
+
+        filterMap.current.forEach((value, key) =>
+            resultSetToFilter = resultSetToFilter.filter(result => value.condition(value.selector(result)))
+        )
+        setResultsToDisplay(resultSetToFilter);
     }
 }
 
