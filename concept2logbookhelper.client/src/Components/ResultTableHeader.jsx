@@ -1,5 +1,4 @@
 import { useState, useRef, React, useContext } from 'react';
-import FilterMenu from "./FilterMenu";
 import './ResultTableHeader.css';
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 
@@ -13,8 +12,10 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
             {popup &&
                 <div>
                     <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
-                    <FilterMenu filterMenuContentsComponent={filterMenuContentsComponent} />
-                    </div>}
+                    <div className='FilterListMenu'>
+                        {filterMenuContentsComponent}
+                    </div>
+                </div>}
             </FilterCallbackContext.Provider>
         </th> 
     );
