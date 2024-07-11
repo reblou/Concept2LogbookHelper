@@ -5,8 +5,10 @@ import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 
 function FilterComparisons() {
     const [dropDown, setDropDown] = useState(false);
+    const [comparisonType, setComparisonType] = useState("=");
 
     const filterResultsCallback = useContext(FilterCallbackContext);
+
 
   return (
       <div>
@@ -15,19 +17,33 @@ function FilterComparisons() {
               <div>
                   <div onClick={() => setDropDown(!dropDown)} />
                   <div className='FilterByDropDown'>
-                      <button>=</button>
-                      <button>{">"}</button>
-                      <button>{"<"}</button>
+                      <button onClick={() => setComparisonType("=")}>=</button>
+                      <button onClick={() => setComparisonType(">") }>{">"}</button>
+                      <button onClick={() => setComparisonType("<")}>{"<"}</button>
                     </div>
               </div>
           }
+          <p>{comparisonType}</p>
           <input autoFocus placeholder='value' onKeyDown={SearchTyped} />
       </div>
     );
 
     function SearchTyped(e) {
         if (e.key === 'Enter') {
-            filterResultsCallback((property => property === + e.target.value));
+            switch (comparisonType) {
+                case "=":
+                    filterResultsCallback((property => property === + e.target.value));
+                    break;
+                case ">":
+                    filterResultsCallback((property => property >= + e.target.value));
+                    break;
+                case "<":
+                    filterResultsCallback((property => property <= + e.target.value));
+                    break;
+                default:
+                    filterResultsCallback((property => property === + e.target.value));
+
+            }
         }
     }
 }
