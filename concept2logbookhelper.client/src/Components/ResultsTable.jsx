@@ -34,12 +34,12 @@ function ResultsTable() {
                         <tr>
                             <th>Date</th>
                             <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />}/>
-                            <th>Time</th>
-                            <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons/>}/>
-                            <th>Pace</th>
-                            <th>Avg SPM</th>
-                            <th>Calories</th>
-                            <th>Avg HR</th>
+                            <ResultTableHeader label='Time' ResultPropSelector={(result) => result.time_formatted} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => value} />} />
+                            <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />}/>
+                            <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => value} />} />
+                            <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} /> 
+                            <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
+                            <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={ (value) => + value} />} />
                             <th>Link</th>
                         </tr>
                     </FilterCallbackContext.Provider>
@@ -61,7 +61,7 @@ function ResultsTable() {
                     ))}
                 </tbody>
             </table>
-      </div>
+     </div>
     );
 
     async function populateTotalResults() {
@@ -86,8 +86,6 @@ function ResultsTable() {
     function Filter(ResultPropSelectorFunction, FilterConditionFunction, label) {
         filterMap.current.set(label, {selector: ResultPropSelectorFunction, condition: FilterConditionFunction})
 
-        //var resultSetToFilter = label === lastFilterSetterColumn ? fullResults.current : resultsToDisplay;
-        //setResultsToDisplay(resultSetToFilter.filter(result => FilterConditionFunction(ResultPropSelectorFunction(result))));
         ApplyAllFilters();
     }
 

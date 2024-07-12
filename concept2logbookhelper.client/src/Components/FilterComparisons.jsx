@@ -3,12 +3,11 @@ import './FilterComparisons.css'
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 
 
-function FilterComparisons() {
+function FilterComparisons({ InputFormatFunc }) {
     const [dropDown, setDropDown] = useState(false);
     const [comparisonType, setComparisonType] = useState("=");
 
     const filterResultsCallback = useContext(FilterCallbackContext);
-
 
   return (
       <div>
@@ -17,9 +16,9 @@ function FilterComparisons() {
               <div>
                   <div onClick={() => setDropDown(!dropDown)} />
                   <div className='FilterByDropDown'>
-                      <button onClick={() => setComparisonType("=")}>=</button>
-                      <button onClick={() => setComparisonType(">") }>{">"}</button>
-                      <button onClick={() => setComparisonType("<")}>{"<"}</button>
+                      <button onClick={() => { setComparisonType("="); setDropDown(false) }}>=</button>
+                      <button onClick={() => { setComparisonType(">"); setDropDown(false) } }>{">"}</button>
+                      <button onClick={() => { setComparisonType("<"); setDropDown(false) }}>{"<"}</button>
                     </div>
               </div>
           }
@@ -30,18 +29,20 @@ function FilterComparisons() {
 
     function SearchTyped(e) {
         if (e.key === 'Enter') {
+
+            var formattedValue = InputFormatFunc(e.target.value);
             switch (comparisonType) {
                 case "=":
-                    filterResultsCallback((property => property === + e.target.value));
+                    filterResultsCallback((property => property === formattedValue));
                     break;
                 case ">":
-                    filterResultsCallback((property => property >= + e.target.value));
+                    filterResultsCallback((property => property >= formattedValue));
                     break;
                 case "<":
-                    filterResultsCallback((property => property <= + e.target.value));
+                    filterResultsCallback((property => property <= formattedValue));
                     break;
                 default:
-                    filterResultsCallback((property => property === + e.target.value));
+                    filterResultsCallback((property => property === formattedValue));
 
             }
         }
