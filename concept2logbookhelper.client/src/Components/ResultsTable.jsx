@@ -6,6 +6,7 @@ import FilterButtonList from "./FilterButtonList";
 import FilterComparisons from "./FilterComparisons";
 
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
+import { SortCallbackContext } from '../Contexts/SortCallbackContext.js';
 
 function ResultsTable() {
     const [resultsToDisplay, setResultsToDisplay] = useState();
@@ -31,6 +32,7 @@ function ResultsTable() {
 
                 <thead>
                     <FilterCallbackContext.Provider value={Filter}>
+                    <SortCallbackContext.Provider value={Sort }>
                         <tr>
                             <th>Date</th>
                             <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />}/>
@@ -41,7 +43,8 @@ function ResultsTable() {
                             <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
                             <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={ (value) => + value} />} />
                             <th>Link</th>
-                        </tr>
+                            </tr>
+                    </SortCallbackContext.Provider>
                     </FilterCallbackContext.Provider>
                 </thead>
                 <tbody>
@@ -81,6 +84,10 @@ function ResultsTable() {
         return map && Object.keys(map).sort(function (a, b) {
             return map[b] - map[a];
         })
+    }
+
+    function Sort(ResultPropSelectorFunction) {
+        setResultsToDisplay(resultsToDisplay.toSorted((a, b) => ResultPropSelectorFunction(a) - ResultPropSelectorFunction(b)));
     }
 
     function Filter(ResultPropSelectorFunction, FilterConditionFunction, label) {
