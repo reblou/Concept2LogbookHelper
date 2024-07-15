@@ -21,6 +21,11 @@ th, td {
     padding: 3px;
 }
 
+.workout_type:hover {
+    cursor: pointer;
+}
+
+
 .JustRow {
     background: #004343;
 }
