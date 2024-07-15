@@ -14,6 +14,7 @@ function ResultsTable() {
     const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
     const filterMap = useRef(new Map());
+    const sortToggle = useRef(false);
 
     const maxHR = Math.max(
         fullResults.current?.map(result => result.heart_rate?.max ?? 0)
@@ -87,7 +88,13 @@ function ResultsTable() {
     }
 
     function Sort(ResultPropSelectorFunction) {
-        setResultsToDisplay(resultsToDisplay.toSorted((a, b) => ResultPropSelectorFunction(a) - ResultPropSelectorFunction(b)));
+
+        sortToggle.current = !sortToggle.current;
+        setResultsToDisplay(resultsToDisplay.toSorted((a, b) => sortToggle.current ?
+            ResultPropSelectorFunction(a) - ResultPropSelectorFunction(b) :
+            ResultPropSelectorFunction(b) - ResultPropSelectorFunction(a)
+        ));
+
     }
 
     function Filter(ResultPropSelectorFunction, FilterConditionFunction, label) {
