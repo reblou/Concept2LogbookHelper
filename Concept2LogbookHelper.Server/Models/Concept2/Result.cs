@@ -97,7 +97,7 @@
             }
             else // variable intervals
             {
-                return $"v{formatter(intervalMeasurable[0])},{formatter(intervalMeasurable[1])}..";
+                return $"v{formatter(intervalMeasurable[0])},{formatter(intervalMeasurable[1])}..{intervalMeasurable.Count}";
             }
         }
 
