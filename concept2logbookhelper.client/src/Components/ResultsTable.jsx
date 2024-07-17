@@ -36,7 +36,7 @@ function ResultsTable() {
                             <tr>
                                 <th>Date</th>
                                 <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />}/>
-                                <ResultTableHeader label='Time' ResultPropSelector={(result) => result.time_formatted} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => value} />} />
+                                <ResultTableHeader label='Time' ResultPropSelector={(result) => TimeToDeciseconds(result.time_formatted)} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} />} />
                                 <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />}/>
                                 <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => value} />} />
                                 <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} /> 
@@ -75,6 +75,13 @@ function ResultsTable() {
         setResultsToDisplay(data);
     }
 
+    function TimeToDeciseconds(time) {
+        var split = time.split(":");
+        
+        return (split.length > 2 ? split[split.length -3] * 36000: 0)
+            + split[split.length -2] * 600 + split[split.length-1] * 10
+    }
+
     function GetUniqueWorkoutTypes(results) {
         var map = results?.map(result => result.pretty_workout_type).reduce(function (accumulator, currentValue) {
             accumulator[currentValue] = (accumulator[currentValue] || 0) + 1;
@@ -87,13 +94,20 @@ function ResultsTable() {
     }
 
     function Sort(ResultPropSelectorFunction) {
-
         sortToggle.current = !sortToggle.current;
-        setResultsToDisplay(resultsToDisplay.toSorted((a, b) => sortToggle.current ?
-            ResultPropSelectorFunction(a) - ResultPropSelectorFunction(b) :
-            ResultPropSelectorFunction(b) - ResultPropSelectorFunction(a)
+        setResultsToDisplay(resultsToDisplay.toSorted((a, b) =>
+            PropComparer(ResultPropSelectorFunction(a), ResultPropSelectorFunction(b), sortToggle.current)
         ));
 
+    }
+
+    function PropComparer(a, b, asc) {
+        if (a === b) return NaN;
+
+        var bool = asc ?
+            a > b :
+            b > a
+        return bool ? 1 : -1;
     }
 
     function Filter(ResultPropSelectorFunction, FilterConditionFunction, label) {
