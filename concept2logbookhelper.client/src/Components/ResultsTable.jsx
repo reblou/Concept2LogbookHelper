@@ -34,7 +34,7 @@ function ResultsTable() {
                     <thead>
                         <SortCallbackContext.Provider value={Sort }>
                             <tr>
-                                <th>Date</th>
+                                <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
                                 <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />}/>
                                 <ResultTableHeader label='Time' ResultPropSelector={(result) => TimeToDeciseconds(result.time_formatted)} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} />} />
                                 <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />}/>
