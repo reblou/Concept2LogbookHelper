@@ -38,7 +38,7 @@ function ResultsTable() {
                                 <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />}/>
                                 <ResultTableHeader label='Time' ResultPropSelector={(result) => TimeToDeciseconds(result.time_formatted)} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} />} />
                                 <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />}/>
-                                <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => value} />} />
+                                <ResultTableHeader label='Pace' ResultPropSelector={(result) => PaceToString(result.average_pace)} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => value} />} />
                                 <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} /> 
                                 <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
                                 <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={ (value) => + value} />} />
@@ -80,6 +80,13 @@ function ResultsTable() {
         
         return (split.length > 2 ? split[split.length -3] * 36000: 0)
             + split[split.length -2] * 600 + split[split.length-1] * 10
+    }
+
+    function PaceToString(pace) {
+        var minutes = Math.floor(pace / 60).toString();
+        var seconds = (pace % 60).toFixed(1).toString();
+
+        return minutes.padStart(2, '0') + ":" + seconds.padStart(4, '0');
     }
 
     function GetUniqueWorkoutTypes(results) {
