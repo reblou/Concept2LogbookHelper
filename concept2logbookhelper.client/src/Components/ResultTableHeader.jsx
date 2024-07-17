@@ -9,16 +9,17 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
     const sortResultsCallback = useContext(SortCallbackContext);
 
     return (
-        <th>{label}<button className='FilterMenuButton' onClick={() => setPopup(!popup)} />
-            <FilterCallbackContext.Provider value={FilterItemClick}>
-            {popup &&
-                <div>
-                    <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
-                    <div className='FilterListMenu'>
-                        {filterMenuContentsComponent}
-                    </div>
-                </div>}
-            </FilterCallbackContext.Provider>
+        <th>{label}
+            {filterMenuContentsComponent !== undefined ?  
+            <><button className='FilterMenuButton' onClick={() => setPopup(!popup)} /><FilterCallbackContext.Provider value={FilterItemClick}>
+                    {popup &&
+                        <div>
+                            <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
+                            <div className='FilterListMenu'>
+                                {filterMenuContentsComponent}
+                            </div>
+                        </div>}
+                </FilterCallbackContext.Provider></> : <></>}
             <button className='FilterMenuButton' onClick={() => sortResultsCallback(ResultPropSelector)} />
         </th> 
     );
