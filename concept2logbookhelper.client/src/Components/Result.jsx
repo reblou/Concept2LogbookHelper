@@ -1,6 +1,8 @@
 import moment from 'moment';
 import { useContext } from 'react';
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
+import './Result.css'
+
 function Result({ date, type_pretty, type, distance, time, pace, spm, calories, avg_hr, link }) {
 
     const filterResultsCallback = useContext(FilterCallbackContext);
@@ -15,7 +17,9 @@ function Result({ date, type_pretty, type, distance, time, pace, spm, calories, 
           <td>{spm}</td>
           <td>{calories}</td>
           <td>{avg_hr === undefined || avg_hr === 0 ? 'N/A' : avg_hr}</td>
-          <td><a href={link} target='_blank'>Page</a></td>
+          <td><a className={'logbookResultLink'} href={link} target='_blank'>
+              <img className={'logbookResultLinkImg'} src='src\assets\icons8-open-30.svg' />
+              </a> </td>
       </tr>
     );
 }

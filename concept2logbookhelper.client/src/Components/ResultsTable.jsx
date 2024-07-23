@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import Result from "./Result";
 import "./ResultsTable.css";
 import ResultTableHeader from "./ResultTableHeader";
@@ -7,6 +7,7 @@ import FilterComparisons from "./FilterComparisons";
 
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
 import { SortCallbackContext } from '../Contexts/SortCallbackContext.js';
+import Loading from "./Loading";
 
 function ResultsTable() {
     const [resultsToDisplay, setResultsToDisplay] = useState();
@@ -29,41 +30,42 @@ function ResultsTable() {
         <div>
             <p>Total Workouts: {totalResults} | Total Meters: {totalMeters}m | Max HR: {maxHR}</p>
             <button onClick={() => { filterMap.current.clear(); ApplyAllFilters(); }}>Clear All Filters</button>
-            <FilterCallbackContext.Provider value={Filter}>
-                <table>
-                    <thead>
-                        <SortCallbackContext.Provider value={Sort }>
-                            <tr>
-                                <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} />
-                                <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />}/>
-                                <ResultTableHeader label='Time' ResultPropSelector={(result) => TimeToDeciseconds(result.time_formatted)} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} />} />
-                                <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />}/>
-                                <ResultTableHeader label='Pace' ResultPropSelector={(result) => PaceToString(result.average_pace)} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => value} />} />
-                                <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} /> 
-                                <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
-                                <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={ (value) => + value} />} />
-                                <th>Link</th>
-                                </tr>
-                        </SortCallbackContext.Provider>
-                    </thead>
-                    <tbody>
-                        {resultsToDisplay?.map((result) => (
-                            <Result key={result.id}
-                                date={result.date}
-                                type_pretty={result.pretty_workout_type}
-                                type={result.workout_type}
-                                distance={result.distance}
-                                time={result.time_formatted}
-                                pace={result.pretty_average_pace}
-                                spm={result.stroke_rate}
-                                calories={result.calories_total}
-                                avg_hr={result.heart_rate?.average}
-                                link={'https://log.concept2.com/profile/' + result.user_id + '/log/' + result.id}
-                            />
-                        ))}
-                    </tbody>
-                </table>
-            </FilterCallbackContext.Provider>
+
+                <FilterCallbackContext.Provider value={Filter}>
+                    <table>
+                        <thead>
+                            <SortCallbackContext.Provider value={Sort }>
+                                <tr>
+                                    <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} />
+                                    <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />}/>
+                                    <ResultTableHeader label='Time' ResultPropSelector={(result) => TimeToDeciseconds(result.time_formatted)} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} />} />
+                                    <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />}/>
+                                    <ResultTableHeader label='Pace' ResultPropSelector={(result) => PaceToString(result.average_pace)} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => value} />} />
+                                    <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} /> 
+                                    <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
+                                    <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={ (value) => + value} />} />
+                                    <th>Link</th>
+                                    </tr>
+                            </SortCallbackContext.Provider>
+                        </thead>
+                        <tbody>
+                            {resultsToDisplay?.map((result) => (
+                                <Result key={result.id}
+                                    date={result.date}
+                                    type_pretty={result.pretty_workout_type}
+                                    type={result.workout_type}
+                                    distance={result.distance}
+                                    time={result.time_formatted}
+                                    pace={result.pretty_average_pace}
+                                    spm={result.stroke_rate}
+                                    calories={result.calories_total}
+                                    avg_hr={result.heart_rate?.average}
+                                    link={'https://log.concept2.com/profile/' + result.user_id + '/log/' + result.id}
+                                />
+                            ))}
+                        </tbody>
+                    </table>
+                </FilterCallbackContext.Provider>
      </div>
     );
 
