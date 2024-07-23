@@ -16,7 +16,7 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
                 </button>
                     <FilterCallbackContext.Provider value={FilterItemClick}>
                     {popup &&
-                        <div>
+                        <div className='above'>
                             <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
                             <div className='FilterListMenu'>
                                 {filterMenuContentsComponent}
