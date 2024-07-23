@@ -18,7 +18,7 @@ function Result({ date, type_pretty, type, distance, time, pace, spm, calories, 
           <td>{calories}</td>
           <td>{avg_hr === undefined || avg_hr === 0 ? 'N/A' : avg_hr}</td>
           <td><a className={'logbookResultLink'} href={link} target='_blank'>
-              <img className={'logbookResultLinkImg'} src='src\assets\icons8-open-30.svg' />
+              <img className={'logbookResultLinkImg'} src='src\assets\external-link.svg' />
               </a> </td>
       </tr>
     );
