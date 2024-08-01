@@ -20,11 +20,15 @@
     border-radius: unset;
 }
 
+.FilterMenuButton:hover {
+    cursor: pointer;
+}
+
 .FilterListMenu {
     background: #3e3e3e;
     position: absolute;
     z-index: 2;
-    align-content: center;
+    align-content: start;
     align-items: center;
     text-align: center;
     overflow-y: auto;
@@ -57,4 +61,8 @@
     width: 100%;
     height: 100%;
     background: none;
+}
+
+.FilterComparisonButton {
+    font-size: small;
 }

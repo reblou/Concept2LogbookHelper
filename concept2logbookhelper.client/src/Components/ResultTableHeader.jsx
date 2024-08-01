@@ -19,10 +19,13 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
                         <div className='above'>
                             <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
                             <div className='FilterListMenu'>
+                                <button onClick={() => FilterItemClick(()=>true)}>Clear Filter</button>
                                 {filterMenuContentsComponent}
                             </div>
                         </div>}
-                </FilterCallbackContext.Provider></> : <></>}
+                    </FilterCallbackContext.Provider>
+                </>
+                : <></>}
             <button className='FilterMenuButton' onClick={() => sortResultsCallback(ResultPropSelector)} >
                 <img className='icon-image' src='src/assets/bar-chart-2.svg' />
             </button>

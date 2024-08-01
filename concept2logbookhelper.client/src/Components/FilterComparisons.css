@@ -1,7 +1,9 @@
 
 
 .FilterByDropDown {
-    z-index: 2;
-    align-items: center;
+    z-index: 7;
+    align-items: stretch;
     display: inline-grid;
+    position: relative;
+    
 }
