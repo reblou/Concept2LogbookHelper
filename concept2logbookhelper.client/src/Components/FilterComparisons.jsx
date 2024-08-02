@@ -28,7 +28,12 @@ function FilterComparisons({ InputFormatFunc }) {
               </div>
           }
           <input autoFocus placeholder='value' onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />
-          {between && <input placeholder='value 2' onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} />}
+          {between &&
+              <>
+              <p>and</p>
+                  <input placeholder='value 2' onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} /></>}
+
+          <button onClick={Filter}>Filter</button>
       </div>
     );
 
@@ -38,30 +43,31 @@ function FilterComparisons({ InputFormatFunc }) {
         setBetween(e.target.textContent === "Between");
     }
 
-    function SearchTyped(e) {
-        if (e.key === 'Enter') {
-
-            var formattedValue = InputFormatFunc(e.target.value);
-            var formatted1 = InputFormatFunc(input1);
-            var formatted2 = InputFormatFunc(input2);
-            switch (comparisonType) {
-                case "Equal To":
-                    filterResultsCallback((property => property === formatted1));
-                    break;
-                case "Greater Than":
-                    filterResultsCallback((property => property >= formatted1));
-                    break;
-                case "Less Than":
-                    filterResultsCallback((property => property <= formatted1));
-                    break;
-                case "Between":
-                    filterResultsCallback((property => formatted1 <= property && property <= formatted2));
-                    break;
-                default:
-                    filterResultsCallback((property => property === formattedValue));
-
-            }
+    function Filter() {
+        var formatted1 = InputFormatFunc(input1);
+        var formatted2 = InputFormatFunc(input2);
+        switch (comparisonType) {
+            case "Equal To":
+                filterResultsCallback((property => property === formatted1));
+                break;
+            case "Greater Than":
+                filterResultsCallback((property => property >= formatted1));
+                break;
+            case "Less Than":
+                filterResultsCallback((property => property <= formatted1));
+                break;
+            case "Between":
+                filterResultsCallback((property => formatted1 <= property && property <= formatted2));
+                break;
+            default:
+                filterResultsCallback((property => property === formatted1));
         }
+    }
+
+    function SearchTyped(e) {
+        if (e.key !== 'Enter') return;
+
+        Filter();
     }
 }
 
