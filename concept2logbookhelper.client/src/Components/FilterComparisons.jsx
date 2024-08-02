@@ -8,6 +8,9 @@ function FilterComparisons({ InputFormatFunc }) {
     const [comparisonType, setComparisonType] = useState("Equal To");
     const [between, setBetween] = useState(false);
 
+    const [input1, setInput1] = useState();
+    const [input2, setInput2] = useState();
+
     const filterResultsCallback = useContext(FilterCallbackContext);
 
   return (
@@ -24,8 +27,8 @@ function FilterComparisons({ InputFormatFunc }) {
                     </div>
               </div>
           }
-          <input autoFocus placeholder='value' onKeyDown={SearchTyped} />
-          {between && <input placeholder='value 2' onKeyDown={SearchTyped}/>}
+          <input autoFocus placeholder='value' onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />
+          {between && <input placeholder='value 2' onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} />}
       </div>
     );
 
@@ -39,18 +42,20 @@ function FilterComparisons({ InputFormatFunc }) {
         if (e.key === 'Enter') {
 
             var formattedValue = InputFormatFunc(e.target.value);
+            var formatted1 = InputFormatFunc(input1);
+            var formatted2 = InputFormatFunc(input2);
             switch (comparisonType) {
                 case "Equal To":
-                    filterResultsCallback((property => property === formattedValue));
+                    filterResultsCallback((property => property === formatted1));
                     break;
                 case "Greater Than":
-                    filterResultsCallback((property => property >= formattedValue));
+                    filterResultsCallback((property => property >= formatted1));
                     break;
                 case "Less Than":
-                    filterResultsCallback((property => property <= formattedValue));
+                    filterResultsCallback((property => property <= formatted1));
                     break;
                 case "Between":
-                    //TODO: get value of both inputs and filter property between those 2
+                    filterResultsCallback((property => formatted1 <= property && property <= formatted2));
                     break;
                 default:
                     filterResultsCallback((property => property === formattedValue));
