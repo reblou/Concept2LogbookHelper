@@ -80,10 +80,16 @@ function ResultsTable() {
     function TimeToDeciseconds(time) {
         if (time === undefined) return undefined;
 
-        var split = time.split(":");
+        var split = FormatTime(time).split(":");
         
         return (split.length > 2 ? split[split.length -3] * 36000: 0)
             + split[split.length -2] * 600 + split[split.length-1] * 10
+    }
+
+    function FormatTime(input) {
+        if (!input.includes(":")) input += ":00";
+        if (!input.includes(".")) input += ".0";
+        return input;
     }
 
     function FormatPace(input) {
