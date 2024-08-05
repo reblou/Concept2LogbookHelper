@@ -38,9 +38,9 @@ function ResultsTable() {
                                 <tr>
                                     <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} />
                                     <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />}/>
-                                    <ResultTableHeader label='Time' ResultPropSelector={(result) => TimeToDeciseconds(result.time_formatted)} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} />} />
+                                    <ResultTableHeader label='Time' ResultPropSelector={(result) => result.time} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} />} />
                                     <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />}/>
-                                    <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => value} />} />
+                                    <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatPace(value)} />} />
                                     <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} /> 
                                     <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
                                     <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={ (value) => + value} />} />
@@ -78,10 +78,20 @@ function ResultsTable() {
     }
 
     function TimeToDeciseconds(time) {
+        if (time === undefined) return undefined;
+
         var split = time.split(":");
         
         return (split.length > 2 ? split[split.length -3] * 36000: 0)
             + split[split.length -2] * 600 + split[split.length-1] * 10
+    }
+
+    function FormatPace(input) {
+        if (input === undefined || input === "") return undefined;
+        if (!input.includes(":")) input += ":00";
+        if (input.charAt(1) === ":") input = "0" + input;
+        if (!input.includes(".")) input += ".0";
+        return input;
     }
 
     function GetUniqueWorkoutTypes(results) {
