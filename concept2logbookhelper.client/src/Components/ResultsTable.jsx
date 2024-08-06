@@ -11,11 +11,13 @@ import Loading from "./Loading";
 
 function ResultsTable() {
     const [resultsToDisplay, setResultsToDisplay] = useState();
+    const [loading, setLoading] = useState(true);
 
     const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
     const filterMap = useRef(new Map());
     const sortToggle = useRef(false);
+
 
     const maxHR = Math.max(
         fullResults.current?.map(result => result.heart_rate?.max ?? 0)
@@ -28,24 +30,25 @@ function ResultsTable() {
 
     return (
         <div>
+            {loading ? <Loading /> : <>
             <p>Total Workouts: {totalResults} | Total Meters: {totalMeters}m | Max HR: {maxHR}</p>
             <button onClick={() => { filterMap.current.clear(); ApplyAllFilters(); }}>Clear All Filters</button>
 
                 <FilterCallbackContext.Provider value={Filter}>
                     <table>
                         <thead>
-                            <SortCallbackContext.Provider value={Sort }>
+                            <SortCallbackContext.Provider value={Sort}>
                                 <tr>
                                     <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} />
-                                    <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />}/>
+                                    <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />} />
                                     <ResultTableHeader label='Time' ResultPropSelector={(result) => result.time} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} />} />
-                                    <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />}/>
+                                    <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
                                     <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatPace(value)} />} />
-                                    <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} /> 
+                                    <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
                                     <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
-                                    <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={ (value) => + value} />} />
+                                    <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
                                     <th>Link</th>
-                                    </tr>
+                                </tr>
                             </SortCallbackContext.Provider>
                         </thead>
                         <tbody>
@@ -66,6 +69,7 @@ function ResultsTable() {
                         </tbody>
                     </table>
                 </FilterCallbackContext.Provider>
+            </>}
      </div>
     );
 
@@ -75,6 +79,7 @@ function ResultsTable() {
         workoutTypesUnique.current = GetUniqueWorkoutTypes(data);
         fullResults.current = data;
         setResultsToDisplay(data);
+        setLoading(false);
     }
 
     function TimeToDeciseconds(time) {
