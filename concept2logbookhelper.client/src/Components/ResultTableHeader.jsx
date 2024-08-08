@@ -1,5 +1,5 @@
 import { useState, useRef, React, useContext } from 'react';
-import './ResultTableHeader.css';
+import '../css/ResultTableHeader.css';
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 import { SortCallbackContext } from '../Contexts/SortCallbackContext.js';
 

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, Suspense } from "react";
 import Result from "./Result";
-import "./ResultsTable.css";
+import "../css/ResultsTable.css";
 import ResultTableHeader from "./ResultTableHeader";
 import FilterButtonList from "./FilterButtonList";
 import FilterComparisons from "./FilterComparisons";

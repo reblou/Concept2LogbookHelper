@@ -66,3 +66,20 @@
 .FilterComparisonButton {
     font-size: small;
 }
+
+
+.FilterByDropDown {
+    z-index: 7;
+    align-items: stretch;
+    display: inline-grid;
+    position: relative;
+}
+
+.FilterComparisonsDiv {
+    display: grid;
+    padding: .25rem;
+}
+
+.FilterComparisonsDiv > :not(.above) {
+    margin: 0.25em;
+}

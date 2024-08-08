@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { useContext } from 'react';
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
-import './Result.css'
 
 function Result({ date, type_pretty, type, distance, time, pace, spm, calories, avg_hr, link }) {
 

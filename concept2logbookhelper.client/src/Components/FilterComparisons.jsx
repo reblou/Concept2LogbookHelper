@@ -1,5 +1,4 @@
 import { useState, useRef, useContext } from 'react';
-import './FilterComparisons.css'
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 
 
@@ -13,8 +12,9 @@ function FilterComparisons({ InputFormatFunc }) {
 
     const filterResultsCallback = useContext(FilterCallbackContext);
 
-  return (
-      <div>
+    return (
+      <>
+      <div className="FilterComparisonsDiv">
           <button className="FilterComparisonButton"  onClick={() => setDropDown(!dropDown)}>{comparisonType}</button>
           {dropDown &&
               <div className='above'>
@@ -32,9 +32,10 @@ function FilterComparisons({ InputFormatFunc }) {
               <>
               <p>and</p>
                   <input placeholder='value 2' onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} /></>}
-
+            </div>
           <button onClick={Filter}>Filter</button>
-      </div>
+
+        </>
     );
 
     function FilterMethodSelected(e) {
