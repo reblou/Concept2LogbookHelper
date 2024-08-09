@@ -14,8 +14,10 @@ function Login() {
     async function Login() {
         // check for valid session ID first
         try {
-            await fetch('api/authentication/validSessionCheck', { signal: AbortSignal.timeout(1000) })
-            navigate('/logbook')
+            var response = await fetch('api/authentication/validSessionCheck', { signal: AbortSignal.timeout(1000) })
+
+            if (response.ok) navigate('/logbook')
+            else throw new Error("Invalid Session");
         } catch (err) {
 
             window.location.replace('api/authentication/redirect');
