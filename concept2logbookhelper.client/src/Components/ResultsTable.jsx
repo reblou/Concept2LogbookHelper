@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, Suspense } from "react";
+import { useNavigate } from 'react-router-dom'
 import Result from "./Result";
 import "../css/ResultsTable.css";
 import ResultTableHeader from "./ResultTableHeader";
@@ -8,15 +9,19 @@ import FilterComparisons from "./FilterComparisons";
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
 import { SortCallbackContext } from '../Contexts/SortCallbackContext.js';
 import Loading from "./Loading";
+import ErrorDialog from "./ErrorDialog";
 
 function ResultsTable() {
     const [resultsToDisplay, setResultsToDisplay] = useState();
     const [loading, setLoading] = useState(true);
 
+    const [openErrorDialog, setOpenErrorDialog] = useState(false);
+
     const workoutTypesUnique = useRef([]);
     const fullResults = useRef([]);
     const filterMap = useRef(new Map());
     const sortToggle = useRef(false);
+
 
 
     const maxHR = Math.max(
@@ -30,6 +35,7 @@ function ResultsTable() {
 
     return (
         <div>
+            <ErrorDialog open={openErrorDialog} />
             {loading ? <Loading /> : <>
             <p>Total Workouts: {totalResults} | Total Meters: {totalMeters}m | Max HR: {maxHR}</p>
             <button onClick={() => { filterMap.current.clear(); ApplyAllFilters(); }}>Clear All Filters</button>
@@ -74,12 +80,16 @@ function ResultsTable() {
     );
 
     async function populateTotalResults() {
-        let response = await fetch("api/logbook/getresults")
-        let data = await response.json();
-        workoutTypesUnique.current = GetUniqueWorkoutTypes(data);
-        fullResults.current = data;
-        setResultsToDisplay(data);
-        setLoading(false);
+        try {
+            let response = await fetch("api/logbook/getresults")
+            let data = await response.json();
+            workoutTypesUnique.current = GetUniqueWorkoutTypes(data);
+            fullResults.current = data;
+            setResultsToDisplay(data);
+            setLoading(false);
+        } catch (err) {
+            setOpenErrorDialog(true);
+        }
     }
 
     function TimeToDeciseconds(time) {
