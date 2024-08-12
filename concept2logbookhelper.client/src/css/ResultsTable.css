@@ -1,6 +1,10 @@
 body {
 }
 
+table {
+    padding: 10px;
+}
+
 tr:nth-child(even) {
     background: #242424;
 }

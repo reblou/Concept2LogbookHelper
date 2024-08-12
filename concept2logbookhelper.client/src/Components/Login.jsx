@@ -6,6 +6,14 @@ function Login() {
   return (
       <div>
           <h1 id="tabelLabel">Logbook Helper</h1>
+          <hr />
+          <h2>What is Logbook helper?</h2>
+          <p>Logbook helper is a React/ ASP.NET Core Web API web app designed to integrate with your Concept 2 workout history and present it in a more useful way.</p>
+
+
+
+          <p>It allows you to filter and sort workouts by date, workout type, time, distance, pace, SPM, calories and heart rate. Making it easy to compare past performance across similar workouts.</p>
+
           <button onClick={Login}>Log In via Concept2</button>
       </div>
     );
