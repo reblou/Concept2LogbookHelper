@@ -1,6 +1,6 @@
 # Concept 2 Logbook Helper
 
-Logbook helper is a React/ ASP.NET Core Web API web app designed to integrate with your Concept 2 workout history and present it in a more useful way.
+Logbook helper is a React/ ASP.NET Core Web API web app designed to integrate with your Concept 2 rowing machine workout history and present it in a more useful way.
 
 ![chrome_fqDwpJi236](https://github.com/user-attachments/assets/da1cab8b-4489-4336-9cb2-dfa3b4d4a361)
 
