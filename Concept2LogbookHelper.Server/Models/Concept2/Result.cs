@@ -89,6 +89,7 @@
                     return "Unknown Intervals";
             }
         }
+
         private string FormatIntervals(List<int> intervalMeasurable, Func<int, string> formatter)
         {
             if (intervalMeasurable.Distinct().Count() == 1) // fixed intervals
@@ -97,7 +98,7 @@
             }
             else // variable intervals
             {
-                return $"v{formatter(intervalMeasurable[0])},{formatter(intervalMeasurable[1])}..{intervalMeasurable.Count}";
+                return $"v{formatter(intervalMeasurable[0])},{formatter(intervalMeasurable.ElementAtOrDefault(1))}..{intervalMeasurable.Count}";
             }
         }
 
