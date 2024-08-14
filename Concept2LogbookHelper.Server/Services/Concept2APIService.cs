@@ -51,7 +51,7 @@ namespace Concept2LogbookHelper.Server.Services
 
         public async Task<int> GetNumberOfResults(string sessionId)
         {
-            GetResults results = await SendRequest<GetResults>(sessionId, $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results", HttpMethod.Get);
+            GetResults results = await SendRequest<GetResults>(sessionId, $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results?type=rower", HttpMethod.Get);
 
             return results.meta.pagination.total;
         }
@@ -79,7 +79,8 @@ namespace Concept2LogbookHelper.Server.Services
 
         public async Task<GetResults> GetResults(string sessionId, int page = 1)
         {
-            return await SendRequest<GetResults>(sessionId, $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results?number={max_returned_per_page}&page={page}", HttpMethod.Get);
+            return await SendRequest<GetResults>(sessionId, 
+                $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results?number={max_returned_per_page}&page={page}", HttpMethod.Get);
         }
 
         public async Task<List<Result>> GetAllResults(string sessionId)
