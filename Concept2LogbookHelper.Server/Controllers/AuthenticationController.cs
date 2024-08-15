@@ -39,7 +39,7 @@ namespace Concept2LogbookHelper.Server.Controllers
         [HttpGet]
         public async Task<StatusCodeResult> GetSessionId([FromQuery] string code)
         { 
-            AccessToken accessToken = await _concept2APIService.GetAccessToken(code);
+            AccessToken accessToken = await _concept2APIService.GetAccessTokenGrant(code);
 
             string sessionID = await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in);
 

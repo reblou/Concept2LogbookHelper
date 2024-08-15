@@ -3,6 +3,7 @@ using Concept2LogbookHelper.Server.Models.Concept2;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.OpenApi.Extensions;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -56,10 +57,8 @@ namespace Concept2LogbookHelper.Server.Services
             return results.meta.pagination.total;
         }
 
-        public async Task<AccessToken> GetAccessToken(string accessCode)
+        public async Task<AccessToken> GetAccessTokenGrant(string accessCode)
         {
-            string url = $"{_config["Authentication:Concept2APIUrl"]}oauth/access_token";
-
             FormUrlEncodedContent body = new FormUrlEncodedContent(new Dictionary<string, string>() {
                 { "client_id", _config["client_id"]},
                 { "client_secret", _config["client_secret"]},
@@ -68,6 +67,26 @@ namespace Concept2LogbookHelper.Server.Services
                 {"scope", _config["Authentication:Scope"] },
                 {"redirect_uri",  _config["Authentication:RedirectURI"]}
             });
+
+            return await GetAccessToken(body);
+        }
+
+        public async Task<AccessToken> UseAccessTokenRefreshGrant(string refreshToken)
+        {
+            FormUrlEncodedContent body = new FormUrlEncodedContent(new Dictionary<string, string>() {
+                { "client_id", _config["client_id"]},
+                { "client_secret", _config["client_secret"]},
+                {"grant_type", "refresh_token"},
+                {"scope", _config["Authentication:Scope"] },
+                {"refresh_token",  refreshToken} 
+            });
+
+            return await GetAccessToken(body);
+        }
+
+        private async Task<AccessToken> GetAccessToken(HttpContent? body)
+        {
+            string url = $"{_config["Authentication:Concept2APIUrl"]}oauth/access_token";
 
             HttpResponseMessage response = await _httpClient.PostAsync(url, body);
 

@@ -5,7 +5,7 @@ namespace Concept2LogbookHelper.Server.Services
 {
     public interface IConcept2APIService
     {
-        Task<AccessToken> GetAccessToken(string accessCode);
+        Task<AccessToken> GetAccessTokenGrant(string accessCode);
         Task<int> GetNumberOfResults(string sessionId);
         Task<List<Result>> GetAllResults(string sessionId);
     }
