@@ -5,6 +5,8 @@ function Login() {
 
   return (
       <div>
+
+          <title>Logbook Helper</title>
           <h1 id="tabelLabel">Logbook Helper</h1>
           <hr />
           <h2>What is Logbook helper?</h2>

@@ -9,26 +9,30 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
     const sortResultsCallback = useContext(SortCallbackContext);
 
     return (
-        <th>{label}
-            {filterMenuContentsComponent !== undefined ?  
-                <><button className='FilterMenuButton' onClick={() => setPopup(!popup)} >
-                    <img className='icon-image' src ='src/assets/filter.svg' />
+        <th>
+            <div className='FilterHeader'>
+                <label>{label}</label>
+                {filterMenuContentsComponent !== undefined ?  
+                    <>
+                    <button className='FilterMenuButton' onClick={() => setPopup(!popup)} >
+                        <img className='icon-image' src ='src/assets/filter.svg' />
+                    </button>
+                        <FilterCallbackContext.Provider value={FilterItemClick}>
+                        {popup &&
+                            <div className='above'>
+                                <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
+                                <div className='FilterListMenu'>
+                                    <button onClick={() => FilterItemClick(()=>true)}>Clear Filter</button>
+                                    {filterMenuContentsComponent}
+                                </div>
+                            </div>}
+                        </FilterCallbackContext.Provider>
+                    </>
+                    : <></>}
+                <button className='FilterMenuButton' onClick={() => sortResultsCallback(ResultPropSelector)} >
+                    <img className='icon-image' src='src/assets/bar-chart-2.svg' />
                 </button>
-                    <FilterCallbackContext.Provider value={FilterItemClick}>
-                    {popup &&
-                        <div className='above'>
-                            <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
-                            <div className='FilterListMenu'>
-                                <button onClick={() => FilterItemClick(()=>true)}>Clear Filter</button>
-                                {filterMenuContentsComponent}
-                            </div>
-                        </div>}
-                    </FilterCallbackContext.Provider>
-                </>
-                : <></>}
-            <button className='FilterMenuButton' onClick={() => sortResultsCallback(ResultPropSelector)} >
-                <img className='icon-image' src='src/assets/bar-chart-2.svg' />
-            </button>
+            </div>
         </th> 
     );
 

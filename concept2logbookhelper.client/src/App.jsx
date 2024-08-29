@@ -6,7 +6,6 @@ import Login from './Components/Login.jsx';
 import Auth from './Components/Auth';
 
 function App() {
-
     return (
         <Routes>
             <Route path="/" element={<Login />} />

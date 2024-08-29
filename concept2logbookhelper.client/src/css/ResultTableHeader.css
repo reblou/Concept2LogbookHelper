@@ -1,3 +1,10 @@
+.FilterHeader {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    gap: 0.1rem;
+}
+
 .PopupDisabler {
     position: fixed;
     width: 100%;
