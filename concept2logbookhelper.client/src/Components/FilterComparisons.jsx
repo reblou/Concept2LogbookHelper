@@ -15,23 +15,18 @@ function FilterComparisons({ InputFormatFunc }) {
     return (
       <>
       <div className="FilterComparisonsDiv">
-          <button className="FilterComparisonButton"  onClick={() => setDropDown(!dropDown)}>{comparisonType}</button>
-          {dropDown &&
-              <div className='above'>
-                  <div onClick={() => setDropDown(!dropDown)} />
-                  <div className='FilterByDropDown'>
-                      <button className="FilterComparisonButton" onClick={FilterMethodSelected}>Equal To</button>
-                      <button className="FilterComparisonButton" onClick={FilterMethodSelected}>Greater Than</button>
-                      <button className="FilterComparisonButton" onClick={FilterMethodSelected}>Less Than</button>
-                      <button className="FilterComparisonButton" onClick={FilterMethodSelected}>Between</button>
-                    </div>
-              </div>
-          }
+            <select onChange={FilterMethodSelected}>
+                <option value="Equal To">Equal To</option>
+                <option value="Greater Than">Greater Than</option>
+                <option value="Less Than">Less Than</option>
+                <option value="Between">Between</option>
+            </select>
           <input autoFocus placeholder='value' onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />
           {between &&
               <>
-              <p>and</p>
-                  <input placeholder='value 2' onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} /></>}
+                <p>and</p>
+                <input placeholder='value 2' onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} />
+              </>}
             </div>
           <button onClick={Filter}>Filter</button>
 
@@ -39,9 +34,9 @@ function FilterComparisons({ InputFormatFunc }) {
     );
 
     function FilterMethodSelected(e) {
-        setComparisonType(e.target.textContent);
+        setComparisonType(e.target.value);
         setDropDown(false);
-        setBetween(e.target.textContent === "Between");
+        setBetween(e.target.value === "Between");
     }
 
     function Filter() {

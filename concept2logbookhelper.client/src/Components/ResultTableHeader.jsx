@@ -18,14 +18,14 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
                         <img className='icon-image' src ='src/assets/filter.svg' />
                     </button>
                         <FilterCallbackContext.Provider value={FilterItemClick}>
-                        {popup &&
-                            <div className='above'>
-                                <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
-                                <div className='FilterListMenu'>
-                                    <button onClick={() => FilterItemClick(()=>true)}>Clear Filter</button>
-                                    {filterMenuContentsComponent}
-                                </div>
-                            </div>}
+                            {popup &&
+                                <div className='above'>
+                                    <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
+                                    <div className='FilterListMenu'>
+                                        <button onClick={() => FilterItemClick(() => true)}>Clear Filter</button>
+                                        {filterMenuContentsComponent}
+                                    </div>
+                                </div>}
                         </FilterCallbackContext.Provider>
                     </>
                     : <></>}
