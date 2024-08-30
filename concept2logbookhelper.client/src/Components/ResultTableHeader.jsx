@@ -13,10 +13,7 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
             <div className='FilterHeader'>
                 <label>{label}</label>
                 {filterMenuContentsComponent !== undefined ?  
-                    <>
-                    <button className='FilterMenuButton' onClick={() => setPopup(!popup)} >
-                        <img className='icon-image' src ='src/assets/filter.svg' />
-                    </button>
+                    <div className='FilterButtonContainer'>
                         <FilterCallbackContext.Provider value={FilterItemClick}>
                             {popup &&
                                 <div className='above'>
@@ -27,7 +24,11 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
                                     </div>
                                 </div>}
                         </FilterCallbackContext.Provider>
-                    </>
+                    <button className='FilterMenuButton' onClick={() => setPopup(!popup)} >
+                        <img className='icon-image' src ='src/assets/filter.svg' />
+                    </button>
+
+                    </div>
                     : <></>}
                 <button className='FilterMenuButton' onClick={() => sortResultsCallback(ResultPropSelector)} >
                     <img className='icon-image' src='src/assets/bar-chart-2.svg' />
