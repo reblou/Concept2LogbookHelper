@@ -34,7 +34,7 @@ function ResultsTable() {
     useEffect(() => { populateTotalResults() }, []);
 
     return (
-        <div>
+        <div className='results-table'>
             <ErrorDialog open={openErrorDialog} />
             {loading ? <Loading /> : <>
             <p>Total Workouts: {totalResults} | Total Meters: {totalMeters}m | Max HR: {maxHR}</p>

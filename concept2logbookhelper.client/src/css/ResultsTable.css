@@ -1,8 +1,16 @@
 body {
 }
 
+.results-table {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-flow: column wrap;
+}
+
 table {
     margin: 1rem;
+    width: 100%;
 }
 
 tr:nth-child(even) {

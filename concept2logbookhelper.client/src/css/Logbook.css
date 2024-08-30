@@ -1,3 +1,14 @@
+.logbook-container {
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 0;
+    align-items: center;
+}
+
 .logTitle {
     text-align: right;
 }
