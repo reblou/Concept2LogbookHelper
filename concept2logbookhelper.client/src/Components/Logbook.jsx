@@ -18,7 +18,7 @@ function Logbook() {
     );
 
     function LogOut() {
-        //TODO: call api to clear session cookie
+        fetch("api/authentication/logout");
 
         navigate('/')
     }

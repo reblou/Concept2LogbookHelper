@@ -42,5 +42,10 @@ namespace Concept2LogbookHelper.Server.Services
             if (data is null) throw new KeyNotFoundException($"No access token found for session Id: {sessionId}");
             return data;
         }
+
+        public async Task LogOut(string sessionId)
+        {
+            await _cache.RemoveAsync(sessionId);
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace Concept2LogbookHelper.Server.Services
     {
         Task<SessionData> GetStoredAccessToken(string sessionId);
         Task<string> StoreNewAccessToken(string access_token, string refresh_token, int expires_in);
+        Task LogOut(string sessionId);
     }
 }

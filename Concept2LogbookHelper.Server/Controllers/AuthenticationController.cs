@@ -58,5 +58,16 @@ namespace Concept2LogbookHelper.Server.Controllers
 
             return StatusCode(200);
         }
+
+        [HttpGet]
+        [Route("logout")]
+        public async Task<StatusCodeResult> LogOut()
+        {
+            var sessionId = Request.Cookies["session-id"] ?? throw new ArgumentException("No valid session ID received");
+            Response.Headers.Append("Set-Cookie", $"session-id=\"\"; Secure; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT");
+            await _sessionService.LogOut(sessionId);
+
+            return StatusCode(200);
+        }
     }
 }
