@@ -16,7 +16,6 @@ IConfiguration configuration = builder.Configuration;
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = configuration.GetConnectionString("Redis");
-    options.InstanceName = "c2logbook_";
 });
 
 var app = builder.Build();

@@ -9,37 +9,48 @@ namespace Concept2LogbookHelper.Server.Services
 {
     public class SessionService : ISessionService
     {
-
+        //private readonly IConcept2APIService _apiService;
         private readonly IDistributedCache _cache;
-        private readonly IConfiguration _config;
-        private readonly HttpClient _httpClient;
 
-        public SessionService(IDistributedCache cache, IConfiguration config, HttpClient httpClient)
+        public SessionService(IDistributedCache cache)
         {
             this._cache = cache;
-            this._config = config;
-            this._httpClient = httpClient;
         }
 
-        public async Task<string> StoreNewAccessToken(string access_token, string refresh_token, int expires_in)
+        public async Task<string> StoreNewAccessToken(string access_token, string refresh_token, int expires_in, string? sessionID = null)
         {
-            SessionData sessionData = new SessionData()
-            {
-                accessCode = access_token,
-                refreshCode = refresh_token
-            };
-            string sessionID = Guid.NewGuid().ToString();
+            // if no sessionId passed, generate new
+            sessionID ??= Guid.NewGuid().ToString();
 
-            await _cache.SetRecordAsync<SessionData>(sessionID, sessionData, TimeSpan.FromSeconds(expires_in), TimeSpan.FromHours(1));
+            await _cache.SetStringAsync("access_" + sessionID, access_token, new DistributedCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expires_in),
+                SlidingExpiration = TimeSpan.FromDays(1)
+            });
+
+            await _cache.SetStringAsync("refresh_" + sessionID, refresh_token, new DistributedCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(14),
+                SlidingExpiration = TimeSpan.FromDays(14)
+            });
 
             return sessionID;
         }
 
-        public async Task<SessionData> GetStoredAccessToken(string sessionId)
+        public async Task<string> GetStoredAccessToken(string sessionId)
         {
-            SessionData data =  await _cache.GetRecordAsync<SessionData>(sessionId);
+            string? data = await _cache.GetStringAsync("access_" + sessionId);
 
-            if (data is null) throw new KeyNotFoundException($"No access token found for session Id: {sessionId}");
+            if (data is not null) return data;
+            else throw new KeyNotFoundException($"No access token found for session Id: {sessionId}");
+
+        }
+
+        public async Task<string> GetStoredRefreshToken(string sessionId)
+        {
+            string? data = await _cache.GetStringAsync("refresh_" + sessionId);
+
+            if (data is null) throw new KeyNotFoundException($"No refresh token found for session Id: {sessionId}");
             return data;
         }
 
@@ -47,5 +58,6 @@ namespace Concept2LogbookHelper.Server.Services
         {
             await _cache.RemoveAsync(sessionId);
         }
+
     }
 }

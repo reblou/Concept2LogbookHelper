@@ -54,9 +54,20 @@ namespace Concept2LogbookHelper.Server.Controllers
         {
             string sessionId = Request.Cookies["session-id"] ?? throw new ArgumentException("No valid session ID received");
 
-            var stuff = await _sessionService.GetStoredAccessToken(sessionId);
+            try
+            {
+                var token = await _sessionService.GetStoredAccessToken(sessionId);
+                return StatusCode(200);
+            } catch (KeyNotFoundException)
+            {
+                // if no access token stored for refresh, use refresh Token
+                var refreshToken = await _sessionService.GetStoredRefreshToken(sessionId);
 
-            return StatusCode(200);
+                var accessToken = await _concept2APIService.GetAccessTokenRefreshGrant(refreshToken);
+
+                await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in, sessionId);
+                return StatusCode(200);
+            }
         }
 
         [HttpGet]

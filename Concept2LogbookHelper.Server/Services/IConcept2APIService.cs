@@ -8,5 +8,6 @@ namespace Concept2LogbookHelper.Server.Services
         Task<AccessToken> GetAccessTokenGrant(string accessCode);
         Task<int> GetNumberOfResults(string sessionId);
         Task<List<Result>> GetAllResults(string sessionId);
+        Task<AccessToken> GetAccessTokenRefreshGrant(string refreshToken);
     }
 }
