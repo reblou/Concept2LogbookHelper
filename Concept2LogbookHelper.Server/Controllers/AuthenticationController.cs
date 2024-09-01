@@ -75,6 +75,7 @@ namespace Concept2LogbookHelper.Server.Controllers
         public async Task<StatusCodeResult> LogOut()
         {
             var sessionId = Request.Cookies["session-id"] ?? throw new ArgumentException("No valid session ID received");
+
             Response.Headers.Append("Set-Cookie", $"session-id=\"\"; Secure; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT");
             await _sessionService.LogOut(sessionId);
 

@@ -56,8 +56,8 @@ namespace Concept2LogbookHelper.Server.Services
 
         public async Task LogOut(string sessionId)
         {
-            await _cache.RemoveAsync(sessionId);
+            await _cache.RemoveAsync("refresh_" + sessionId);
+            await _cache.RemoveAsync("access_" + sessionId);
         }
-
     }
 }
