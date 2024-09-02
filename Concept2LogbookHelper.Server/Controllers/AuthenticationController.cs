@@ -43,7 +43,7 @@ namespace Concept2LogbookHelper.Server.Controllers
 
             string sessionID = await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in);
 
-            Response.Headers.Append("Set-Cookie", $"session-id={sessionID}; Secure; HttpOnly; Expires={DateTime.Now.AddMonths(1).ToString("ddd, dd MMM, yyyy HH:mm:ss G'M'T")}");
+            Response.Headers.Append("Set-Cookie", $"session-id={sessionID}; Secure; HttpOnly; Expires={DateTime.Now.AddMonths(1).ToString("ddd, dd MMM, yyyy HH:mm:ss G'M'T")}; Path=/api");
 
             return StatusCode(200);
         }
@@ -76,8 +76,11 @@ namespace Concept2LogbookHelper.Server.Controllers
         {
             var sessionId = Request.Cookies["session-id"] ?? throw new ArgumentException("No valid session ID received");
 
-            Response.Headers.Append("Set-Cookie", $"session-id=\"\"; Secure; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT");
-            await _sessionService.LogOut(sessionId);
+            Response.Headers.Append("Set-Cookie", $"session-id=\"\"; Secure; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/api");
+
+            // don't delete dummy account tokens
+            if(sessionId != _config["Authentication:DummySessionId"])
+                await _sessionService.LogOut(sessionId);
 
             return StatusCode(200);
         }
@@ -86,13 +89,28 @@ namespace Concept2LogbookHelper.Server.Controllers
         [Route("dummyLogIn")]
         public async Task<StatusCodeResult> DummyLogIn()
         {
-            Response.Headers.Append("Set-Cookie", $"session-id={_config["Authentication:DummySessionId"]}; Secure; HttpOnly; Expires={DateTime.Now.AddMonths(1).ToString("ddd, dd MMM, yyyy HH:mm:ss G'M'T")}; Path=/api");
+            string sessionId = _config["Authentication:DummySessionId"] ?? throw new InvalidOperationException("Configured session ID for dummy account not found.");
 
-            //TODO: check access token stored for dummy account
-            // return error if no access token & can't use refresh token
+            try
+            {
+                var token = await _sessionService.GetStoredAccessToken(sessionId);
 
+                Response.Headers.Append("Set-Cookie", $"session-id={sessionId}; Secure; HttpOnly; Expires={DateTime.Now.AddMonths(1).ToString("ddd, dd MMM, yyyy HH:mm:ss G'M'T")}; Path=/api");
 
-            return StatusCode(200);
+                return StatusCode(200);
+            }
+            catch (KeyNotFoundException)
+            {
+                // if no access token stored for refresh, use refresh Token
+                var refreshToken = await _sessionService.GetStoredRefreshToken(sessionId);
+
+                var accessToken = await _concept2APIService.GetAccessTokenRefreshGrant(refreshToken);
+
+                await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in, sessionId, 365);
+                Response.Headers.Append("Set-Cookie", $"session-id={sessionId}; Secure; HttpOnly; Expires={DateTime.Now.AddMonths(1).ToString("ddd, dd MMM, yyyy HH:mm:ss G'M'T")}; Path=/api");
+
+                return StatusCode(200);
+            }
         }
     }
 

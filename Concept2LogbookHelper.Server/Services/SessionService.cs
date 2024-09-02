@@ -17,7 +17,7 @@ namespace Concept2LogbookHelper.Server.Services
             this._cache = cache;
         }
 
-        public async Task<string> StoreNewAccessToken(string access_token, string refresh_token, int expires_in, string? sessionID = null)
+        public async Task<string> StoreNewAccessToken(string access_token, string refresh_token, int expires_in, string? sessionID = null, int expirationDays = 14)
         {
             // if no sessionId passed, generate new
             sessionID ??= Guid.NewGuid().ToString();
@@ -30,8 +30,8 @@ namespace Concept2LogbookHelper.Server.Services
 
             await _cache.SetStringAsync("refresh_" + sessionID, refresh_token, new DistributedCacheEntryOptions()
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(14),
-                SlidingExpiration = TimeSpan.FromDays(14)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(expirationDays),
+                SlidingExpiration = TimeSpan.FromDays(expirationDays)
             });
 
             return sessionID;

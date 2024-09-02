@@ -32,6 +32,8 @@ namespace Concept2LogbookHelper.Server.Services
 
         private async Task<string> GetAccessToken(string sessionId)
         {
+            //TODO: double calling on react dev mode is messing up the refresh token store. 
+
             try
             {
                 return await _sessionService.GetStoredAccessToken(sessionId);
@@ -43,7 +45,11 @@ namespace Concept2LogbookHelper.Server.Services
 
                 var accessToken = await GetAccessTokenRefreshGrant(refreshToken);
 
-                await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in);
+                if(sessionId == _config["Authentication:DummySessionId"]) 
+                    await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in, expirationDays: 365);
+                else 
+                    await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in);
+
                 return accessToken.access_token;
             }
         }
