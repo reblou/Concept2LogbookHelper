@@ -43,7 +43,7 @@ namespace Concept2LogbookHelper.Server.Controllers
 
             string sessionID = await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in);
 
-            Response.Headers.Append("Set-Cookie", $"session-id={sessionID}; Secure; HttpOnly; Expires={DateTime.Now.AddMonths(6).ToString("ddd, dd MMM, yyyy HH:mm:ss G'M'T")}");
+            Response.Headers.Append("Set-Cookie", $"session-id={sessionID}; Secure; HttpOnly; Expires={DateTime.Now.AddMonths(1).ToString("ddd, dd MMM, yyyy HH:mm:ss G'M'T")}");
 
             return StatusCode(200);
         }
@@ -81,5 +81,19 @@ namespace Concept2LogbookHelper.Server.Controllers
 
             return StatusCode(200);
         }
+
+        [HttpGet]
+        [Route("dummyLogIn")]
+        public async Task<StatusCodeResult> DummyLogIn()
+        {
+            Response.Headers.Append("Set-Cookie", $"session-id={_config["Authentication:DummySessionId"]}; Secure; HttpOnly; Expires={DateTime.Now.AddMonths(1).ToString("ddd, dd MMM, yyyy HH:mm:ss G'M'T")}; Path=/api");
+
+            //TODO: check access token stored for dummy account
+            // return error if no access token & can't use refresh token
+
+
+            return StatusCode(200);
+        }
     }
+
 }

@@ -7,5 +7,6 @@
         public string ResponseType { get; set; }
         public string Concept2APIUrl { get; set; }
         public string GrantType { get; set; }
+        public string DummySessionId { get; set; }
     }
 }

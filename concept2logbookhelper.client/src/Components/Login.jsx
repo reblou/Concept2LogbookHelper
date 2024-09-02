@@ -17,6 +17,8 @@ function Login() {
           <p>It allows you to filter and sort workouts by date, workout type, time, distance, pace, SPM, calories and heart rate. Making it easy to compare past performance across similar workouts.</p>
 
           <button onClick={Login}>Log In via Concept2</button>
+
+          <button onClick={DummyLogin} >Log In to Dummy Account</button>
       </div>
     );
 
@@ -26,12 +28,18 @@ function Login() {
         try {
             var response = await fetch('api/authentication/validSessionCheck', { signal: AbortSignal.timeout(5000) })
 
-            if (response.ok) navigate('/logbook')
+            if (response.ok) navigate('/logbook');
             else throw new Error("Invalid Session");
         } catch (err) {
 
             window.location.replace('api/authentication/redirect');
         }
+    }
+
+    async function DummyLogin() {
+        var response = await fetch('api/authentication/dummyLogIn');
+
+        navigate('/logbook');
     }
 }
 
