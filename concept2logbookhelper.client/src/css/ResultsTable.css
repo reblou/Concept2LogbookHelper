@@ -14,11 +14,11 @@ table {
 }
 
 tr:nth-child(even) {
-    background: #242424;
+    background-color: light-dark(#ffffff, #242424);
 }
 
 tr:nth-child(odd) {
-    background: #3e3e3e;
+    background: light-dark(#808080, #3e3e3e);
 }
 
 th, td {
@@ -30,6 +30,7 @@ th, td {
     border-radius: 25px;
     margin: 3px;
     padding: 3px;
+    color: #ffffff;
 }
 
 .workout_type:hover {
