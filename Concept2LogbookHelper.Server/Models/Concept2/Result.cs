@@ -54,7 +54,7 @@
                 case "FixedTimeInterval":
                 case "VariableIntervalUndefinedRest":
                 case "FixedCalorieInterval":
-                case "VariableInterval": //v250, 500, 750 etc. // could be time/distance/ or calorie intervals
+                case "VariableInterval": //v250, 500, 750 etc. // could be time/distance/ or calorie intervals 
                     this.pretty_workout_type = FormatUnknownIntervalsTypes();
                     break;
                 case "FixedDistanceSplits": // fixed distance
@@ -105,7 +105,7 @@
         private string FormatDeciseconds(int d)
         {
             var t = TimeSpan.FromSeconds(d / 10d);
-            return $"{t.TotalMinutes}:{t.Seconds.ToString("D2")}";
+            return $"{t.Minutes}:{t.Seconds.ToString("D2")}";
         }
     }
 
