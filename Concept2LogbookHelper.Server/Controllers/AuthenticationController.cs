@@ -60,9 +60,10 @@ namespace Concept2LogbookHelper.Server.Controllers
                 return StatusCode(200);
             } catch (KeyNotFoundException)
             {
-                // if no access token stored for refresh, use refresh Token
+                // if no access token stored use refresh Token
                 var refreshToken = await _sessionService.GetStoredRefreshToken(sessionId);
 
+                //TODO: if this goes wrong, delete refresh token user has to log in again
                 var accessToken = await _concept2APIService.GetAccessTokenRefreshGrant(refreshToken);
 
                 await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in, sessionId);
@@ -101,9 +102,10 @@ namespace Concept2LogbookHelper.Server.Controllers
             }
             catch (KeyNotFoundException)
             {
-                // if no access token stored for refresh, use refresh Token
+                // if no access token stored  use refresh Token
                 var refreshToken = await _sessionService.GetStoredRefreshToken(sessionId);
 
+                //TODO: if this fails, somethings gone super wrong and the refresh token is now invalid, dummy account needs to be logged into again.
                 var accessToken = await _concept2APIService.GetAccessTokenRefreshGrant(refreshToken);
 
                 await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in, sessionId, 365);

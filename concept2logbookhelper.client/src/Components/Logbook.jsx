@@ -17,8 +17,8 @@ function Logbook() {
       </div>
     );
 
-    function LogOut() {
-        fetch("api/authentication/logout");
+    async function LogOut() {
+        await fetch("api/authentication/logout");
 
         navigate('/')
     }

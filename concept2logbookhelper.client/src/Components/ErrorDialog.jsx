@@ -24,6 +24,8 @@ function ErrorDialog({ open }) {
     async function closeDialog()
     {
         open = false;
+        await fetch("api/authentication/logout");
+
         navigate('/');
     }
 }
