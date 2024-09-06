@@ -81,7 +81,7 @@ function ResultsTable() {
 
     async function populateTotalResults() {
         try {
-            let response = await fetch("api/logbook/getresults")
+            let response = await fetch("api/logbook/fake")
             let data = await response.json();
             workoutTypesUnique.current = GetUniqueWorkoutTypes(data);
             fullResults.current = data;

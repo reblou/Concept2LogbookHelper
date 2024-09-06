@@ -15,8 +15,8 @@ function ErrorDialog({ open }) {
 
   return (
       <dialog ref={errorDialog}>
-          <h3>Error</h3>
-          <p>Error fetching logbook data. Please retry.</p>
+          <h3>An Error Occured</h3>
+          <p>There was an error fetching workout data. <br/> Please retry.</p>
           <button onClick={closeDialog}>Ok</button>
       </dialog>
     );
