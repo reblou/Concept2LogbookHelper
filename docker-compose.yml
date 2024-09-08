@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  concept2logbookhelper.server:
+    image: ${DOCKER_REGISTRY-}concept2logbookhelperserver
+    build:
+      context: .
+      dockerfile: Concept2LogbookHelper.Server/Dockerfile
+    ports:
+        - 8080:8080
+    environment:
+        - ConnectionStrings__Redis=redis:5111
+  redis:
+    image: redis
+    command: --port 5111
+    container_name: redis
