@@ -8,9 +8,4 @@
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="src\assets\icons8-open-60.svg" />
-    <None Remove="src\assets\icons8-open-ios-17-glyph.zip" />
-    <None Remove="src\assets\open-outline.svg" />
-  </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 import ResultsTable from "./ResultsTable";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import "../css/Logbook.css";
 
 function Logbook() {

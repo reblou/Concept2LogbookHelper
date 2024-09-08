@@ -1,4 +1,6 @@
 import { useState, useRef, React, useContext } from 'react';
+import filterImage from '/assets/filter.svg';
+import sortImage from '/assets/bar-chart-2.svg';
 import '../css/ResultTableHeader.css';
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 import { SortCallbackContext } from '../Contexts/SortCallbackContext.js';
@@ -25,13 +27,13 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
                                 </div>}
                         </FilterCallbackContext.Provider>
                     <button className='FilterMenuButton' onClick={() => setPopup(!popup)} >
-                        <img className='icon-image' src ='src/assets/filter.svg' />
+                        <img className='icon-image' src ={filterImage} />
                     </button>
 
                     </div>
                     : <></>}
                 <button className='FilterMenuButton' onClick={() => sortResultsCallback(ResultPropSelector)} >
-                    <img className='icon-image' src='src/assets/bar-chart-2.svg' />
+                    <img className='icon-image' src={sortImage} />
                 </button>
             </div>
         </th> 

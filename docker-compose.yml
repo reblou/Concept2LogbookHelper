@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   concept2logbookhelper.server:
-    image: ${DOCKER_REGISTRY-}concept2logbookhelperserver
+    image: reblou/concept2logbookhelperserver
     build:
       context: .
       dockerfile: Concept2LogbookHelper.Server/Dockerfile
