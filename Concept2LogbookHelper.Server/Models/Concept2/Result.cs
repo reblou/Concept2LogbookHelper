@@ -52,10 +52,12 @@
                     break;
                 case "FixedDistanceInterval": //8x 500m
                 case "FixedTimeInterval":
-                case "VariableIntervalUndefinedRest":
                 case "FixedCalorieInterval":
+                    this.pretty_workout_type = FormatFixedIntervals(this.workout.intervals);
+                    break;
                 case "VariableInterval": //v250, 500, 750 etc. // could be time/distance/ or calorie intervals 
-                    this.pretty_workout_type = FormatUnknownIntervalsTypes();
+                case "VariableIntervalUndefinedRest":
+                    this.pretty_workout_type = FormatVariableIntervals(this.workout.intervals);
                     break;
                 case "FixedDistanceSplits": // fixed distance
                     this.pretty_workout_type = $"{distance}m";
@@ -75,30 +77,36 @@
             }
         }
 
-        private string FormatUnknownIntervalsTypes()
+        private string FormatFixedIntervals(List<Interval> intervals)
         {
-            switch(workout.intervals.First().type)
-            {
-                case "time":
-                    return FormatIntervals(workout.intervals.Select(i => i.time).ToList(), FormatDeciseconds);
-                case "distance":
-                    return FormatIntervals(workout.intervals.Select(i => i.distance).ToList(), i => $"{i}m");
-                case "calorie":
-                    return FormatIntervals(workout.intervals.Select(i => i.calories_total).ToList(), i=> $"{i}cal");
-                default:
-                    return "Unknown Intervals";
-            }
+            if (intervals is null || intervals.Count == 0) return "Invalid Intervals";
+
+            return $"{intervals.Count}x{FormatInterval(intervals.First())}";
         }
 
-        private string FormatIntervals(List<int> intervalMeasurable, Func<int, string> formatter)
+        private string FormatVariableIntervals(List<Interval> intervals)
         {
-            if (intervalMeasurable.Distinct().Count() == 1) // fixed intervals
+            if (intervals is null || intervals.Count == 0) return "Invalid Intervals";
+
+            var first = $"v{FormatInterval(intervals.First())}";
+
+            var second = intervals.Count > 1 ? $",{FormatInterval(intervals[1])}" : "";
+
+            return $"{first}{second}..{intervals.Count}";
+        }
+
+        private string FormatInterval(Interval interval)
+        {
+            switch(interval.type)
             {
-                return $"{intervalMeasurable.Count}x{formatter(intervalMeasurable[0])}";
-            }
-            else // variable intervals
-            {
-                return $"v{formatter(intervalMeasurable[0])},{formatter(intervalMeasurable.ElementAtOrDefault(1))}..{intervalMeasurable.Count}";
+                case "time":
+                    return FormatDeciseconds(interval.time);
+                case "distance":
+                    return $"{interval.distance}m";
+                case "calorie":
+                    return $"{interval.calories_total}cal";
+                default:
+                    return "N/A";
             }
         }
 
