@@ -62,15 +62,15 @@ namespace Concept2LogbookHelper.Server.Services
             return results.meta.pagination.total;
         }
 
-        public async Task<AccessToken> GetAccessTokenGrant(string code)
+        public async Task<AccessToken> GetAccessTokenGrant(string code, string? redirectUrl = null)
         {
             FormUrlEncodedContent body = new FormUrlEncodedContent(new Dictionary<string, string>() {
                 { "client_id", _config["client_id"]},
                 { "client_secret", _config["client_secret"]},
                 {"code", code },
-                {"grant_type", _config["Authentication:GrantType"]},
+                {"grant_type", "authorization_code"},
                 {"scope", _config["Authentication:Scope"] },
-                {"redirect_uri",  _config["Authentication:RedirectURI"]}
+                {"redirect_uri",  redirectUrl ?? _config["Authentication:RedirectURI"]}
             });
 
             return await GetAccessToken(body);

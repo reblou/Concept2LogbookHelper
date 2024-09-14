@@ -14,8 +14,13 @@ function Auth() {
 
     async function getSessionId() {
         var code = searchParams.get("code");
+        var dummy = searchParams.get("dummy");
 
-        await fetch("api/authentication?" + new URLSearchParams({ code: code }));
+        let params = new URLSearchParams({ code: code})
+
+        if (dummy !== null) params.append("dummy", dummy);
+
+        await fetch("api/authentication?" + params);
 
         navigate("/logbook")
     }

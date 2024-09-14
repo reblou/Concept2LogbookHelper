@@ -3,6 +3,7 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
+      "launchBrowser": false,
       "serviceActions": {
         "concept2logbookhelper.server": "StartDebugging",
         "redis": "StartWithoutDebugging"

@@ -10,6 +10,7 @@ using Concept2LogbookHelper.Extensions;
 using Microsoft.Extensions.Caching.Distributed;
 using Concept2LogbookHelper.Server.Services;
 using System.ComponentModel;
+using static System.Net.WebRequestMethods;
 
 namespace Concept2LogbookHelper.Server.Controllers
 {
@@ -29,23 +30,42 @@ namespace Concept2LogbookHelper.Server.Controllers
         }
 
         [HttpGet]
-        [Route("redirect")]
-        public RedirectResult RedirectToC2Login()
+        public async Task<StatusCodeResult> GetSessionId([FromQuery] string code, [FromQuery] bool dummy=false)
         {
-            //TODO: implement Options pattern
-            return Redirect($"{_config["Authentication:Concept2APIUrl"]}oauth/authorize?client_id={_config["client_id"]}&scope={_config["Authentication:Scope"]}&response_type={_config["Authentication:ResponseType"]}&redirect_uri={_config["Authentication:RedirectURI"]}");
-        }
+            string? redirect = null;
+            string? sessionId = null;
 
-        [HttpGet]
-        public async Task<StatusCodeResult> GetSessionId([FromQuery] string code)
-        { 
-            AccessToken accessToken = await _concept2APIService.GetAccessTokenGrant(code);
+            if (dummy)
+            {
+                redirect = _config["Authentication:DummyRedirectURI"];
+                sessionId = _config["Authentication:DummySessionId"];
+            }
 
-            string sessionID = await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, accessToken.expires_in);
+            AccessToken accessToken = await _concept2APIService.GetAccessTokenGrant(code, redirect);
+
+            string sessionID = await _sessionService.StoreNewAccessToken(accessToken.access_token, accessToken.refresh_token, 
+                accessToken.expires_in, sessionID: sessionId);
 
             Response.Headers.Append("Set-Cookie", $"session-id={sessionID}; Secure; HttpOnly; Expires={DateTime.Now.AddMonths(1).ToString("ddd, dd MMM, yyyy HH:mm:ss G'M'T")}; Path=/api");
 
             return StatusCode(200);
+        }
+
+        [HttpGet]
+        [Route("redirect")]
+        public RedirectResult RedirectToC2Login()
+        {
+            //TODO: implement Options pattern
+            return Redirect($"{_config["Authentication:Concept2APIUrl"]}oauth/authorize?client_id={_config["client_id"]}&scope={_config["Authentication:Scope"]}&response_type=code&redirect_uri={_config["Authentication:RedirectURI"]}");
+        }
+
+        [HttpGet]
+        [Route("dummyRedirect")]
+        public RedirectResult DummyRedirect([FromQuery] string pass)
+        {
+            if (pass != _config["dummy_login_key"]) return Redirect("/");
+
+            return Redirect($"{_config["Authentication:Concept2APIUrl"]}oauth/authorize?client_id={_config["client_id"]}&scope={_config["Authentication:Scope"]}&response_type=code&redirect_uri={_config["Authentication:DummyRedirectURI"]}");
         }
 
         [HttpGet]
