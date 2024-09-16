@@ -11,10 +11,12 @@ namespace Concept2LogbookHelper.Server.Controllers
     public class LogbookController : ControllerBase
     {
         IConcept2APIService _concept2APIService;
+        ISessionService _sessionService;
 
-        public LogbookController(IConcept2APIService concept2APIService)
+        public LogbookController(IConcept2APIService concept2APIService, ISessionService sessionService)
         {
             this._concept2APIService = concept2APIService;
+            this._sessionService = sessionService;
         }
 
         private string GetSessionId()
@@ -29,6 +31,15 @@ namespace Concept2LogbookHelper.Server.Controllers
             string sessionId = GetSessionId();
 
             return await _concept2APIService.GetAllResults(sessionId);
+        }
+
+        [HttpGet]
+        [Route("GetResultsPaged")]
+        public async Task<GetResults> GetResultsPaged([FromQuery] int size, [FromQuery] int page = 1)
+        {
+            var accessToken = await _sessionService.GetStoredAccessToken(GetSessionId());
+
+            return await _concept2APIService.GetResults(accessToken, page, size); ;
         }
     }
 }

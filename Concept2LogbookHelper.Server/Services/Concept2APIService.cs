@@ -101,10 +101,17 @@ namespace Concept2LogbookHelper.Server.Services
             return JsonConvert.DeserializeObject<AccessToken>(content);
         }
 
-        public async Task<GetResults> GetResults(string accessToken, int page = 1)
+        public async Task<GetResults> GetResults(string accessToken, int page = 1, int? size = null)
         {
-            return await SendRequest<GetResults>(accessToken, 
-                $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results?number={max_returned_per_page}&page={page}", HttpMethod.Get);
+            if (size > max_returned_per_page) throw new ArgumentException("Size is larger than C2 API max");
+
+            // if no arg passed, set to API max
+            size ??= max_returned_per_page;
+
+            GetResults results = await SendRequest<GetResults>(accessToken, 
+                $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results?number={size}&page={page}", HttpMethod.Get);
+            results.data.ForEach(result => result.CalculateAndSetPrettyWorkoutType());
+            return results;
         }
 
         public async Task<List<Result>> GetAllResults(string sessionId)
@@ -122,7 +129,7 @@ namespace Concept2LogbookHelper.Server.Services
                 data.AddRange(res.data);
             }
 
-            data.ForEach(result => result.CalculateAndSetPrettyWorkoutType());
+            //data.ForEach(result => result.CalculateAndSetPrettyWorkoutType());
 
             return data;
         }

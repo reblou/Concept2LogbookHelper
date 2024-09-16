@@ -80,17 +80,42 @@ function ResultsTable() {
     );
 
     async function populateTotalResults() {
+        let fetchSize = 20
+
+        // wipe results first
+        setLoading(true);
+        workoutTypesUnique.current = undefined;
+        fullResults.current = undefined;
+        setResultsToDisplay(undefined);
+
         try {
-            let response = await fetch("api/logbook/getresults")
+            let response = await fetch("api/logbook/GetResultsPaged?" + new URLSearchParams({ size: fetchSize }));
             let data = await response.json();
-            workoutTypesUnique.current = GetUniqueWorkoutTypes(data);
-            fullResults.current = data;
-            setResultsToDisplay(data);
-            setLoading(false);
+
+            addResultsToTable(data.data);
+
+            for (let i = 2; i <= data.meta.pagination.total_pages; i++) {
+                let response = await fetch("api/logbook/GetResultsPaged?" + new URLSearchParams({ size: fetchSize, page: i}));
+                let data = await response.json();
+
+                //TODO: wipes any active filters
+                addResultsToTable(data.data);
+            }
         } catch (err) {
             setOpenErrorDialog(true);
         }
     }
+
+    async function addResultsToTable(data) {
+        if (fullResults.current !== undefined)
+            data = fullResults.current.concat(data);
+
+        workoutTypesUnique.current = GetUniqueWorkoutTypes(data);
+        fullResults.current = data;
+        setResultsToDisplay(data);
+        setLoading(false);
+    }
+
 
     function TimeToDeciseconds(time) {
         if (time === undefined) return undefined;

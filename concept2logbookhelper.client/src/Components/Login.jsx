@@ -42,7 +42,7 @@ function Login() {
     }
 
     async function DummyLogin() {
-        //TODO: if no access or refresh token stored, flag error message, do not navigate to logbook
+        //TODO: if no access or refresh token stored, flag error message
         var response = await fetch('api/authentication/dummyLogIn');
 
         if (response.ok) navigate('/logbook');
