@@ -14,24 +14,36 @@ import ErrorDialog from "./ErrorDialog";
 function ResultsTable() {
     const [resultsToDisplay, setResultsToDisplay] = useState();
     const [loading, setLoading] = useState(true);
+    const [fullResults, setFullResults] = useState(undefined);
 
     const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
     const workoutTypesUnique = useRef([]);
-    const fullResults = useRef([]);
     const filterMap = useRef(new Map());
     const sortToggle = useRef(false);
 
-
-
     const maxHR = Math.max(
-        fullResults.current?.map(result => result.heart_rate?.max ?? 0)
+        fullResults?.map(result => result.heart_rate?.max ?? 0)
             ?.reduce((a, b) => Math.max(a, b), 0)) || 0;
 
-    const totalMeters = fullResults.current?.reduce((a, c) => a + c.distance, 0) ?? 0
-    const totalResults = fullResults.current?.length ?? 0;
+    const totalMeters = fullResults?.reduce((a, c) => a + c.distance, 0) ?? 0
+    const totalResults = fullResults?.length ?? 0;
 
-    useEffect(() => { populateTotalResults() }, []);
+    useEffect(() => {
+        var controller = new AbortController();
+        populateTotalResults(controller);
+        return () => {
+            controller.abort();
+            setFullResults(fr => undefined);
+        };
+    }, []);
+
+    useEffect(() => {
+        ApplyAllFilters();
+        return () => {
+            setResultsToDisplay(rs => undefined);
+        };
+    }, [fullResults]);
 
     return (
         <div className='results-table'>
@@ -79,43 +91,36 @@ function ResultsTable() {
      </div>
     );
 
-    async function populateTotalResults() {
+    async function populateTotalResults(controller) {
         let fetchSize = 20
 
-        // wipe results first
-        setLoading(true);
-        workoutTypesUnique.current = undefined;
-        fullResults.current = undefined;
-        setResultsToDisplay(undefined);
-
         try {
-            let response = await fetch("api/logbook/GetResultsPaged?" + new URLSearchParams({ size: fetchSize }));
-            let data = await response.json();
+            let pagination = await populatePagedResults(controller, fetchSize);
 
-            addResultsToTable(data.data);
-
-            for (let i = 2; i <= data.meta.pagination.total_pages; i++) {
-                let response = await fetch("api/logbook/GetResultsPaged?" + new URLSearchParams({ size: fetchSize, page: i}));
-                let data = await response.json();
-
-                //TODO: wipes any active filters
-                addResultsToTable(data.data);
+            for (let i = 2; i <= pagination.total_pages; i++) {
+                await populatePagedResults(controller, fetchSize, i);
             }
-        } catch (err) {
+            workoutTypesUnique.current = GetUniqueWorkoutTypes(fullResults);
+        } catch ({ name, messsage }) {
+            if (name === "AbortError") return; //ignore unmount errors
+            
             setOpenErrorDialog(true);
         }
     }
 
-    async function addResultsToTable(data) {
-        if (fullResults.current !== undefined)
-            data = fullResults.current.concat(data);
+    async function populatePagedResults(controller, fetchSize, page=1) {
+        let response = await fetch("api/logbook/GetResultsPaged?" + new URLSearchParams({ size: fetchSize, page }), { signal: controller.signal });
+        let results = await response.json();
 
-        workoutTypesUnique.current = GetUniqueWorkoutTypes(data);
-        fullResults.current = data;
-        setResultsToDisplay(data);
+        setFullResults(fr => {
+            return fr === undefined ?
+                results.data :
+                [...fr, ...results.data]
+        });
+
         setLoading(false);
+        return results.meta.pagination;
     }
-
 
     function TimeToDeciseconds(time) {
         if (time === undefined) return undefined;
@@ -175,7 +180,11 @@ function ResultsTable() {
     }
 
     function ApplyAllFilters() {
-        var resultSetToFilter = fullResults.current;
+        if (fullResults === undefined) {
+            setResultsToDisplay(undefined);
+        }
+
+        var resultSetToFilter = fullResults;
 
         filterMap.current.forEach((value, key) =>
             resultSetToFilter = resultSetToFilter.filter(result => value.condition(value.selector(result)))
