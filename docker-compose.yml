@@ -7,11 +7,9 @@ services:
       context: .
       dockerfile: Concept2LogbookHelper.Server/Dockerfile
     ports:
-      - 51803:80
-      - 44360:443
+        - 8080:8080
     environment:
         - ConnectionStrings__Redis=redis:5111
-        - ASPNETCORE_URLS=https://+:443;http://+:80
   redis:
     image: redis
     command: --port 5111
