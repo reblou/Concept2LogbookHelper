@@ -15,7 +15,6 @@ function ResultsTable() {
     const [resultsToDisplay, setResultsToDisplay] = useState();
     const [loading, setLoading] = useState(true);
     const [fullResults, setFullResults] = useState(undefined);
-
     const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
     const workoutTypesUnique = useRef([]);
@@ -40,6 +39,8 @@ function ResultsTable() {
 
     useEffect(() => {
         ApplyAllFilters();
+
+        workoutTypesUnique.current = GetUniqueWorkoutTypes(fullResults);
         return () => {
             setResultsToDisplay(rs => undefined);
         };
@@ -100,7 +101,6 @@ function ResultsTable() {
             for (let i = 2; i <= pagination.total_pages; i++) {
                 await populatePagedResults(controller, fetchSize, i);
             }
-            workoutTypesUnique.current = GetUniqueWorkoutTypes(fullResults);
         } catch ({ name, messsage }) {
             if (name === "AbortError") return; //ignore unmount errors
             

@@ -8,7 +8,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/home/app/.aspnet/https/Concept2LogbookHelper.Server.pfx
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=027ca022-4927-47a8-a257-0b391d78de27
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=acdff01e-4048-4397-93d5-6928daceb4b4
       - ASPNETCORE_URLS=https://+:443;http://+:80
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
