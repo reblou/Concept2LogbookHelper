@@ -1,4 +1,6 @@
+using Concept2LogbookHelper.Server.Models;
 using Concept2LogbookHelper.Server.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +13,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<ISessionService, SessionService>();
 builder.Services.AddSingleton<IConcept2APIService,  Concept2APIService>();
+
 IConfiguration configuration = builder.Configuration;
+builder.Services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {

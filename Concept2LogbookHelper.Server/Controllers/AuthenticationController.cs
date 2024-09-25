@@ -11,6 +11,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Concept2LogbookHelper.Server.Services;
 using System.ComponentModel;
 using static System.Net.WebRequestMethods;
+using Microsoft.Extensions.Options;
 
 namespace Concept2LogbookHelper.Server.Controllers
 {
@@ -18,15 +19,15 @@ namespace Concept2LogbookHelper.Server.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IConfiguration _config;
         private readonly ISessionService _sessionService;
         private readonly IConcept2APIService _concept2APIService;
+        private readonly AuthenticationOptions _auth;
 
-        public AuthenticationController(IConfiguration config, ISessionService authService, IConcept2APIService concept2APIService)
+        public AuthenticationController(IOptions<AuthenticationOptions> _authOptions, ISessionService authService, IConcept2APIService concept2APIService)
         {
-            _config = config;
             _sessionService = authService;
             _concept2APIService = concept2APIService;
+            _auth = _authOptions.Value;
         }
 
         [HttpGet]
@@ -37,8 +38,8 @@ namespace Concept2LogbookHelper.Server.Controllers
 
             if (dummy)
             {
-                redirect = _config["Authentication:DummyRedirectURI"];
-                sessionId = _config["Authentication:DummySessionId"];
+                redirect = _auth.DummyRedirectURI;
+                sessionId = _auth.DummySessionId;
             }
 
             AccessToken accessToken = await _concept2APIService.GetAccessTokenGrant(code, redirect);
@@ -55,17 +56,16 @@ namespace Concept2LogbookHelper.Server.Controllers
         [Route("redirect")]
         public RedirectResult RedirectToC2Login()
         {
-            //TODO: implement Options pattern
-            return Redirect($"{_config["Authentication:Concept2APIUrl"]}oauth/authorize?client_id={_config["client_id"]}&scope={_config["Authentication:Scope"]}&response_type=code&redirect_uri={_config["Authentication:RedirectURI"]}");
+            return Redirect($"{_auth.Concept2APIUrl}oauth/authorize?client_id={_auth.client_id}&scope={_auth.Scope}&response_type=code&redirect_uri={_auth.RedirectURI}");
         }
 
         [HttpGet]
         [Route("dummyRedirect")]
         public RedirectResult DummyRedirect([FromQuery] string pass)
         {
-            if (pass != _config["dummy_login_key"]) return Redirect("/");
+            if (pass != _auth.dummy_login_key) return Redirect("/");
 
-            return Redirect($"{_config["Authentication:Concept2APIUrl"]}oauth/authorize?client_id={_config["client_id"]}&scope={_config["Authentication:Scope"]}&response_type=code&redirect_uri={_config["Authentication:DummyRedirectURI"]}");
+            return Redirect($"{_auth.Concept2APIUrl}oauth/authorize?client_id={_auth.client_id}&scope={_auth.Scope}&response_type=code&redirect_uri={_auth.DummyRedirectURI}");
         }
 
         [HttpGet]
@@ -100,7 +100,7 @@ namespace Concept2LogbookHelper.Server.Controllers
             Response.Headers.Append("Set-Cookie", $"session-id=\"\"; Secure; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/api");
 
             // don't delete dummy account tokens
-            if(sessionId != _config["Authentication:DummySessionId"])
+            if(sessionId != _auth.DummySessionId)
                 await _sessionService.LogOut(sessionId);
 
             return StatusCode(200);
@@ -110,7 +110,7 @@ namespace Concept2LogbookHelper.Server.Controllers
         [Route("dummyLogIn")]
         public async Task<StatusCodeResult> DummyLogIn()
         {
-            string sessionId = _config["Authentication:DummySessionId"] ?? throw new InvalidOperationException("Configured session ID for dummy account not found.");
+            string sessionId = _auth.DummySessionId ?? throw new InvalidOperationException("Configured session ID for dummy account not found.");
 
             try
             {

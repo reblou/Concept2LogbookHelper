@@ -2,6 +2,7 @@
 using Concept2LogbookHelper.Server.Models.Concept2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Extensions;
 using Newtonsoft.Json;
 using System;
@@ -20,13 +21,13 @@ namespace Concept2LogbookHelper.Server.Services
 
 
         private HttpClient _httpClient;
-        private IConfiguration _config;
         private ISessionService _sessionService;
+        private readonly AuthenticationOptions _auth;
 
-        public Concept2APIService(HttpClient httpClient, IConfiguration configuration, ISessionService authenticationService)
+        public Concept2APIService(HttpClient httpClient, IOptions<AuthenticationOptions> authOptions, ISessionService authenticationService)
         {
             this._httpClient = httpClient;
-            this._config = configuration;
+            this._auth = authOptions.Value;
             _sessionService = authenticationService;
         }
 
@@ -57,7 +58,7 @@ namespace Concept2LogbookHelper.Server.Services
 
         public async Task<int> GetNumberOfResults(string sessionId)
         {
-            GetResults results = await SendRequest<GetResults>(sessionId, $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results?type=rower", HttpMethod.Get);
+            GetResults results = await SendRequest<GetResults>(sessionId, $"{_auth.Concept2APIUrl}/api/users/me/results?type=rower", HttpMethod.Get);
 
             return results.meta.pagination.total;
         }
@@ -65,12 +66,12 @@ namespace Concept2LogbookHelper.Server.Services
         public async Task<AccessToken> GetAccessTokenGrant(string code, string? redirectUrl = null)
         {
             FormUrlEncodedContent body = new FormUrlEncodedContent(new Dictionary<string, string>() {
-                { "client_id", _config["client_id"]},
-                { "client_secret", _config["client_secret"]},
+                { "client_id", _auth.client_id},
+                { "client_secret", _auth.client_secret},
                 {"code", code },
                 {"grant_type", "authorization_code"},
-                {"scope", _config["Authentication:Scope"] },
-                {"redirect_uri",  redirectUrl ?? _config["Authentication:RedirectURI"]}
+                {"scope", _auth.Scope},
+                {"redirect_uri",  redirectUrl ?? _auth.RedirectURI}
             });
 
             return await GetAccessToken(body);
@@ -79,10 +80,10 @@ namespace Concept2LogbookHelper.Server.Services
         public async Task<AccessToken> GetAccessTokenRefreshGrant(string refreshToken)
         {
             FormUrlEncodedContent body = new FormUrlEncodedContent(new Dictionary<string, string>() {
-                { "client_id", _config["client_id"]},
-                { "client_secret", _config["client_secret"]},
+                { "client_id", _auth.client_id},
+                { "client_secret", _auth.client_secret},
                 {"grant_type", "refresh_token"},
-                {"scope", _config["Authentication:Scope"] },
+                {"scope", _auth.Scope },
                 {"refresh_token",  refreshToken} 
             });
 
@@ -91,7 +92,7 @@ namespace Concept2LogbookHelper.Server.Services
 
         private async Task<AccessToken> GetAccessToken(HttpContent? body)
         {
-            string url = $"{_config["Authentication:Concept2APIUrl"]}oauth/access_token";
+            string url = $"{_auth.Concept2APIUrl}oauth/access_token";
 
             HttpResponseMessage response = await _httpClient.PostAsync(url, body);
 
@@ -109,7 +110,7 @@ namespace Concept2LogbookHelper.Server.Services
             size ??= max_returned_per_page;
 
             GetResults results = await SendRequest<GetResults>(accessToken, 
-                $"{_config["Authentication:Concept2APIUrl"]}/api/users/me/results?number={size}&page={page}", HttpMethod.Get);
+                $"{_auth.Concept2APIUrl}/api/users/me/results?number={size}&page={page}", HttpMethod.Get);
             results.data.ForEach(result => result.CalculateAndSetPrettyWorkoutType());
             return results;
         }
@@ -128,8 +129,6 @@ namespace Concept2LogbookHelper.Server.Services
                 var res = await GetResults(accessToken, i);
                 data.AddRange(res.data);
             }
-
-            //data.ForEach(result => result.CalculateAndSetPrettyWorkoutType());
 
             return data;
         }
