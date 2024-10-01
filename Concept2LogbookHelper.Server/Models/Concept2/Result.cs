@@ -8,6 +8,11 @@
         public string TimeZone { get; set; }
         public DateTime? date_utc { get; set; }
         public int distance { get; set; }
+        public int rest_distance { get; set; }
+        public int total_distance { get { 
+                return distance + rest_distance;
+            } }
+
         public string type { get; set; }
 
         // time in 10ths of a second/ decisecond

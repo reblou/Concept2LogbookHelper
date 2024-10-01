@@ -9,7 +9,6 @@ namespace Concept2LogbookHelper.Server.Services
 {
     public class SessionService : ISessionService
     {
-        //private readonly IConcept2APIService _apiService;
         private readonly IDistributedCache _cache;
 
         public SessionService(IDistributedCache cache)
