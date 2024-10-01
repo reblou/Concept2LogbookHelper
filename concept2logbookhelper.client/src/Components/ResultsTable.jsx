@@ -5,15 +5,16 @@ import "../css/ResultsTable.css";
 import ResultTableHeader from "./ResultTableHeader";
 import FilterButtonList from "./FilterButtonList";
 import FilterComparisons from "./FilterComparisons";
-
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
 import { SortCallbackContext } from '../Contexts/SortCallbackContext.js';
 import Loading from "./Loading";
 import ErrorDialog from "./ErrorDialog";
+import ResultTableTotals from "./ResultTableTopMenu";
 
 function ResultsTable() {
     const [resultsToDisplay, setResultsToDisplay] = useState();
     const [loading, setLoading] = useState(true);
+    const [semiLoaded, setSemiLoaded] = useState(true);
     const [fullResults, setFullResults] = useState(undefined);
     const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
@@ -21,12 +22,7 @@ function ResultsTable() {
     const filterMap = useRef(new Map());
     const sortToggle = useRef(false);
 
-    const maxHR = Math.max(
-        fullResults?.map(result => result.heart_rate?.max ?? 0)
-            ?.reduce((a, b) => Math.max(a, b), 0)) || 0;
-
-    const totalMeters = fullResults?.reduce((a, c) => a + c.distance, 0) ?? 0
-    const totalResults = fullResults?.length ?? 0;
+    const sortFunction = useRef(undefined);
 
     useEffect(() => {
         var controller = new AbortController();
@@ -40,7 +36,9 @@ function ResultsTable() {
     useEffect(() => {
         ApplyAllFilters();
 
+
         workoutTypesUnique.current = GetUniqueWorkoutTypes(fullResults);
+
         return () => {
             setResultsToDisplay(rs => undefined);
         };
@@ -50,13 +48,14 @@ function ResultsTable() {
         <div className='results-table'>
             <ErrorDialog open={openErrorDialog} />
             {loading ? <Loading /> : <>
-            <p>Total Workouts: {totalResults} | Total Meters: {totalMeters}m | Max HR: {maxHR}</p>
-            <button onClick={() => { filterMap.current.clear(); ApplyAllFilters(); }}>Clear All Filters</button>
+
+            <ResultTableTotals fullResults={fullResults} loading={semiLoaded}/>
+                <button onClick={() => { filterMap.current.clear(); sortFunction.current = undefined; ApplyAllFilters(); }}>Clear All Filters</button>
 
                 <FilterCallbackContext.Provider value={Filter}>
                     <table>
                         <thead>
-                            <SortCallbackContext.Provider value={Sort}>
+                            <SortCallbackContext.Provider value={SetSort}>
                                 <tr>
                                     <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} />
                                     <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />} />
@@ -101,6 +100,7 @@ function ResultsTable() {
             for (let i = 2; i <= pagination.total_pages; i++) {
                 await populatePagedResults(controller, fetchSize, i);
             }
+            setSemiLoaded(false);
         } catch ({ name, messsage }) {
             if (name === "AbortError") return; //ignore unmount errors
             
@@ -156,12 +156,16 @@ function ResultsTable() {
         })
     }
 
-    function Sort(ResultPropSelectorFunction) {
+    function SetSort(ResultPropSelectorFunction) {
         sortToggle.current = !sortToggle.current;
-        setResultsToDisplay(resultsToDisplay.toSorted((a, b) =>
-            PropComparer(ResultPropSelectorFunction(a), ResultPropSelectorFunction(b), sortToggle.current)
-        ));
 
+        sortFunction.current = (results) => {
+            return results.toSorted((a, b) =>
+                PropComparer(ResultPropSelectorFunction(a), ResultPropSelectorFunction(b), sortToggle.current)
+            );
+        }
+
+        setResultsToDisplay(sortFunction.current(resultsToDisplay));
     }
 
     function PropComparer(a, b, asc) {
@@ -184,12 +188,15 @@ function ResultsTable() {
             setResultsToDisplay(undefined);
         }
 
-        var resultSetToFilter = fullResults;
+        var filteredResults = fullResults;
 
-        filterMap.current.forEach((value, key) =>
-            resultSetToFilter = resultSetToFilter.filter(result => value.condition(value.selector(result)))
+        filterMap.current.forEach((value) =>
+            filteredResults = filteredResults.filter(result => value.condition(value.selector(result)))
         )
-        setResultsToDisplay(resultSetToFilter);
+
+        if (sortFunction.current !== undefined) filteredResults = sortFunction.current(filteredResults);
+
+        setResultsToDisplay(filteredResults);
     }
 }
 
