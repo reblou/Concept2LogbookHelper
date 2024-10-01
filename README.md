@@ -14,4 +14,4 @@ I made this project because of wanting features that were missing in the officia
 
 ## Access
 
-This project is still in development and there is no public URL as of yet. 
+https://logbookhelper.com/
