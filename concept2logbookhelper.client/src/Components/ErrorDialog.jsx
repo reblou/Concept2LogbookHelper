@@ -25,7 +25,7 @@ function ErrorDialog({ open }) {
     {
         open = false;
         await fetch("api/authentication/logout");
-
+        
         navigate('/');
     }
 }

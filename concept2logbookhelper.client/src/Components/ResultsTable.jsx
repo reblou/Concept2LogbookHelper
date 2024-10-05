@@ -18,6 +18,7 @@ function ResultsTable() {
     const [fullResults, setFullResults] = useState(undefined);
     const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
+    const navigate = useNavigate();
     const workoutTypesUnique = useRef([]);
     const filterMap = useRef(new Map());
     const sortToggle = useRef(false);
@@ -110,6 +111,12 @@ function ResultsTable() {
 
     async function populatePagedResults(controller, fetchSize, page=1) {
         let response = await fetch("api/logbook/GetResultsPaged?" + new URLSearchParams({ size: fetchSize, page }), { signal: controller.signal });
+
+        if (response.status == 401) {
+            navigate('/');
+            return;
+        }
+
         let results = await response.json();
 
         setFullResults(fr => {

@@ -35,11 +35,18 @@ namespace Concept2LogbookHelper.Server.Controllers
 
         [HttpGet]
         [Route("GetResultsPaged")]
-        public async Task<GetResults> GetResultsPaged([FromQuery] int size, [FromQuery] int page = 1)
+        public async Task<GetResults?> GetResultsPaged([FromQuery] int size, [FromQuery] int page = 1)
         {
-            var accessToken = await _sessionService.GetStoredAccessToken(GetSessionId());
-
-            return await _concept2APIService.GetResults(accessToken, page, size); ;
+            try
+            {
+                var accessToken = await _sessionService.GetStoredAccessToken(GetSessionId());
+                return await _concept2APIService.GetResults(accessToken, page, size);
+            } catch(KeyNotFoundException)
+            {
+                //access token has expired.
+                this.HttpContext.Response.StatusCode = 401;
+                return null;
+            }
         }
     }
 }
