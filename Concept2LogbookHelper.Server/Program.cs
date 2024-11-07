@@ -1,6 +1,8 @@
 using Concept2LogbookHelper.Server.Models;
 using Concept2LogbookHelper.Server.Services;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection.Metadata.Ecma335;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +13,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
-builder.Services.AddSingleton<ISessionService, SessionService>();
-builder.Services.AddSingleton<IConcept2APIService,  Concept2APIService>();
 
 IConfiguration configuration = builder.Configuration;
 builder.Services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
@@ -21,6 +21,16 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = configuration.GetConnectionString("Redis");
 });
+
+builder.Services.AddSingleton<ISessionService, SessionService>(serviceProvider =>
+{
+    return new SessionService(serviceProvider.GetService<IDistributedCache>(), configuration.GetConnectionString("Redis"));
+});
+builder.Services.AddSingleton<IConcept2APIService,  Concept2APIService>();
+
+
+
+
 
 var app = builder.Build();
 

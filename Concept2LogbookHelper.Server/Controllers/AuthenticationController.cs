@@ -134,6 +134,14 @@ namespace Concept2LogbookHelper.Server.Controllers
                 return StatusCode(200);
             }
         }
+
+        [HttpGet]
+        [Route("dummyTokenCheck")]
+        public async Task<StoredToken> DummyTokenCheck()
+        {
+            string sessionId = _auth.DummySessionId ?? throw new InvalidOperationException("Configured session ID for dummy account not found.");
+            return await _sessionService.GetTokenDetails(sessionId);
+        }
     }
 
 }

@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef, Suspense } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom'
+import { PropTypes } from 'prop-types';
 
 function ErrorDialog({ open }) {
     const errorDialog = useRef();
