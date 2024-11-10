@@ -74,6 +74,10 @@ namespace Concept2LogbookHelper.Server.Controllers
         {
             string sessionId = Request.Cookies["session-id"] ?? throw new ArgumentException("No valid session ID received");
 
+            if(sessionId==_auth.DummySessionId) 
+                return StatusCode(404);
+            
+
             try
             {
                 var token = await _sessionService.GetStoredAccessToken(sessionId);
