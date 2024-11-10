@@ -35,6 +35,7 @@ COPY ["concept2logbookhelper.client/concept2logbookhelper.client.esproj", "conce
 RUN dotnet restore "./Concept2LogbookHelper.Server/Concept2LogbookHelper.Server.csproj"
 COPY . .
 WORKDIR "/src/Concept2LogbookHelper.Server"
+RUN mkdir -p ~/.aspnet/https
 RUN dotnet build "./Concept2LogbookHelper.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
