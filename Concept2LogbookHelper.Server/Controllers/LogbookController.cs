@@ -21,7 +21,7 @@ namespace Concept2LogbookHelper.Server.Controllers
 
         private string GetSessionId()
         {
-            return Request.Cookies["session-id"] ?? throw new ArgumentException("No valid session ID received");
+            return Request.Cookies["session-id"] ?? throw new KeyNotFoundException("No valid session ID received");
         }
 
         [HttpGet]
@@ -43,7 +43,7 @@ namespace Concept2LogbookHelper.Server.Controllers
                 return await _concept2APIService.GetResults(accessToken, page, size);
             } catch(KeyNotFoundException)
             {
-                //access token has expired.
+                //access token has expired or we don't have a session Id
                 this.HttpContext.Response.StatusCode = 401;
                 return null;
             }
