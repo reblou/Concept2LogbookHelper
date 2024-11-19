@@ -5,6 +5,7 @@ import "../css/ResultsTable.css";
 import ResultTableHeader from "./ResultTableHeader";
 import FilterButtonList from "./FilterButtonList";
 import FilterComparisons from "./FilterComparisons";
+import MobileWarning from "./MobileWarning";
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
 import { SortCallbackContext } from '../Contexts/SortCallbackContext.js';
 import Loading from "./Loading";
@@ -47,12 +48,14 @@ function ResultsTable() {
 
     return (
         <div className='results-table'>
-            <ErrorDialog open={openErrorDialog} />
             {loading ? <Loading /> : <>
+                <ErrorDialog open={openErrorDialog} />
 
-            <ResultTableTotals fullResults={fullResults} loading={semiLoaded}/>
-                <button onClick={() => { filterMap.current.clear(); sortFunction.current = undefined; ApplyAllFilters(); }}>Clear All Filters</button>
-
+                <div className='results-table-header'>
+                    <MobileWarning />
+                    <ResultTableTotals fullResults={fullResults} loading={semiLoaded}/>
+                    <button onClick={() => { filterMap.current.clear(); sortFunction.current = undefined; ApplyAllFilters(); }}>Clear All Filters</button>
+                </div>
                 <FilterCallbackContext.Provider value={Filter}>
                     <table>
                         <thead>

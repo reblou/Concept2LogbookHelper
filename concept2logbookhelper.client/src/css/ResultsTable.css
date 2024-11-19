@@ -59,3 +59,30 @@ dialog::backdrop {
     background-color: #000000;
     opacity: 0.5;
 }
+
+.results-table-header {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.mobilemessagediv {
+    display: none;
+    background-color: light-dark(#008585, #008585);
+    width: 100%;
+    border-radius: 8px;
+    padding: 2px;
+}
+
+@media screen and (max-width:480px) {
+    .mobilemessagediv {
+        display: block;
+    }
+
+    .results-table-header {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        align-self: flex-start;
+    }
+}
