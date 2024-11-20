@@ -48,8 +48,8 @@ function ResultsTable() {
 
     return (
         <div className='results-table'>
+            <ErrorDialog open={openErrorDialog} message={"There was an error fetching workout data."} />
             {loading ? <Loading /> : <>
-                <ErrorDialog open={openErrorDialog} />
 
                 <div className='results-table-header'>
                     <MobileWarning />

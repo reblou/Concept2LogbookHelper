@@ -1,8 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom'
-import { PropTypes } from 'prop-types';
 
-function ErrorDialog({ open }) {
+function ErrorDialog({ open, message }) {
     const errorDialog = useRef();
     const navigate = useNavigate();
 
@@ -17,7 +16,7 @@ function ErrorDialog({ open }) {
   return (
       <dialog ref={errorDialog}>
           <h3>An Error Occured</h3>
-          <p>There was an error fetching workout data. <br/> Please retry.</p>
+          <p>{message}</p>
           <button onClick={closeDialog}>Ok</button>
       </dialog>
     );
