@@ -5,12 +5,11 @@ import "../css/ResultsTable.css";
 import ResultTableHeader from "./ResultTableHeader";
 import FilterButtonList from "./FilterButtonList";
 import FilterComparisons from "./FilterComparisons";
-import MobileWarning from "./MobileWarning";
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
 import { SortCallbackContext } from '../Contexts/SortCallbackContext.js';
 import Loading from "./Loading";
 import ErrorDialog from "./ErrorDialog";
-import ResultTableTotals from "./ResultTableTopMenu";
+import ResultTableTopMenu from "./ResultTableTopMenu";
 
 function ResultsTable() {
     const [resultsToDisplay, setResultsToDisplay] = useState();
@@ -50,12 +49,8 @@ function ResultsTable() {
         <div className='results-table'>
             <ErrorDialog open={openErrorDialog} message={"There was an error fetching workout data."} />
             {loading ? <Loading /> : <>
+                <ResultTableTopMenu fullResults={fullResults} loading={semiLoaded} filterMap={filterMap} sortFunction={sortFunction} applyFilters={ApplyAllFilters} />
 
-                <div className='results-table-header'>
-                    <MobileWarning />
-                    <ResultTableTotals fullResults={fullResults} loading={semiLoaded}/>
-                    <button onClick={() => { filterMap.current.clear(); sortFunction.current = undefined; ApplyAllFilters(); }}>Clear All Filters</button>
-                </div>
                 <FilterCallbackContext.Provider value={Filter}>
                     <table>
                         <thead>

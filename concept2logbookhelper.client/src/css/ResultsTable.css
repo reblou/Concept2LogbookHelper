@@ -60,10 +60,11 @@ dialog::backdrop {
     opacity: 0.5;
 }
 
-.results-table-header {
+.results-table-topmenu {
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
+    align-items: center;
 }
 
 .mobilemessagediv {
@@ -79,10 +80,11 @@ dialog::backdrop {
         display: block;
     }
 
-    .results-table-header {
+    .results-table-topmenu {
         display: flex;
         justify-content: flex-start;
         flex-direction: column;
         align-self: flex-start;
+        align-items: center;
     }
 }
