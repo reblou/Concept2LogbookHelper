@@ -8,12 +8,14 @@ function ResultTableTopMenu({ fullResults, loading, filterMap, sortFunction, app
 
     return (
         <div className='results-table-topmenu'>
+
+            <MobileWarning />    
             {loading ?       
-                <p>Populating Results Table...</p> : <>
-                <MobileWarning />         
-                <p> Total Workouts: {fullResults?.length} | Total Meters: {fullResults?.reduce((a, c) => a + c.total_distance, 0)} m | Max HR: {maxHR}</p>
+                <p>Populating Results Table...</p> : <>     
+                    <p> Total Workouts: {fullResults?.length} | Total Meters: {fullResults?.reduce((a, c) => a + c.total_distance, 0)} m | Max HR: {maxHR}</p>
+                </>}
                 <button onClick={() => { filterMap.current.clear(); sortFunction.current = undefined; applyFilters(); }}>Clear All Filters</button>
-        </> }
+
         </div>
   );
 }
