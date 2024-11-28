@@ -1,10 +1,10 @@
-.FilterHeader {
+
+.FilterHeaderItems {
+    width: auto;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
-}
-
-.FilterHeader > :not(.above) {
+    /*margin: 0 1rem 0 1rem;*/
     margin: 0.1rem;
 }
 
@@ -68,6 +68,9 @@
 }
 
 .above {
+    position: absolute;
+    top: 100%;
+    left: 0;
     z-index: 1;
     width: 0;
     height: 0;

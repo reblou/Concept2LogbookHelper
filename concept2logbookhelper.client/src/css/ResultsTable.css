@@ -21,7 +21,11 @@ tr:nth-child(odd) {
     background: light-dark(#959595, #3e3e3e);
 }
 
-th, td {
+th {
+    position:relative;
+}
+
+td {
     padding-left: 1rem;
     padding-right: 1rem;
 }

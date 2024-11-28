@@ -12,26 +12,29 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
 
     return (
         <th>
-            <div className='FilterHeader'>
+            <FilterCallbackContext.Provider value={FilterItemClick}>
+                {popup &&
+                    <div className='above'>
+                        <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
+                        <div className='FilterListMenu'>
+                            <button onClick={() => FilterItemClick(() => true)}>Clear Filter</button>
+                            {filterMenuContentsComponent}
+                        </div>
+                    </div>}
+
+            </FilterCallbackContext.Provider>
+            
+            <div className='FilterHeaderItems'>
                 <label>{label}</label>
                 {filterMenuContentsComponent !== undefined ?  
                     <div className='FilterButtonContainer'>
-                        <FilterCallbackContext.Provider value={FilterItemClick}>
-                            {popup &&
-                                <div className='above'>
-                                    <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
-                                    <div className='FilterListMenu'>
-                                        <button onClick={() => FilterItemClick(() => true)}>Clear Filter</button>
-                                        {filterMenuContentsComponent}
-                                    </div>
-                                </div>}
-                        </FilterCallbackContext.Provider>
-                    <button className='FilterMenuButton' onClick={() => setPopup(!popup)} >
-                        <img className='icon-image' src ={filterImage} />
-                    </button>
+
+                        <button className='FilterMenuButton' onClick={() => setPopup(!popup)} >
+                            <img className='icon-image' src ={filterImage} />
+                        </button>
 
                     </div>
-                    : <></>}
+                : <></>}
                 <button className='FilterMenuButton' onClick={() => sortResultsCallback(ResultPropSelector)} >
                     <img className='icon-image' src={sortImage} />
                 </button>
