@@ -4,7 +4,10 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
-    /*margin: 0 1rem 0 1rem;*/
+    
+}
+
+.FilterHeaderItems > * {
     margin: 0.1rem;
 }
 
