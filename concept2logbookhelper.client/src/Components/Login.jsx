@@ -8,7 +8,7 @@ function Login() {
 
   return (
       <div>
-          <ErrorDialog open={openErrorDialog} message={"There was an error attempting to retrieve stored dummy account access token. Please contact the site administrator"} />
+          <ErrorDialog open={openErrorDialog} message={"There was an error attempting to retrieve stored dummy account access token. Please contact the site administrator"} setOpen={setOpenErrorDialog} />
           <title>Logbook Helper</title>
           <h1 id="tabelLabel">Logbook Helper</h1>
           <hr />

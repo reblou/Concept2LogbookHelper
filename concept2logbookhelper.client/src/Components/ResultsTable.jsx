@@ -47,7 +47,7 @@ function ResultsTable() {
 
     return (
         <div className='results-table'>
-            <ErrorDialog open={openErrorDialog} message={"There was an error fetching workout data."} />
+            <ErrorDialog open={openErrorDialog} message={"There was an error fetching workout data."} setOpen={setOpenErrorDialog} />
             {loading ? <Loading /> : <>
                 <ResultTableTopMenu fullResults={fullResults} loading={semiLoaded} filterMap={filterMap} sortFunction={sortFunction} applyFilters={ApplyAllFilters} />
 

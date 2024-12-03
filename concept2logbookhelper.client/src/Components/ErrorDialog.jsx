@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom'
 
-function ErrorDialog({ open, message }) {
+function ErrorDialog({ open, message, setOpen }) {
     const errorDialog = useRef();
     const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ function ErrorDialog({ open, message }) {
 
     async function closeDialog()
     {
-        open = false;        
+        setOpen(false);        
         navigate('/');
     }
 }
