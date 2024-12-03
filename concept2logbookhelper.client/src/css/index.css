@@ -11,15 +11,16 @@
     -moz-osx-font-smoothing: grayscale;
     z-index: 0;
     position: sticky;
-    --typeColour-JustRow: #004343;
-    --typeColour-FixedDistanceInterval: #74a892;
-    --typeColour-FixedTimeInterval: #b8cdab;
-    --typeColour-VariableIntervalUndefinedRest: #f0daa5;
-    --typeColour-FixedCalorieInterval: #c7522a;
-    --typeColour-VariableInterval: #008585;
-    --typeColour-FixedDistanceSplits: #74a892;
-    --typeColour-FixedCalorie: #e5c185;
-    --typeColour-FixedTimeSplits: #c3774c;
+    --highlight: #008585;
+    --typeColour-JustRow: #154E4E;
+    --typeColour-FixedDistanceInterval: #097979;
+    --typeColour-FixedTimeInterval: #118D8D;
+    --typeColour-VariableIntervalUndefinedRest: #228D80;
+    --typeColour-FixedCalorieInterval: #228D80;
+    --typeColour-VariableInterval: var(--highlight);
+    --typeColour-FixedDistanceSplits: #40826F;
+    --typeColour-FixedCalorie: #5A9678;
+    --typeColour-FixedTimeSplits: #5A9678;
     --typeColour-unknown: #006464;
 }
 
@@ -53,7 +54,7 @@ button {
     font-weight: 500;
     font-family: inherit;
     color: light-dark(white, white);
-    background-color: #008585;
+    background-color: var(--highlight);
     cursor: pointer;
     transition: border-color 0.25s;
     width: fit-content;

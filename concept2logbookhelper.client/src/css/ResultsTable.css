@@ -28,7 +28,7 @@ tr:nth-child(odd) {
 
 th {
     position: relative;
-    background-color: light-dark(#008585, #008585);
+    background-color: var(--highlight)
 }
 
 td {
@@ -79,7 +79,7 @@ dialog::backdrop {
 
 .mobilemessagediv {
     display: none;
-    background-color: light-dark(#008585, #008585);
+    background-color: var(--highlight);
     width: 100%;
     border-radius: 8px;
     padding: 2px;

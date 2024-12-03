@@ -18,7 +18,7 @@
     top: 0px;
     left: 0px;
     z-index: 1;
-    background-color: #000000;
+    background-color: none;
     opacity: 0.3;
 }
 
@@ -31,6 +31,7 @@
     height: 1rem;
     background: none;
     border-radius: unset;
+
 }
 
 .FilterMenuButton:hover {
@@ -56,6 +57,9 @@
     max-height: 20em;
     overflow-y: auto;
     padding: .3rem;
+    border: 1px solid;
+    border-color: var(--highlight);
+    border-radius: 2px;
 }
 
 .FilterList {
