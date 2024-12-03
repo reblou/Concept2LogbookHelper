@@ -21,11 +21,11 @@ function FilterComparisons({ InputFormatFunc }) {
                 <option value="Less Than">Less Than</option>
                 <option value="Between">Between</option>
             </select>
-          <input autoFocus placeholder='value' onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />
+          <input autoFocus placeholder='Value' onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />
           {between &&
               <>
-                <p>and</p>
-                <input placeholder='value 2' onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} />
+                <p>And</p>
+                <input placeholder='Value 2' onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} />
               </>}
             </div>
           <button onClick={Filter}>Filter</button>

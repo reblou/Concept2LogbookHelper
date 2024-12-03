@@ -8,21 +8,27 @@ body {
     flex-flow: column wrap;
 }
 
+table, th, td {
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
 table {
     margin: 1rem;
     width: 100%;
 }
 
 tr:nth-child(even) {
-    background-color: light-dark(#cdcdcd, #242424);
+    background-color: light-dark(#e1e1e1, #242424);
 }
 
 tr:nth-child(odd) {
-    background: light-dark(#959595, #3e3e3e);
+    background: light-dark(#cdcdcd, #3e3e3e);
 }
 
 th {
-    position:relative;
+    position: relative;
+    background-color: light-dark(#008585, #008585);
 }
 
 td {
