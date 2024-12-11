@@ -54,11 +54,6 @@ td {
     border-radius: unset;
 }
 
-.logbookResultLinkImg {
-    max-width: 100%;
-    max-height: 100%;
-}
-
 dialog {
     background-color: light-dark(#cdcdcd, #242424);
     border: thick;
