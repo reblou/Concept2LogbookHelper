@@ -19,11 +19,11 @@ table {
 }
 
 tr:nth-child(even) {
-    background-color: light-dark(#e1e1e1, #242424);
+    background-color: light-dark(#e1e1e1, #15191E);
 }
 
 tr:nth-child(odd) {
-    background: light-dark(#cdcdcd, #3e3e3e);
+    background: light-dark(#cdcdcd, #212528);
 }
 
 th {
