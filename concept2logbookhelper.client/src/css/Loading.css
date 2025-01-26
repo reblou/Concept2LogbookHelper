@@ -1,0 +1,29 @@
+.loading {
+    display: flex;
+    padding: 8px;
+    margin: 8px;
+    align-content: center;
+    flex-direction:row;
+    justify-content: center;
+}
+
+.spinner {
+    margin: 10px;
+    width: 20px;
+    border-radius: 50%;
+    background: var(--highlight);
+    padding: 8px;
+    aspect-ratio: 1;
+    --_m: conic-gradient(#0000 10%,#000), linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+    mask: var(--_m);
+    -webkit-mask-composite: source-out;
+    mask-composite: subtract;
+    animation: s3 1s infinite linear;
+}
+
+@keyframes s3 {
+    to {
+        transform: rotate(1turn)
+    }
+}
