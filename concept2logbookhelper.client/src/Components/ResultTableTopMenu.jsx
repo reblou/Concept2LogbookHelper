@@ -4,7 +4,7 @@ import MobileWarning from "./MobileWarning";
 function ResultTableTopMenu({ fullResults, loading, filterMap, sortFunction, applyFilters }) {
     const maxHR = Math.max(
         fullResults?.map(result => result.heart_rate?.max ?? 0)
-            ?.reduce((a, b) => Math.max(a, b), 0)) || 0;
+            ?.reduce((a, b) => Math.max(a, b), 0)) || 'N/A';
 
     return (
         <div className='results-table-topmenu'>
