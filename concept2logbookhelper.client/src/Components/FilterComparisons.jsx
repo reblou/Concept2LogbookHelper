@@ -6,6 +6,7 @@ function FilterComparisons({ InputFormatFunc }) {
     const [dropDown, setDropDown] = useState(false);
     const [comparisonType, setComparisonType] = useState("Equal To");
     const [between, setBetween] = useState(false);
+    const value1 = between ? "Value 1" : "Value";
 
     const [input1, setInput1] = useState();
     const [input2, setInput2] = useState();
@@ -21,7 +22,7 @@ function FilterComparisons({ InputFormatFunc }) {
                 <option value="Less Than">Less Than</option>
                 <option value="Between">Between</option>
             </select>
-          <input autoFocus placeholder='Value' onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />
+                <input autoFocus placeholder={value1} onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />
           {between &&
               <>
                 <p>And</p>
