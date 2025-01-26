@@ -10,7 +10,7 @@ function ResultTableTopMenu({ fullResults, loading, filterMap, sortFunction, app
         <div className='results-table-topmenu'>
 
             <MobileWarning />    
-            {loading ?       
+            {!loading ?       
                 <Loading/> : <>     
                     <p> Total Workouts: {fullResults?.length} | Total Meters: {fullResults?.reduce((a, c) => a + c.total_distance, 0)} m | Max HR: {maxHR}</p>
                 </>}
