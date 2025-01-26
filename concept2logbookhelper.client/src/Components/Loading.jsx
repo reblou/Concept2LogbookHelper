@@ -1,6 +1,11 @@
+import "../css/Loading.css";
+
 function Loading() {
   return (
-    <h2>Fetching Results...</h2>
+    <div className="loading">
+		<p>Fetching Results... </p>
+		<div className='spinner'/>
+	</div>
   );
 }
 

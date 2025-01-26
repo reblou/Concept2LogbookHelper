@@ -93,3 +93,7 @@ dialog::backdrop {
         align-items: center;
     }
 }
+
+svg {
+    stroke: light-dark(#10151b, #ffffff);
+}

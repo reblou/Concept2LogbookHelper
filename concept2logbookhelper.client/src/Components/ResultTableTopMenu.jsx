@@ -1,4 +1,4 @@
-
+import Loading from "./Loading.jsx";
 import MobileWarning from "./MobileWarning";
 
 function ResultTableTopMenu({ fullResults, loading, filterMap, sortFunction, applyFilters }) {
@@ -10,8 +10,8 @@ function ResultTableTopMenu({ fullResults, loading, filterMap, sortFunction, app
         <div className='results-table-topmenu'>
 
             <MobileWarning />    
-            {loading ?       
-                <p>Populating Results Table...</p> : <>     
+            {!loading ?       
+                <Loading/> : <>     
                     <p> Total Workouts: {fullResults?.length} | Total Meters: {fullResults?.reduce((a, c) => a + c.total_distance, 0)} m | Max HR: {maxHR}</p>
                 </>}
                 <button onClick={() => { filterMap.current.clear(); sortFunction.current = undefined; applyFilters(); }}>Clear All Filters</button>

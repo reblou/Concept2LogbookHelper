@@ -14,7 +14,7 @@ import ResultTableTopMenu from "./ResultTableTopMenu";
 function ResultsTable() {
     const [resultsToDisplay, setResultsToDisplay] = useState();
     const [loading, setLoading] = useState(true);
-    const [semiLoaded, setSemiLoaded] = useState(true);
+    const [fullyLoaded, setFullyLoaded] = useState(false);
     const [fullResults, setFullResults] = useState(undefined);
     const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
@@ -49,7 +49,7 @@ function ResultsTable() {
         <div className='results-table'>
             <ErrorDialog open={openErrorDialog} message={"There was an error fetching workout data."} setOpen={setOpenErrorDialog} />
             {loading ? <Loading /> : <>
-                <ResultTableTopMenu fullResults={fullResults} loading={semiLoaded} filterMap={filterMap} sortFunction={sortFunction} applyFilters={ApplyAllFilters} />
+                <ResultTableTopMenu fullResults={fullResults} loading={fullyLoaded} filterMap={filterMap} sortFunction={sortFunction} applyFilters={ApplyAllFilters} />
 
                 <FilterCallbackContext.Provider value={Filter}>
                     <table>
@@ -99,7 +99,7 @@ function ResultsTable() {
             for (let i = 2; i <= pagination.total_pages; i++) {
                 await populatePagedResults(controller, fetchSize, i);
             }
-            setSemiLoaded(false);
+            setFullyLoaded(true);
         } catch ({ name, messsage }) {
             if (name === "AbortError") return; //ignore unmount errors
             
