@@ -1,11 +1,19 @@
 import "../css/ActiveFiltersBar.css";
+import ActiveFilter from "./ActiveFilter";
 
 function ActiveFiltersBar({ filterMap, sortFunction, applyFilters }) {
-  return (
-    <div className="ActiveFilters">
-		<p>E.g. 8x500m -&gt; </p>
-		<button onClick={() => { filterMap.current.clear(); sortFunction.current = undefined; applyFilters(); }}>Clear All Filters</button>
-	</div>
+	return (
+			filterMap.current.size > 0 || typeof sortFunction.current !== "undefined" ?
+
+			<div className="ActiveFilters">
+				{Array.from(filterMap.current).map(([key, value]) =>
+					<ActiveFilter key={key} label={key} />
+				)}
+				
+				<button onClick={() => { filterMap.current.clear(); sortFunction.current = undefined; applyFilters(); }}>Clear All Filters</button> 
+		</div>:
+				<></>
+
   );
 
 }
