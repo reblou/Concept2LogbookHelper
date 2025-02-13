@@ -7,7 +7,7 @@ function ActiveFiltersBar({ filterMap, sortFunction, applyFilters }) {
 
 			<div className="ActiveFilters">
 				{Array.from(filterMap.current).map(([key, value]) =>
-					<ActiveFilter key={key} label={key} />
+					<ActiveFilter key={key} label={value.desc} />
 				)}
 				
 				<button onClick={() => { filterMap.current.clear(); sortFunction.current = undefined; applyFilters(); }}>Clear All Filters</button> 

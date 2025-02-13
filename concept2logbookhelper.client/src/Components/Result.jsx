@@ -10,7 +10,7 @@ function Result({ date, type_pretty, type, distance, time, pace, spm, calories, 
   return (
       <tr>
           <td>{moment(date).format('YYYY-MM-DD HH:mm')}</td>
-          <td><div className={'workout_type'} style={{background: "var(--typeColour-" + type + ")" }} onClick={() => filterResultsCallback(r => r.pretty_workout_type, v => v===type_pretty, "Type") }>{type_pretty}</div></td>
+          <td><div className={'workout_type'} style={{background: "var(--typeColour-" + type + ")" }} onClick={() => filterResultsCallback(r => r.pretty_workout_type, v => v===type_pretty, "Type", type_pretty) }>{type_pretty}</div></td>
           <td>{time}</td>
           <td>{distance}m</td>
           <td>{pace}</td>

@@ -182,8 +182,8 @@ function ResultsTable() {
         return bool ? 1 : -1;
     }
 
-    function Filter(ResultPropSelectorFunction, FilterConditionFunction, label) {
-        filterMap.current.set(label, {selector: ResultPropSelectorFunction, condition: FilterConditionFunction})
+    function Filter(ResultPropSelectorFunction, FilterConditionFunction, label, desc) {
+        filterMap.current.set(label, {selector: ResultPropSelectorFunction, condition: FilterConditionFunction, desc: desc})
 
         ApplyAllFilters();
     }

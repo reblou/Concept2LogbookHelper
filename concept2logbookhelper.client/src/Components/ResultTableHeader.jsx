@@ -42,9 +42,10 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
         </th> 
     );
 
-    function FilterItemClick(condition) {
+    function FilterItemClick(condition, desc) {
         setPopup(false);
-        filterResultsCallback(ResultPropSelector, condition, label);
+        desc = desc.replace("%prop%", label);
+        filterResultsCallback(ResultPropSelector, condition, label, desc);
     }
 }
 

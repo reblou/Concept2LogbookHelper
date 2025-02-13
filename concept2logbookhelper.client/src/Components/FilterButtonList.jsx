@@ -7,7 +7,7 @@ function FilterButtonList({ filterOptionList }) {
 
     const contents = filterOptionList === undefined || filterOptionList.length <= 0
         ? <p>Loading...</p>
-        : filterOptionList.map((value) => (<li key={value}><button onClick={() => filterResultsCallback(property  => property === value)}>{value}</button></li>))
+        : filterOptionList.map((value) => (<li key={value}><button onClick={() => filterResultsCallback(property  => property === value, value)}>{value}</button></li>))
         
     return (
         <div>
@@ -21,7 +21,7 @@ function FilterButtonList({ filterOptionList }) {
 
     function SearchTyped(e) {
         if (e.key === 'Enter') {
-            filterResultsCallback(property => property.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1);
+            filterResultsCallback(property => property.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1, "Contains " + e.target.value);
         }
     }
 }
