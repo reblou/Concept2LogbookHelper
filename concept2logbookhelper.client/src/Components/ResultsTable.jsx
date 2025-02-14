@@ -21,7 +21,6 @@ function ResultsTable() {
     const navigate = useNavigate();
     const workoutTypesUnique = useRef([]);
     const filterMap = useRef(new Map());
-    const sortToggle = useRef(false);
 
     const sortFunction = useRef(undefined);
 
@@ -49,7 +48,7 @@ function ResultsTable() {
         <div className='results-table'>
             <ErrorDialog open={openErrorDialog} message={"There was an error fetching workout data."} setOpen={setOpenErrorDialog} />
             {loading ? <Loading /> : <>
-                <ResultTableTopMenu fullResults={fullResults} loading={fullyLoaded} filterMap={filterMap} sortFunction={sortFunction} applyFilters={ApplyAllFilters} />
+                <ResultTableTopMenu fullResults={fullResults} loading={fullyLoaded} filterMap={filterMap.current} sortFunction={sortFunction} applyFilters={ApplyAllFilters} />
 
                 <FilterCallbackContext.Provider value={Filter}>
                     <table>
@@ -161,16 +160,26 @@ function ResultsTable() {
         })
     }
 
-    function SetSort(ResultPropSelectorFunction) {
-        sortToggle.current = !sortToggle.current;
+    function SetSort(ResultPropSelectorFunction, label) {
+        var toggle;
 
-        sortFunction.current = (results) => {
-            return results.toSorted((a, b) =>
-                PropComparer(ResultPropSelectorFunction(a), ResultPropSelectorFunction(b), sortToggle.current)
-            );
+        if (typeof sortFunction.current === "undefined") {
+            toggle = true; // true = ascending
+        } else {
+            toggle = !sortFunction.current.toggle;
         }
 
-        setResultsToDisplay(sortFunction.current(resultsToDisplay));
+        sortFunction.current = {
+            func: ((results) => {
+                return results.toSorted((a, b) =>
+                    PropComparer(ResultPropSelectorFunction(a), ResultPropSelectorFunction(b), sortFunction.current.toggle)
+                )
+            }),
+            label: label,
+            toggle: toggle
+        };
+
+        setResultsToDisplay(sortFunction.current.func(resultsToDisplay));
     }
 
     function PropComparer(a, b, asc) {
@@ -199,7 +208,7 @@ function ResultsTable() {
             filteredResults = filteredResults.filter(result => value.condition(value.selector(result)))
         )
 
-        if (sortFunction.current !== undefined) filteredResults = sortFunction.current(filteredResults);
+        if (sortFunction.current !== undefined && sortFunction !== null) filteredResults = sortFunction.current.func(filteredResults);
 
         setResultsToDisplay(filteredResults);
     }

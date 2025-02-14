@@ -35,7 +35,7 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
 
                     </div>
                 : <></>}
-                <button className='FilterMenuButton' onClick={() => sortResultsCallback(ResultPropSelector)} >
+                <button className='FilterMenuButton' onClick={() => sortResultsCallback(ResultPropSelector, label)} >
                     <img className='icon-image' src={sortImage} />
                 </button>
             </div>
