@@ -1,9 +1,9 @@
 import "../css/ActiveFiltersBar.css";
 
-function ActiveFilter({ label }) {
+function ActiveFilter({ label, closeCallback }) {
   return (
       <div className="Filter">
-          <p>{label}</p>
+          <p>{label} <span className="x" onClick={closeCallback}>X</span></p>
       </div>
   );
 }

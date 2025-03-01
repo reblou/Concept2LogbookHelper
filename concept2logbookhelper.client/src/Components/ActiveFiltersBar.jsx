@@ -8,9 +8,9 @@ function ActiveFiltersBar({ filterMap, sortFunction, applyFilters }) {
 			<div className="ActiveFilters">
 				<p>Active Filters: </p>
 				{Array.from(filterMap).map(([key, value]) =>
-					<ActiveFilter key={key} label={value.desc} />
+					<ActiveFilter key={key} label={value.desc} closeCallback={() => close(key, false)} />
 				)}
-				{typeof sortFunction.current !== "undefined" ? <ActiveFilter key={sortFunction.current.label} label={sortFunction.current.label + (sortFunction.current.toggle ? " asc" : " desc" )} /> : <></>}
+				{typeof sortFunction.current !== "undefined" ? <ActiveFilter key={sortFunction.current.label} label={sortFunction.current.label + (sortFunction.current.toggle ? " asc" : " desc" )} closeCallback={label => close(null, true)}/> : <></>}
 				
 				<button className="ClearButton" onClick={() => {
 					filterMap.clear();
@@ -22,6 +22,19 @@ function ActiveFiltersBar({ filterMap, sortFunction, applyFilters }) {
 
   );
 
+	function close(label, sort) {
+		//remove from filter map or clear sort function
+		console.log("Closing " + label);
+
+		if (sort) {
+			sortFunction.current = undefined;
+		} else {
+			filterMap.delete(label);
+		}
+
+		applyFilters();
+		return;
+	}
 }
 
 export default ActiveFiltersBar;
