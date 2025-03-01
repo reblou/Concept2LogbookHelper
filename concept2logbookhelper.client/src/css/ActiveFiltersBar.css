@@ -5,6 +5,12 @@
     align-content: space-between;
 }
 
+.ActiveFilters > p {
+    font-weight: bold;
+    margin: 2px;
+    padding: 0.4em .6em;
+}
+
 .Filter {
     border: 2px solid var(--highlight);
     border-radius: 8px;

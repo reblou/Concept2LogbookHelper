@@ -6,6 +6,7 @@ function ActiveFiltersBar({ filterMap, sortFunction, applyFilters }) {
 			filterMap.size > 0 || typeof sortFunction.current !== "undefined" ?
 
 			<div className="ActiveFilters">
+				<p>Active Filters: </p>
 				{Array.from(filterMap).map(([key, value]) =>
 					<ActiveFilter key={key} label={value.desc} />
 				)}
