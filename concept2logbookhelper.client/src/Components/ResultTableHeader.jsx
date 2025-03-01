@@ -35,16 +35,17 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
 
                     </div>
                 : <></>}
-                <button className='FilterMenuButton' onClick={() => sortResultsCallback(ResultPropSelector)} >
+                <button className='FilterMenuButton' onClick={() => sortResultsCallback(ResultPropSelector, label)} >
                     <img className='icon-image' src={sortImage} />
                 </button>
             </div>
         </th> 
     );
 
-    function FilterItemClick(condition) {
+    function FilterItemClick(condition, desc) {
         setPopup(false);
-        filterResultsCallback(ResultPropSelector, condition, label);
+        desc = desc.replace("%prop%", label);
+        filterResultsCallback(ResultPropSelector, condition, label, desc);
     }
 }
 

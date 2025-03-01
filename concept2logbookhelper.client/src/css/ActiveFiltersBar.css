@@ -1,0 +1,42 @@
+.ActiveFilters {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    align-content: space-between;
+}
+
+.ActiveFilters > p {
+    font-weight: bold;
+    margin: 2px;
+    padding: 0.4em .6em;
+}
+
+.Filter {
+    border: 2px solid var(--highlight);
+    border-radius: 8px;
+    height: fit-content;
+    margin: 2px;
+    padding: 0.4em .6em;
+    aspect-ratio: unset;
+}
+
+.Filter > p {
+    height: min-content;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.x {
+    cursor: pointer;
+    margin: 0 0 0 .25em;
+    font-weight: bold;
+}
+
+.x:hover {
+    color: var(--highlight)
+}
+
+.ClearButton {
+    margin: 0 0 0 10px;
+}

@@ -43,21 +43,22 @@ function FilterComparisons({ InputFormatFunc }) {
     function Filter() {
         var formatted1 = InputFormatFunc(input1);
         var formatted2 = InputFormatFunc(input2);
+        //TODO: add string label here e.g. Pace < 2:00
         switch (comparisonType) {
             case "Equal To":
-                filterResultsCallback((property => property === formatted1));
+                filterResultsCallback((property => property === formatted1), "%prop% = " + input1);
                 break;
             case "Greater Than":
-                filterResultsCallback((property => property >= formatted1));
+                filterResultsCallback((property => property >= formatted1), "%prop% >= " + input1);
                 break;
             case "Less Than":
-                filterResultsCallback((property => property <= formatted1));
+                filterResultsCallback((property => property <= formatted1), "%prop% <= " + input1);
                 break;
             case "Between":
-                filterResultsCallback((property => formatted1 <= property && property <= formatted2));
+                filterResultsCallback((property => formatted1 <= property && property <= formatted2), input1 + " <= %prop% <= " + input2);
                 break;
             default:
-                filterResultsCallback((property => property === formatted1));
+                filterResultsCallback((property => property === formatted1), "%prop% = " + input1);
         }
     }
 

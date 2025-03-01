@@ -1,5 +1,6 @@
 import Loading from "./Loading.jsx";
 import MobileWarning from "./MobileWarning";
+import ActiveFiltersBar from "./ActiveFiltersBar";
 
 function ResultTableTopMenu({ fullResults, loading, filterMap, sortFunction, applyFilters }) {
     const maxHR = Math.max(
@@ -14,7 +15,7 @@ function ResultTableTopMenu({ fullResults, loading, filterMap, sortFunction, app
                 <Loading/> : <>     
                     <p> Total Workouts: {fullResults?.length} | Total Meters: {fullResults?.reduce((a, c) => a + c.total_distance, 0)} m | Max HR: {maxHR}</p>
                 </>}
-                <button onClick={() => { filterMap.current.clear(); sortFunction.current = undefined; applyFilters(); }}>Clear All Filters</button>
+				<ActiveFiltersBar filterMap={filterMap} sortFunction={sortFunction} applyFilters={applyFilters} />
 
         </div>
   );
