@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 
 
-function FilterComparisons({ InputFormatFunc }) {
+function FilterComparisons({ InputFormatFunc, customInput: CustomInput }) {
     const [dropDown, setDropDown] = useState(false);
     const [comparisonType, setComparisonType] = useState("Equal To");
     const [between, setBetween] = useState(false);
@@ -22,7 +22,7 @@ function FilterComparisons({ InputFormatFunc }) {
                 <option value="Less Than">Less Than</option>
                 <option value="Between">Between</option>
             </select>
-                <input autoFocus placeholder={value1} onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />
+                {CustomInput !== undefined ? <CustomInput value={value1} search={SearchTyped} setInput={setInput1} /> : <input autoFocus placeholder={value1} onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />}
           {between &&
               <>
                 <p>And</p>

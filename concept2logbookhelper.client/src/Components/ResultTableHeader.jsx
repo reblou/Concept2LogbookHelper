@@ -17,7 +17,6 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
                     <div className='above'>
                         <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
                         <div className='FilterListMenu'>
-                            <button onClick={() => FilterItemClick(() => true)}>Clear Filter</button>
                             {filterMenuContentsComponent}
                         </div>
                     </div>}
