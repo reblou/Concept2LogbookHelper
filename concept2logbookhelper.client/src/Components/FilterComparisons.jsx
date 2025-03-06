@@ -26,7 +26,7 @@ function FilterComparisons({ InputFormatFunc, customInput: CustomInput }) {
           {between &&
               <>
                 <p>And</p>
-                <input placeholder='Value 2' onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} />
+                {CustomInput !== undefined ? <CustomInput value={"Value 2"} search={SearchTyped} setInput={setInput2} /> : <input autoFocus placeholder={"Value 2"} onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} />}
               </>}
             </div>
           <button onClick={Filter}>Filter</button>
@@ -43,7 +43,8 @@ function FilterComparisons({ InputFormatFunc, customInput: CustomInput }) {
     function Filter() {
         var formatted1 = InputFormatFunc(input1);
         var formatted2 = InputFormatFunc(input2);
-        //TODO: add string label here e.g. Pace < 2:00
+        if (formatted1 === undefined) return;
+
         switch (comparisonType) {
             case "Equal To":
                 filterResultsCallback((property => property === formatted1), "%prop% = " + input1);
@@ -55,6 +56,7 @@ function FilterComparisons({ InputFormatFunc, customInput: CustomInput }) {
                 filterResultsCallback((property => property <= formatted1), "%prop% <= " + input1);
                 break;
             case "Between":
+                if (formatted2 === undefined) return;
                 filterResultsCallback((property => formatted1 <= property && property <= formatted2), input1 + " <= %prop% <= " + input2);
                 break;
             default:
