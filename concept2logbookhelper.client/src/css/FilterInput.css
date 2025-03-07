@@ -7,3 +7,9 @@ input:invalid {
 input:focus {
     outline: none;
 }
+
+.inputTooltip {
+    font-size: .8em;
+    font-style: italic;
+    font-weight: normal;
+}
