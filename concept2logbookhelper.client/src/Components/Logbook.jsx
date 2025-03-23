@@ -9,8 +9,8 @@ function Logbook() {
         <div className='logbook-container'>
             <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
             <div className='header'>
-                <button className='logout-button' onClick={LogOut}>Log Out</button>
                 <h1 className='logTitle'>Logbook</h1>
+                <button className='logout-button' onClick={LogOut}>Log Out</button>
             </div>
             <hr></hr>
             <ResultsTable></ResultsTable>
