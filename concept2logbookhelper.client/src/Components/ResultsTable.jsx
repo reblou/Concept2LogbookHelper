@@ -58,7 +58,7 @@ function ResultsTable() {
                                 <tr>
                                     <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} />
                                     <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />} />
-                                    <ResultTableHeader label='Time' ResultPropSelector={(result) => result.time} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} customInput={TimeInput} />}/>
+                                    <ResultTableHeader label='Time' ResultPropSelector={(result) => result.total_time} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} customInput={TimeInput} />}/>
                                     <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />}/>
                                     <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatPace(value)} />} />
                                     <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
@@ -132,8 +132,8 @@ function ResultsTable() {
 
         var split = FormatTime(time).split(":");
         
-        return (split.length > 2 ? split[split.length -3] * 36000: 0)
-            + split[split.length -2] * 600 + split[split.length-1] * 10
+        return (split.length > 2 ? split[split.length - 3] * 36000 : 0)
+            + split[split.length - 2] * 600 + split[split.length - 1] * 10;
     }
 
     function FormatTime(input) {

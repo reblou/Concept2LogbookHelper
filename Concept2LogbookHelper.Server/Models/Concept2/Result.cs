@@ -15,8 +15,10 @@
 
         public string type { get; set; }
 
-        // time in 10ths of a second/ decisecond
+        // time in 10ths of a second/ decisecond, only working time not total
         public int time { get; set; }
+        public int rest_time { get; set; }
+        public int total_time { get => time + rest_time; }
 
         //This is the total time + rest times..
         public string time_formatted { get; set; }
