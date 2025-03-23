@@ -1,13 +1,12 @@
 import "../../css/FilterInput.css";
 import { useRef, useState } from 'react';
 
-function TimeInput({ value, search, setInput }) {
+function TimeInput({ value, search, setInput, failedSubmit }) {
 	const inputRef = useRef(null);
-	const [invalid, setInvalid] = useState(false);
 
 	return (<>
-		{invalid ? <label className="inputTooltip">Input Format: (HH:)MM:SS.ms</label> : <></>}
-		<input ref={inputRef} autoFocus placeholder={"Custom" + value} onKeyDown={search} onInput={e => validate(e.target.value)} pattern="\d{1,2}:\d{2}(:\d{2})?(\.\d+)?\s*"/>
+		{failedSubmit ? <label className="inputTooltip">Input Format: (HH:)MM:SS.ms</label> : <></>}
+		<input ref={inputRef} autoFocus placeholder={"Time " + value} onKeyDown={search} onInput={e => validate(e.target.value)} pattern="\d{1,2}:\d{2}(:\d{2})?(\.\d+)?\s*" />
 		</>
   );
 
@@ -18,7 +17,6 @@ function TimeInput({ value, search, setInput }) {
 			value = "0" + value;
 		}
 
-		setInvalid(!inputRef.current.validity.valid);
 		if (inputRef.current.validity.valid) {
 			setInput(value);
 		} else {
