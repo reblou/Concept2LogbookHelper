@@ -11,6 +11,7 @@ import TimeInput from "./FilterInputs/TimeInput";
 import DistanceInput from "./FilterInputs/DistanceInput";
 import NumericInput from "./FilterInputs/NumericInput";
 import PaceInput from "./FilterInputs/PaceInput";
+import DateInput from "./FilterInputs/DateInput";
 import Loading from "./Loading";
 import ErrorDialog from "./ErrorDialog";
 import ResultTableTopMenu from "./ResultTableTopMenu";
@@ -59,7 +60,7 @@ function ResultsTable() {
                         <thead>
                             <SortCallbackContext.Provider value={SetSort}>
                                 <tr>
-                                    <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} />
+                                    <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date.getTime()} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={FormatDate} customInput={DateInput} />} /> 
                                     <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />} />
                                     <ResultTableHeader label='Time' ResultPropSelector={(result) => result.total_time} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} customInput={TimeInput} />}/>
                                     <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={DistanceInput} />}/>
@@ -110,7 +111,7 @@ function ResultsTable() {
         }
     }
 
-    async function populatePagedResults(controller, fetchSize, page=1) {
+    async function populatePagedResults(controller, fetchSize, page = 1) {
         let response = await fetch("api/logbook/GetResultsPaged?" + new URLSearchParams({ size: fetchSize, page }), { signal: controller.signal });
 
         if (response.status == 401) {
@@ -119,6 +120,8 @@ function ResultsTable() {
         }
 
         let results = await response.json();
+        // parse date string to Date objects.
+        results.data = results.data.map(r => ({ ...r, date: new Date(r.date)}));
 
         setFullResults(fr => {
             return fr === undefined ?
@@ -151,6 +154,13 @@ function ResultsTable() {
         if (input.charAt(1) === ":") input = "0" + input;
         if (!input.includes(".")) input += ".0";
         return input;
+    }
+
+    function FormatDate(input)
+    {
+        if (input === undefined) return;
+        //TODO: format date so that blank inputs return undefined.
+        return new Date(input).getTime();
     }
 
     function FormatNumeric(input) {

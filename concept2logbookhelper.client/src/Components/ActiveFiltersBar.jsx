@@ -24,8 +24,6 @@ function ActiveFiltersBar({ filterMap, sortFunction, applyFilters }) {
 
 	function close(label, sort) {
 		//remove from filter map or clear sort function
-		console.log("Closing " + label);
-
 		if (sort) {
 			sortFunction.current = undefined;
 		} else {
