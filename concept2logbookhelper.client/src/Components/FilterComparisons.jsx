@@ -24,11 +24,15 @@ function FilterComparisons({ InputFormatFunc, customInput: CustomInput }) {
                 <option value="Less Than">Less Than</option>
                 <option value="Between">Between</option>
             </select>
-                {CustomInput !== undefined ? <CustomInput value={value1} search={SearchTyped} setInput={setInput1} failedSubmit={invalid} /> : <input autoFocus placeholder={value1} onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />}
+                {CustomInput !== undefined ?
+                    <CustomInput value={value1} search={SearchTyped} setInput={setInput1} failedSubmit={invalid} /> : 
+                    <input autoFocus placeholder={value1} onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />}
           {between &&
               <>
                 <p>And</p>
-                {CustomInput !== undefined ? <CustomInput value={"Value 2"} search={SearchTyped} setInput={setInput2} failedSubmit={invalid2} /> : <input autoFocus placeholder={"Value 2"} onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} />}
+                    {CustomInput !== undefined ?
+                        <CustomInput value={"Value 2"} search={SearchTyped} setInput={setInput2} failedSubmit={invalid2} /> :
+                        <input autoFocus placeholder={"Value 2"} onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} />}
               </>}
             </div>
           <button onClick={Filter}>Filter</button>
@@ -45,7 +49,7 @@ function FilterComparisons({ InputFormatFunc, customInput: CustomInput }) {
     function Filter() {
         var formatted1 = InputFormatFunc(input1);
         var formatted2 = InputFormatFunc(input2);
-        if (formatted1 === undefined) {
+        if (formatted1 === undefined || isNaN(formatted1)) {
             setInvalid(true);
             return;
         }
@@ -62,7 +66,7 @@ function FilterComparisons({ InputFormatFunc, customInput: CustomInput }) {
                 filterResultsCallback((property => property <= formatted1), "%prop% <= " + input1);
                 break;
             case "Between":
-                if (formatted2 === undefined) {
+                if (formatted2 === undefined || isNaN(formatted2)) {
                     setInvalid2(true);
                     return;
                 }
