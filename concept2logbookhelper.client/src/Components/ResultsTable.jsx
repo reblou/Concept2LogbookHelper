@@ -7,6 +7,11 @@ import FilterButtonList from "./FilterButtonList";
 import FilterComparisons from "./FilterComparisons";
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
 import { SortCallbackContext } from '../Contexts/SortCallbackContext.js';
+import TimeInput from "./FilterInputs/TimeInput";
+import DistanceInput from "./FilterInputs/DistanceInput";
+import NumericInput from "./FilterInputs/NumericInput";
+import PaceInput from "./FilterInputs/PaceInput";
+import DateInput from "./FilterInputs/DateInput";
 import Loading from "./Loading";
 import ErrorDialog from "./ErrorDialog";
 import ResultTableTopMenu from "./ResultTableTopMenu";
@@ -55,14 +60,14 @@ function ResultsTable() {
                         <thead>
                             <SortCallbackContext.Provider value={SetSort}>
                                 <tr>
-                                    <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} />
+                                    <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={FormatDate} customInput={DateInput} customEqualityFunc={DatesEqual} />} /> 
                                     <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />} />
-                                    <ResultTableHeader label='Time' ResultPropSelector={(result) => result.time} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} />} />
-                                    <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
-                                    <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatPace(value)} />} />
-                                    <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
-                                    <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
-                                    <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
+                                    <ResultTableHeader label='Time' ResultPropSelector={(result) => result.total_time} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} customInput={TimeInput} />}/>
+                                    <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={DistanceInput} />}/>
+                                    <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatPace(value)} customInput={PaceInput} />} />
+                                    <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={NumericInput} />}/>
+                                    <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={NumericInput} />} />
+                                    <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={NumericInput} />} />
                                     <th>Link</th>
                                 </tr>
                             </SortCallbackContext.Provider>
@@ -106,7 +111,7 @@ function ResultsTable() {
         }
     }
 
-    async function populatePagedResults(controller, fetchSize, page=1) {
+    async function populatePagedResults(controller, fetchSize, page = 1) {
         let response = await fetch("api/logbook/GetResultsPaged?" + new URLSearchParams({ size: fetchSize, page }), { signal: controller.signal });
 
         if (response.status == 401) {
@@ -115,6 +120,8 @@ function ResultsTable() {
         }
 
         let results = await response.json();
+        // parse date string to Date objects.
+        results.data = results.data.map(r => ({ ...r, date: new Date(r.date)}));
 
         setFullResults(fr => {
             return fr === undefined ?
@@ -131,8 +138,8 @@ function ResultsTable() {
 
         var split = FormatTime(time).split(":");
         
-        return (split.length > 2 ? split[split.length -3] * 36000: 0)
-            + split[split.length -2] * 600 + split[split.length-1] * 10
+        return (split.length > 2 ? split[split.length - 3] * 36000 : 0)
+            + split[split.length - 2] * 600 + split[split.length - 1] * 10;
     }
 
     function FormatTime(input) {
@@ -149,6 +156,21 @@ function ResultsTable() {
         return input;
     }
 
+    function FormatDate(input)
+    {
+        if (input === undefined) return undefined;
+        return new Date(input);
+    }
+
+    function DatesEqual(a, b) {
+        return a.getFullYear() === b.getFullYear() &&
+			a.getMonth() === b.getMonth() &&
+			a.getDate() === b.getDate();
+    }
+    function FormatNumeric(input) {
+        if (input === undefined) return input;
+        else return + input
+    }
     function GetUniqueWorkoutTypes(results) {
         var map = results?.map(result => result.pretty_workout_type).reduce(function (accumulator, currentValue) {
             accumulator[currentValue] = (accumulator[currentValue] || 0) + 1;

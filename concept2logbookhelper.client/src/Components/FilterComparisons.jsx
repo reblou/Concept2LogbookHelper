@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 
 
-function FilterComparisons({ InputFormatFunc }) {
+function FilterComparisons({ InputFormatFunc, customInput: CustomInput, customEqualityFunc }) {
     const [dropDown, setDropDown] = useState(false);
     const [comparisonType, setComparisonType] = useState("Equal To");
     const [between, setBetween] = useState(false);
@@ -10,6 +10,8 @@ function FilterComparisons({ InputFormatFunc }) {
 
     const [input1, setInput1] = useState();
     const [input2, setInput2] = useState();
+    const [invalid, setInvalid] = useState(false);
+    const [invalid2, setInvalid2] = useState(false);
 
     const filterResultsCallback = useContext(FilterCallbackContext);
 
@@ -22,11 +24,15 @@ function FilterComparisons({ InputFormatFunc }) {
                 <option value="Less Than">Less Than</option>
                 <option value="Between">Between</option>
             </select>
-                <input autoFocus placeholder={value1} onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />
+                {CustomInput !== undefined ?
+                    <CustomInput value={value1} search={SearchTyped} setInput={setInput1} failedSubmit={invalid} /> : 
+                    <input autoFocus placeholder={value1} onKeyDown={SearchTyped} onInput={e => setInput1(e.target.value)} />}
           {between &&
               <>
                 <p>And</p>
-                <input placeholder='Value 2' onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} />
+                    {CustomInput !== undefined ?
+                        <CustomInput value={"Value 2"} search={SearchTyped} setInput={setInput2} failedSubmit={invalid2} /> :
+                        <input autoFocus placeholder={"Value 2"} onKeyDown={SearchTyped} onInput={e => setInput2(e.target.value)} />}
               </>}
             </div>
           <button onClick={Filter}>Filter</button>
@@ -43,10 +49,19 @@ function FilterComparisons({ InputFormatFunc }) {
     function Filter() {
         var formatted1 = InputFormatFunc(input1);
         var formatted2 = InputFormatFunc(input2);
-        //TODO: add string label here e.g. Pace < 2:00
+        if (formatted1 === undefined) {
+            setInvalid(true);
+            return;
+        }
+        setInvalid(false);
+
         switch (comparisonType) {
             case "Equal To":
-                filterResultsCallback((property => property === formatted1), "%prop% = " + input1);
+                var f = (property => property === formatted1)
+                //override equality if function set
+                if (customEqualityFunc !== undefined) f = (property => customEqualityFunc(property, formatted1));
+
+                filterResultsCallback(f, "%prop% = " + input1);
                 break;
             case "Greater Than":
                 filterResultsCallback((property => property >= formatted1), "%prop% >= " + input1);
@@ -55,6 +70,11 @@ function FilterComparisons({ InputFormatFunc }) {
                 filterResultsCallback((property => property <= formatted1), "%prop% <= " + input1);
                 break;
             case "Between":
+                if (formatted2 === undefined) {
+                    setInvalid2(true);
+                    return;
+                }
+                setInvalid2(false);
                 filterResultsCallback((property => formatted1 <= property && property <= formatted2), input1 + " <= %prop% <= " + input2);
                 break;
             default:
