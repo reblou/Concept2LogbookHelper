@@ -49,7 +49,7 @@ function FilterComparisons({ InputFormatFunc, customInput: CustomInput }) {
     function Filter() {
         var formatted1 = InputFormatFunc(input1);
         var formatted2 = InputFormatFunc(input2);
-        if (formatted1 === undefined || isNaN(formatted1)) {
+        if (formatted1 === undefined) {
             setInvalid(true);
             return;
         }
@@ -66,7 +66,7 @@ function FilterComparisons({ InputFormatFunc, customInput: CustomInput }) {
                 filterResultsCallback((property => property <= formatted1), "%prop% <= " + input1);
                 break;
             case "Between":
-                if (formatted2 === undefined || isNaN(formatted2)) {
+                if (formatted2 === undefined) {
                     setInvalid2(true);
                     return;
                 }

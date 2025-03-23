@@ -9,6 +9,8 @@ import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
 import { SortCallbackContext } from '../Contexts/SortCallbackContext.js';
 import TimeInput from "./FilterInputs/TimeInput";
 import DistanceInput from "./FilterInputs/DistanceInput";
+import NumericInput from "./FilterInputs/NumericInput";
+import PaceInput from "./FilterInputs/PaceInput";
 import Loading from "./Loading";
 import ErrorDialog from "./ErrorDialog";
 import ResultTableTopMenu from "./ResultTableTopMenu";
@@ -60,11 +62,11 @@ function ResultsTable() {
                                     <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} />
                                     <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />} />
                                     <ResultTableHeader label='Time' ResultPropSelector={(result) => result.total_time} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} customInput={TimeInput} />}/>
-                                    <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} customInput={DistanceInput} />}/>
-                                    <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatPace(value)} />} />
-                                    <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
-                                    <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
-                                    <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => + value} />} />
+                                    <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={DistanceInput} />}/>
+                                    <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatPace(value)} customInput={PaceInput} />} />
+                                    <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={NumericInput} />}/>
+                                    <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={NumericInput} />} />
+                                    <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={NumericInput} />} />
                                     <th>Link</th>
                                 </tr>
                             </SortCallbackContext.Provider>
@@ -151,6 +153,10 @@ function ResultsTable() {
         return input;
     }
 
+    function FormatNumeric(input) {
+        if (input === undefined) return input;
+        else return + input
+    }
     function GetUniqueWorkoutTypes(results) {
         var map = results?.map(result => result.pretty_workout_type).reduce(function (accumulator, currentValue) {
             accumulator[currentValue] = (accumulator[currentValue] || 0) + 1;
