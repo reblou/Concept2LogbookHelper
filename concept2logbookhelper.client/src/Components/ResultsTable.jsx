@@ -60,7 +60,7 @@ function ResultsTable() {
                         <thead>
                             <SortCallbackContext.Provider value={SetSort}>
                                 <tr>
-                                    <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date.getTime()} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={FormatDate} customInput={DateInput} />} /> 
+                                    <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={FormatDate} customInput={DateInput} customEqualityFunc={DatesEqual} />} /> 
                                     <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />} />
                                     <ResultTableHeader label='Time' ResultPropSelector={(result) => result.total_time} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} customInput={TimeInput} />}/>
                                     <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={DistanceInput} />}/>
@@ -158,11 +158,15 @@ function ResultsTable() {
 
     function FormatDate(input)
     {
-        if (input === undefined) return;
-        //TODO: format date so that blank inputs return undefined.
-        return new Date(input).getTime();
+        if (input === undefined) return undefined;
+        return new Date(input);
     }
 
+    function DatesEqual(a, b) {
+        return a.getFullYear() === b.getFullYear() &&
+			a.getMonth() === b.getMonth() &&
+			a.getDate() === b.getDate();
+    }
     function FormatNumeric(input) {
         if (input === undefined) return input;
         else return + input

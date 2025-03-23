@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext';
 
 
-function FilterComparisons({ InputFormatFunc, customInput: CustomInput }) {
+function FilterComparisons({ InputFormatFunc, customInput: CustomInput, customEqualityFunc }) {
     const [dropDown, setDropDown] = useState(false);
     const [comparisonType, setComparisonType] = useState("Equal To");
     const [between, setBetween] = useState(false);
@@ -57,7 +57,11 @@ function FilterComparisons({ InputFormatFunc, customInput: CustomInput }) {
 
         switch (comparisonType) {
             case "Equal To":
-                filterResultsCallback((property => property === formatted1), "%prop% = " + input1);
+                var f = (property => property === formatted1)
+                //override equality if function set
+                if (customEqualityFunc !== undefined) f = (property => customEqualityFunc(property, formatted1));
+
+                filterResultsCallback(f, "%prop% = " + input1);
                 break;
             case "Greater Than":
                 filterResultsCallback((property => property >= formatted1), "%prop% >= " + input1);
