@@ -93,6 +93,10 @@ dialog::backdrop {
         align-self: flex-start;
         align-items: center;
     }
+
+    table {
+        table-layout: auto;
+    }
 }
 
 svg {
