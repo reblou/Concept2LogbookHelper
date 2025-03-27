@@ -14,12 +14,15 @@ function ResultTableHeader({label, filterMenuContentsComponent, ResultPropSelect
         <th>
             <FilterCallbackContext.Provider value={FilterItemClick}>
                 {popup &&
-                    <div className='above'>
-                        <div className='PopupDisabler' onClick={() => setPopup(!popup)} />
-                        <div className='FilterListMenu'>
-                            {filterMenuContentsComponent}
-                        </div>
-                    </div>}
+                    <>
+						<div className='FilterListMenu'>
+							{filterMenuContentsComponent}
+						</div>
+						<div className='above'>
+							<div className='PopupDisabler' onClick={() => setPopup(!popup)} />
+						</div>
+					</>
+                }
 
             </FilterCallbackContext.Provider>
             
