@@ -10,12 +10,12 @@ function FilterButtonList({ filterOptionList }) {
         : filterOptionList.map((value) => (<li key={value}><button onClick={() => filterResultsCallback(property  => property === value, value)}>{value}</button></li>))
         
     return (
-        <div>
+        <>
             <input autoFocus type='text' placeholder="Search..." onKeyDown={SearchTyped}></input>
             <ul className='FilterList'>
                 {contents }
             </ul>
-        </div>
+        </>
     );
 
 
