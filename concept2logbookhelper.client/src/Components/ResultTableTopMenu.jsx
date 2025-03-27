@@ -2,6 +2,7 @@ import Loading from "./Loading.jsx";
 import MobileWarning from "./MobileWarning";
 import ActiveFiltersBar from "./ActiveFiltersBar";
 import MovablePopup from "./MovablePopup.jsx";
+import ResultGraph from "./Visualisations/ResultGraph.jsx";
 import { useState } from "react";
 
 function ResultTableTopMenu({ fullResults, loading, filterMap, sortFunction, applyFilters }) {
@@ -20,9 +21,8 @@ function ResultTableTopMenu({ fullResults, loading, filterMap, sortFunction, app
                 </>}
 				<ActiveFiltersBar filterMap={filterMap} sortFunction={sortFunction} applyFilters={applyFilters} />
             <button onClick={() => setIsGraphOpen(true)}>Open Graph</button>
-            <MovablePopup isOpen={isGraphOpen} onClose={() => setIsGraphOpen(false)} >
-                <p>This is a movable popup window!</p>
-                <p>You can drag the header to move it around.</p>
+            <MovablePopup isOpen={isGraphOpen} onClose={() => setIsGraphOpen(false)} title={"Graph"}>
+                <ResultGraph/>
             </MovablePopup>
         </div>
     );

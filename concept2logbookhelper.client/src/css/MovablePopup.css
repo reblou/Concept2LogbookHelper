@@ -3,9 +3,10 @@
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    width: 300px;
+    width: 600px;
     z-index: 1000;
     border: 1px solid #e0e0e0;
+    overflow: auto;
 }
 
 .popup-header {
