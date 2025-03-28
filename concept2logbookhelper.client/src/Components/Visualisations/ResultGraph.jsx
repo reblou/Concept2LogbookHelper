@@ -1,6 +1,7 @@
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 import "../../css/ResultGraph.css";
 import { useState, useEffect } from 'react';
+import moment from 'moment';
 
 function formatPace(averagePace) {
     const minutes = Math.floor(averagePace / 60);
@@ -28,7 +29,7 @@ function ResultGraph({ resultsInView }) {
             <LineChart width={600} height={300} data={resultsInView}>
 				<Line type="monotone" dataKey="average_pace" stroke="#8884d8" />
 				<CartesianGrid stroke="#ccc" />
-                <XAxis dataKey="date_utc" reversed={true} />
+                <XAxis dataKey="date_utc" reversed={true} tickFormatter={d => moment(d).format('YYYY-MM-DD')} />
                 <YAxis tickFormatter={formatPace} scale={"auto"} allowDataOverflow={true} domain={[paceMin-bufferSecs, paceMax+bufferSecs]} />
 			</LineChart>
 		</div>
