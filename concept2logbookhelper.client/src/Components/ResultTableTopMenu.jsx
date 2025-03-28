@@ -5,7 +5,7 @@ import MovablePopup from "./MovablePopup.jsx";
 import ResultGraph from "./Visualisations/ResultGraph.jsx";
 import { useState } from "react";
 
-function ResultTableTopMenu({ fullResults, loading, filterMap, sortFunction, applyFilters }) {
+function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap, sortFunction, applyFilters }) {
     const [isGraphOpen, setIsGraphOpen] = useState(false);
     const maxHR = Math.max(
         fullResults?.map(result => result.heart_rate?.max ?? 0)
@@ -22,7 +22,7 @@ function ResultTableTopMenu({ fullResults, loading, filterMap, sortFunction, app
 				<ActiveFiltersBar filterMap={filterMap} sortFunction={sortFunction} applyFilters={applyFilters} />
             <button onClick={() => setIsGraphOpen(true)}>Open Graph</button>
             <MovablePopup isOpen={isGraphOpen} onClose={() => setIsGraphOpen(false)} title={"Graph"}>
-                <ResultGraph/>
+                <ResultGraph resultsInView={displayedResults} />
             </MovablePopup>
         </div>
     );

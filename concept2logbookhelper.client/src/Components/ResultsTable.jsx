@@ -53,7 +53,7 @@ function ResultsTable() {
         <div className='results-table'>
             <ErrorDialog open={openErrorDialog} message={"There was an error fetching workout data."} setOpen={setOpenErrorDialog} />
             {loading ? <Loading /> : <>
-                <ResultTableTopMenu fullResults={fullResults} loading={fullyLoaded} filterMap={filterMap.current} sortFunction={sortFunction} applyFilters={ApplyAllFilters} />
+                <ResultTableTopMenu fullResults={fullResults} displayedResults={resultsToDisplay} loading={fullyLoaded} filterMap={filterMap.current} sortFunction={sortFunction} applyFilters={ApplyAllFilters} />
 
                 <FilterCallbackContext.Provider value={Filter}>
                     <table>
