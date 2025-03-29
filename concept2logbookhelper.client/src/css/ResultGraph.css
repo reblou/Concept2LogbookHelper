@@ -9,3 +9,8 @@
 .custom-tooltip p {
     margin: 0.25em;
 }
+
+.ResultContainer {
+    padding: 10px 20px 20px 20px;
+    box-sizing: border-box;
+}

@@ -34,15 +34,15 @@ function ResultGraph({ resultsInView }) {
     };
 
     const renderLineChart = (
-			<ResponsiveContainer width="100%" height="100%">
-				<LineChart className="ResultLineGraph" data={resultsInView} margin={{ top: 20, right: 30, left: 20, bottom: 50 }}>
-					<Line type="monotone" dataKey="average_pace" stroke="#8884d8" />
-					<CartesianGrid stroke="#ccc" />
-					<XAxis dataKey="date" reversed={true} tickFormatter={d => moment(d).format('YYYY-MM-DD')} angle={-45} tickCount={50} textAnchor={'end'} />
-					<YAxis tickFormatter={formatPace} scale={"auto"} allowDataOverflow={true} domain={['dataMin-5', 'dataMax+5']} interval={0}  tickCount={10} />
-					<Tooltip content={<CustomTooltip />} />
-				</LineChart>
-            </ResponsiveContainer>
+        <ResponsiveContainer className="ResultContainer" width="100%" height="100%" minHeight={200} minWidth={300} >
+			<LineChart className="ResultLineGraph" data={resultsInView}>
+				<Line type="monotone" dataKey="average_pace" stroke="#8884d8" />
+				<CartesianGrid stroke="#ccc" />
+                <XAxis dataKey="date" reversed={true} tickFormatter={d => moment(d).format('YYYY-MM-DD')} angle={-45} tickCount={50} textAnchor={'end'} height={70} />
+				<YAxis tickFormatter={formatPace} scale={"auto"} allowDataOverflow={true} domain={['dataMin-5', 'dataMax+5']} interval={0}  tickCount={10} />
+				<Tooltip content={<CustomTooltip />} />
+			</LineChart>
+		</ResponsiveContainer>
     );
 
     return renderLineChart;
