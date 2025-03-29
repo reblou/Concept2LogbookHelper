@@ -1,3 +1,15 @@
 .lineChartContainer {
     width: 100%;
 }
+
+.custom-tooltip {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    gap: 1px;
+}
+
+.custom-tooltip p {
+    margin: 0.25em;
+}
