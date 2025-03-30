@@ -4,6 +4,7 @@ import ActiveFiltersBar from "./ActiveFiltersBar";
 import MovablePopup from "./MovablePopup.jsx";
 import ResultGraph from "./Visualisations/ResultGraph.jsx";
 import { useState } from "react";
+import '../css/ResultTableTopMenu.css';
 
 function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap, sortFunction, applyFilters }) {
     const [isGraphOpen, setIsGraphOpen] = useState(false);
@@ -13,15 +14,16 @@ function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap,
 
     return (
         <div className='results-table-topmenu'>
-
             <MobileWarning />    
-            {!loading ?       
-                <Loading/> : <>     
-                    <p> Total Workouts: {fullResults?.length} | Total Meters: {fullResults?.reduce((a, c) => a + c.total_distance, 0)} m | Max HR: {maxHR}</p>
-                </>}
+            <div className='topmenu-infobar'>
+				{!loading ?       
+					<Loading/> : <>     
+						<p> Total Workouts: {fullResults?.length} | Total Meters: {fullResults?.reduce((a, c) => a + c.total_distance, 0)} m | Max HR: {maxHR}</p>
+					</>}
+				<button onClick={() => setIsGraphOpen(true)}>View Graph</button>
+			</div>
 				<ActiveFiltersBar filterMap={filterMap} sortFunction={sortFunction} applyFilters={applyFilters} />
-            <button onClick={() => setIsGraphOpen(true)}>Open Graph</button>
-            <MovablePopup isOpen={isGraphOpen} onClose={() => setIsGraphOpen(false)} title={"Graph"}>
+            <MovablePopup isOpen={isGraphOpen} onClose={() => setIsGraphOpen(false)} title={"Results"}>
                 <ResultGraph resultsInView={displayedResults} />
             </MovablePopup>
         </div>

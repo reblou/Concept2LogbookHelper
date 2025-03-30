@@ -1,0 +1,40 @@
+.results-table-topmenu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.topmenu-infobar {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.mobilemessagediv {
+    display: none;
+    background-color: var(--highlight);
+    width: 100%;
+    border-radius: 8px;
+    padding: 2px;
+}
+
+@media screen and (max-width:480px) {
+    .mobilemessagediv {
+        display: block;
+    }
+
+    .results-table-topmenu {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        align-self: flex-start;
+        align-items: center;
+    }
+
+}

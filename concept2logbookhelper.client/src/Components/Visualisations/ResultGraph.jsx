@@ -36,10 +36,10 @@ function ResultGraph({ resultsInView }) {
     const renderLineChart = (
         <ResponsiveContainer className="ResultContainer" width="100%" height="100%" minHeight={200} minWidth={300} >
 			<LineChart className="ResultLineGraph" data={resultsInView}>
-				<Line type="monotone" dataKey="average_pace" stroke="#8884d8" />
+				<Line className="ResultLine" type="monotone" dataKey="average_pace" />
 				<CartesianGrid stroke="#ccc" />
-                <XAxis dataKey="date" reversed={true} tickFormatter={d => moment(d).format('YYYY-MM-DD')} angle={-45} tickCount={50} textAnchor={'end'} height={70} />
-				<YAxis tickFormatter={formatPace} scale={"auto"} allowDataOverflow={true} domain={['dataMin-5', 'dataMax+5']} interval={0}  tickCount={10} />
+                <XAxis className="ResultAxis" dataKey="date" reversed={true} tickFormatter={d => moment(d).format('YYYY-MM-DD')} angle={-45} tickCount={50} textAnchor={'end'} height={70} />
+				<YAxis className="ResultAxis" tickFormatter={formatPace} scale={"auto"} allowDataOverflow={true} domain={['dataMin-5', 'dataMax+5']} interval={0}  tickCount={10} />
 				<Tooltip content={<CustomTooltip />} />
 			</LineChart>
 		</ResponsiveContainer>

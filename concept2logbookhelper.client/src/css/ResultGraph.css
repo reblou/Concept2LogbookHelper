@@ -1,7 +1,7 @@
 .custom-tooltip {
     background-color: white;
     color: black;
-    border: 1px solid black;
+    border: 1px solid light-dark(black, white);
     border-radius: 5px;
     gap: 1px;
 }
@@ -13,4 +13,8 @@
 .ResultContainer {
     padding: 10px 20px 20px 20px;
     box-sizing: border-box;
+}
+
+.ResultLine > path {
+    stroke: var(--highlight);
 }

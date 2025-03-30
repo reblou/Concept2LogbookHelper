@@ -79,12 +79,7 @@ function MovablePopup({ title = 'Popup Window', isOpen = false, onClose, childre
                 </div>
 
 				{children}
-				<div className="resize"
-					style={{
-						background: 'linear-gradient(135deg, transparent 50%, gray 50%)'
-					}}
-					onMouseDown={startResizing}
-				/> 
+				<div className="resize" onMouseDown={startResizing} /> 
 
             </div>
     );
