@@ -1,7 +1,7 @@
 .custom-tooltip {
     background-color: white;
-    color: black;
-    border: 1px solid light-dark(black, white);
+    color: #10151B;
+    border: 1px solid light-dark(#10151B, white);
     border-radius: 5px;
     gap: 1px;
 }
