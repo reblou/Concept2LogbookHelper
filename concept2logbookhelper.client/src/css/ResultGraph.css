@@ -14,7 +14,3 @@
     padding: 10px 20px 20px 20px;
     box-sizing: border-box;
 }
-
-.ResultLine > path {
-    stroke: var(--highlight);
-}
