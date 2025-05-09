@@ -1,6 +1,6 @@
 .custom-tooltip {
-    background-color: white;
-    color: #10151B;
+    background-color: light-dark(white, #15191E);
+    color: light-dark(#10151B, white);
     border: 1px solid light-dark(#10151B, white);
     border-radius: 5px;
     gap: 1px;
