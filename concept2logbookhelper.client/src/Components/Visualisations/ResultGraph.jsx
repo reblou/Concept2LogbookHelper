@@ -15,7 +15,6 @@ function formatPace(averagePace) {
 }
 
 function ResultGraph({ resultsInView }) {
-
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             let result = payload[0].payload;
@@ -42,7 +41,7 @@ function ResultGraph({ resultsInView }) {
                 <YAxis className="ResultAxis" tickFormatter={formatPace} scale={"auto"} allowDataOverflow={true} domain={['dataMin-5', 'dataMax+5']} interval={0} tickCount={10} stroke={"light-dark(#10151B, #ffffff)"} />
 				<Tooltip content={<CustomTooltip />} />
 			</LineChart>
-		</ResponsiveContainer>
+        </ResponsiveContainer>
     );
 
     return renderLineChart;
