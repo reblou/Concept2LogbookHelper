@@ -11,7 +11,7 @@ function MobileGraphView() {
 	)
 
 	return (
-		<div style={{width:"200%", height:600, overflow:"scroll", display: "block", flexShrink:0, flexFlow: "Flex-start"}}>
+		<div style={{width:"150%", height:600, overflowX:"scroll", overflowY:"hidden", display: "block", flexShrink:0, flexFlow: "Flex-start"}}>
 			{display}
 		</div>
   );

@@ -17,6 +17,7 @@ table {
     box-sizing: border-box;
     margin: 1rem 0 0 0;
     width: 100%;
+    min-width: 50em;
     table-layout: fixed;
 }
 
