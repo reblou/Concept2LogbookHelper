@@ -10,6 +10,8 @@
 .spinner {
     margin: 10px;
     width: 20px;
+    height: 20px;
+    aspect-ratio: 1/ 1;
     border-radius: 50%;
     background: var(--highlight);
     padding: 8px;

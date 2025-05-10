@@ -14,8 +14,10 @@ table, th, td {
 }
 
 table {
-    margin: 1rem;
+    box-sizing: border-box;
+    margin: 1rem 0 0 0;
     width: 100%;
+    min-width: 50em;
     table-layout: fixed;
 }
 
@@ -24,7 +26,7 @@ tr:nth-child(even) {
 }
 
 tr:nth-child(odd) {
-    background: light-dark(#cdcdcd, #212528);
+    background: light-dark(#f2f2f2, #212528);
 }
 
 th {
@@ -66,34 +68,7 @@ dialog::backdrop {
     opacity: 0.5;
 }
 
-.results-table-topmenu {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    align-items: center;
-}
-
-.mobilemessagediv {
-    display: none;
-    background-color: var(--highlight);
-    width: 100%;
-    border-radius: 8px;
-    padding: 2px;
-}
-
 @media screen and (max-width:480px) {
-    .mobilemessagediv {
-        display: block;
-    }
-
-    .results-table-topmenu {
-        display: flex;
-        justify-content: flex-start;
-        flex-direction: column;
-        align-self: flex-start;
-        align-items: center;
-    }
-
     table {
         table-layout: auto;
     }
