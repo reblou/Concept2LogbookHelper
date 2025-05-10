@@ -3,7 +3,8 @@ import "../css/MovablePopup.css";
 
 function MovablePopup({ title = 'Popup Window', isOpen = false, onClose, children}) {
     const defaultSize = { width: 800, height: 500 };
-    const [position, setPosition] = useState({ x: 100, y: 100 });
+    const defaultPos = { x: 800, y: 300 }
+    const [position, setPosition] = useState({ x: defaultPos.x, y: defaultPos.y });
     const [isDragging, setIsDragging] = useState(false);
     const [size, setSize] = useState({ width: defaultSize.width, height: defaultSize.height });
     const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -57,6 +58,7 @@ function MovablePopup({ title = 'Popup Window', isOpen = false, onClose, childre
 
     useEffect(() => {
         setSize({ width: defaultSize.width, height: defaultSize.height });
+        setPosition({ x: defaultPos.x, y: defaultPos.y });
     }, [isOpen]);
 
     if (!isOpen) return null;
