@@ -20,20 +20,26 @@ namespace Concept2LogbookHelper.Server.Services
         const int max_returned_per_page = 250;
 
 
+        private ILogger<Concept2APIService> logger;
         private HttpClient _httpClient;
         private ISessionService _sessionService;
         private readonly AuthenticationOptions _auth;
 
-        public Concept2APIService(HttpClient httpClient, IOptions<AuthenticationOptions> authOptions, ISessionService authenticationService)
+        public Concept2APIService(
+            HttpClient httpClient,
+            IOptions<AuthenticationOptions> authOptions,
+            ISessionService authenticationService,
+            ILogger<Concept2APIService> logger)
         {
             this._httpClient = httpClient;
             this._auth = authOptions.Value;
             _sessionService = authenticationService;
+            this.logger = logger;
         }
 
         private async Task<string> GetAccessToken(string sessionId)
         {
-           return await _sessionService.GetStoredAccessToken(sessionId);
+           return await _sessionService.GetStoredAccessTokenAsync(sessionId);
         }
 
         private async Task<T> SendRequest<T>(string accessCode, string url, HttpMethod method)
@@ -96,7 +102,12 @@ namespace Concept2LogbookHelper.Server.Services
 
             HttpResponseMessage response = await _httpClient.PostAsync(url, body);
 
-            if (!response.IsSuccessStatusCode) throw new BadHttpRequestException("Failed to authenticate user");
+            if (!response.IsSuccessStatusCode)
+            {
+                string responseBody = await response.Content.ReadAsStringAsync();
+                logger.LogError("Error getting accessToken {response}", responseBody);
+                throw new BadHttpRequestException("Failed to authenticate user");
+            }
 
             string content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<AccessToken>(content);
