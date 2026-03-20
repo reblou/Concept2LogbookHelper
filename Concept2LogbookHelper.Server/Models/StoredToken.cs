@@ -2,7 +2,6 @@
 {
     public class StoredToken
     {
-
         public bool AccessTokenExists { get; set; }
         public bool RefreshTokenExists { get; set; }
         public DateTime? RefreshExpiryDate { get; set; }
