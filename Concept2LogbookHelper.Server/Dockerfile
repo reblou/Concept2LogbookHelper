@@ -5,6 +5,7 @@ USER app
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
+EXPOSE 8080
 
 
 # Prevent 'Warning: apt-key output should not be parsed (stdout is not a terminal)'
