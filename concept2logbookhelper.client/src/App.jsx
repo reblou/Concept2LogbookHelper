@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import './css/App.css';
 import { Routes, Route } from 'react-router-dom';
 import Logbook from './Components/Logbook.jsx';

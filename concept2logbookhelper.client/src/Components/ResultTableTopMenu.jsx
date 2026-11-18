@@ -20,16 +20,23 @@ function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap,
         <div className='results-table-topmenu'>
             <MobileWarning />    
             <div className='topmenu-infobar'>
-				{!loading ?       
-					<Loading/> : <>     
-						<p> Total Workouts: {fullResults?.length} | Total Meters: {fullResults?.reduce((a, c) => a + c.total_distance, 0)} m | Max HR: {maxHR}</p>
-					</>}
-				<button onClick={OpenGraph}>View Graph</button>
-                <button onClick={Export}>Export To Csv</button>
+                {!loading ? <Loading /> : (
+                    <dl className="workout-summary">
+                        <div><dt>Total workouts</dt><dd>{fullResults?.length.toLocaleString()}</dd></div>
+                        <div><dt>Total meters</dt><dd>{fullResults?.reduce((total, result) => total + result.total_distance, 0).toLocaleString()} m</dd></div>
+                        <div><dt>Max HR</dt><dd>{maxHR}</dd></div>
+                    </dl>
+                )}
+                <div className="table-actions">
+                    <button onClick={OpenGraph}>View Graph</button>
+                    <button className="secondary-button" onClick={Export}>Export CSV</button>
+                </div>
 			</div>
 				<ActiveFiltersBar filterMap={filterMap} sortFunction={sortFunction} applyFilters={applyFilters} />
             <MovablePopup isOpen={isGraphOpen} onClose={() => setIsGraphOpen(false)} title={"Results"}>
-                <ResultGraph resultsInView={displayedResults} />
+                {displayedResults?.length ? (
+                    <ResultGraph resultsInView={displayedResults} />
+                ) : <p className="graph-empty">No results to display.</p>}
             </MovablePopup>
         </div>
     );
@@ -45,7 +52,7 @@ function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap,
     function Export() {
         let csvContent = "Date,Type,Distance,Time,Pace,SPM,Calories,HR\n";
 
-        csvContent += displayedResults.map(x => moment(x.date).format('YYYY-MM-DD HH:mm') + "," + x.pretty_workout_type + "," + x.distance + "," + x.time_formatted + "," + x.pretty_average_pace + "," + x.stroke_rate + "," + x.calories_total + "," + x.heart_rate?.average).join("\n");
+        csvContent += (displayedResults ?? []).map(x => moment(x.date).format('YYYY-MM-DD HH:mm') + "," + x.pretty_workout_type + "," + x.distance + "," + x.time_formatted + "," + x.pretty_average_pace + "," + x.stroke_rate + "," + x.calories_total + "," + x.heart_rate?.average).join("\n");
 
         // Create a Blob from the CSV content
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });

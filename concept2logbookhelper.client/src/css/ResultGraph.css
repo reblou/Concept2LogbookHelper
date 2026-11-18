@@ -1,21 +1,21 @@
 .custom-tooltip {
-    background-color: light-dark(white, #15191E);
-    color: light-dark(#10151B, white);
-    border: 1px solid light-dark(#10151B, white);
-    border-radius: 5px;
-    gap: 1px;
+    padding: .55rem .75rem;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
 }
-
-.custom-tooltip p {
-    margin: 0.25em;
+.custom-tooltip p { margin: .2rem 0; }
+.custom-tooltip .label { font-weight: 700; }
+.ResultContainer { padding: .75rem .75rem .5rem 0; }
+.graph-panel {
+    height: clamp(300px, 65vh, 600px);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: .65rem;
+    overflow: auto;
 }
-
-.ResultContainer {
-    padding: 10px 20px 20px 20px;
-    box-sizing: border-box;
-    display: block;
-}
-
-.recharts-responsive-containerr {
-    overflow: inherit;
-}
+.graph-canvas { min-width: 550px; height: 100%; }
+.graph-empty { margin: 1rem; color: var(--muted); }

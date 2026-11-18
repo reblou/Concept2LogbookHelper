@@ -1,40 +1,35 @@
-.results-table-topmenu {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-
 .topmenu-infobar {
-    width: 100%;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
-    gap: 1em;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 1rem;
 }
 
-.mobilemessagediv {
-    display: none;
-    background-color: var(--highlight);
-    width: 100%;
-    border-radius: 8px;
-    padding: 2px;
+.workout-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+    margin: 0;
 }
-
-@media screen and (max-width:480px) {
-    .mobilemessagediv {
-        display: block;
-    }
-
-    .results-table-topmenu {
-        display: flex;
-        justify-content: flex-start;
-        flex-direction: column;
-        align-self: flex-start;
-        align-items: center;
-    }
-
+.workout-summary > div {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: clamp(.65rem, 2vw, 1.15rem);
+}
+.workout-summary dt { color: var(--muted); font-size: .82rem; font-weight: 650; }
+.workout-summary dd {
+    margin: .15rem 0 0;
+    font-size: clamp(1rem, 2.5vw, 1.7rem);
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+.table-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.mobilemessagediv { display: none; }
+@media (max-width: 850px) {
+    .topmenu-infobar { grid-template-columns: 1fr; }
+}
+@media (max-width: 1050px) {
+    .mobilemessagediv { display: block; color: var(--muted); font-size: .85rem; }
 }

@@ -1,15 +1,46 @@
-﻿#root {
-    max-width: 1280px;
-    min-width: 85vw;
-    align-self: flex-start;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
-    justify-content: center;
-    align-items: flex-start;
+#root {
+    width: min(100%, 1480px);
+    margin-inline: auto;
+    padding: clamp(1rem, 4vw, 3.5rem);
 }
 
-.icon-image {
-    max-width: 100%;
-    max-height: 100%;
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    font-size: .9rem;
+    font-weight: 700;
+}
+.brand img { width: 28px; height: 28px; }
+
+.login-card {
+    margin: clamp(1rem, 9vh, 7rem) auto;
+    max-width: 850px;
+    overflow: hidden;
+    border-radius: 24px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+.login-hero {
+    padding: clamp(1.5rem, 6vw, 4.5rem);
+    background: radial-gradient(ellipse at top right, #176357, transparent 65%), #132837;
+    color: #f1fbfa;
+}
+.login-hero h1 {
+    margin: 1.5rem 0 0;
+    max-width: 12ch;
+    font-size: clamp(2.6rem, 7vw, 5.5rem);
+    line-height: .98;
+    letter-spacing: -.055em;
+}
+.login-body { padding: clamp(1.5rem, 6vw, 4.5rem); }
+.login-body h2 { margin: 0; }
+.login-body p { max-width: 61ch; color: var(--muted); }
+.login-body button { margin-top: .75rem; }
+
+.secondary-button {
+    color: var(--ink);
+    background: var(--surface);
+    border-color: var(--line);
 }

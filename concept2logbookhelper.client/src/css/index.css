@@ -1,88 +1,37 @@
 :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: "Segoe UI", system-ui, sans-serif;
     line-height: 1.5;
-    font-weight: 400;
     color-scheme: light dark;
-    color: #ffffff;
-    background-color: #10151b;
+    --canvas: light-dark(#eef2f6, #101820);
+    --surface: light-dark(#fff, #17232e);
+    --subtle: light-dark(#f4f7fb, #1d2c39);
+    --ink: light-dark(#15283d, #e8f1f8);
+    --muted: light-dark(#4b6074, #a8bdd0);
+    --line: light-dark(#dbe3ec, #334758);
+    --accent: light-dark(#086759, #86e0ca);
+    --highlight: #086759;
+    --shadow: 0 12px 32px #10233712;
+    color: var(--ink);
+    background: var(--canvas);
     font-synthesis: none;
-    text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    z-index: 0;
-    position: sticky;
-    --highlight: #007385;
-    --typeColour-JustRow: #154E4E;
-    --typeColour-FixedDistanceInterval: #097979;
-    --typeColour-FixedTimeInterval: #118D8D;
-    --typeColour-VariableIntervalUndefinedRest: #228D80;
-    --typeColour-FixedCalorieInterval: #228D80;
-    --typeColour-VariableInterval: #008585;
-    --typeColour-FixedDistanceSplits: #40826F;
-    --typeColour-FixedCalorie: #5A9678;
-    --typeColour-FixedTimeSplits: #5A9678;
-    --typeColour-unknown: #006464;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-@media (prefers-color-scheme: light) {
-    :root {
-        color: #10151B;
-        background-color: #ffffff;
-    }
-
-    a:hover {
-        color: #747bff;
-    }
-
-    th {
-        color: #ffffff
-    }
-}
-
-
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; }
+a { color: var(--accent); }
+button, input, select { font: inherit; }
 button {
-    border-radius: 8px;
     border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
-    color: light-dark(white, white);
-    background-color: var(--highlight);
+    border-radius: 8px;
+    padding: .6rem .95rem;
+    font-weight: 650;
+    color: #fff;
+    background: var(--highlight);
     cursor: pointer;
-    transition: border-color 0.25s;
-    width: fit-content;
 }
-
-button:hover {
-  border-color: #ffffffde;
+button:hover { filter: brightness(1.12); }
+:where(button, a, input, select):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
 }
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-

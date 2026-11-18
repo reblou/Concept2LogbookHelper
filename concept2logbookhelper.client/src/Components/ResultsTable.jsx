@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, Suspense } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom'
 import Result from "./Result";
 import "../css/ResultsTable.css";
@@ -7,11 +7,7 @@ import FilterButtonList from "./FilterButtonList";
 import FilterComparisons from "./FilterComparisons";
 import { FilterCallbackContext } from '../Contexts/FilterCallbackContext.js';
 import { SortCallbackContext } from '../Contexts/SortCallbackContext.js';
-import TimeInput from "./FilterInputs/TimeInput";
-import DistanceInput from "./FilterInputs/DistanceInput";
-import NumericInput from "./FilterInputs/NumericInput";
-import PaceInput from "./FilterInputs/PaceInput";
-import DateInput from "./FilterInputs/DateInput";
+import { dateKey, parseDuration } from "./filterValues";
 import Loading from "./Loading";
 import ErrorDialog from "./ErrorDialog";
 import ResultTableTopMenu from "./ResultTableTopMenu";
@@ -56,23 +52,27 @@ function ResultsTable() {
                 <ResultTableTopMenu fullResults={fullResults} displayedResults={resultsToDisplay} loading={fullyLoaded} filterMap={filterMap.current} sortFunction={sortFunction} applyFilters={ApplyAllFilters} />
 
                 <FilterCallbackContext.Provider value={Filter}>
+                    <div className="table-scroll" role="region" aria-label="Workout history" tabIndex={0}>
                     <table>
                         <thead>
                             <SortCallbackContext.Provider value={SetSort}>
                                 <tr>
-                                    <ResultTableHeader label='Date' ResultPropSelector={(result) => result.date} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={FormatDate} customInput={DateInput} customEqualityFunc={DatesEqual} />} /> 
+                                    <ResultTableHeader label="Date" ResultPropSelector={result => result.date} filterValue={result => dateKey(result.date)} filterMenuContentsComponent={<FilterComparisons label="Date" kind="date" />} />
                                     <ResultTableHeader label='Type' ResultPropSelector={(result) => result.pretty_workout_type} filterMenuContentsComponent={<FilterButtonList filterOptionList={workoutTypesUnique.current} />} />
-                                    <ResultTableHeader label='Time' ResultPropSelector={(result) => result.total_time} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => TimeToDeciseconds(value)} customInput={TimeInput} />}/>
-                                    <ResultTableHeader label='Distance' ResultPropSelector={(result) => result.distance} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={DistanceInput} />}/>
-                                    <ResultTableHeader label='Pace' ResultPropSelector={(result) => result.pretty_average_pace} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatPace(value)} customInput={PaceInput} />} />
-                                    <ResultTableHeader label='Avg SPM' ResultPropSelector={(result) => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={NumericInput} />}/>
-                                    <ResultTableHeader label='Calories' ResultPropSelector={(result) => result.calories_total} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={NumericInput} />} />
-                                    <ResultTableHeader label='Avg HR' ResultPropSelector={(result) => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons InputFormatFunc={(value) => FormatNumeric(value)} customInput={NumericInput} />} />
-                                    <th>Link</th>
+                                    <ResultTableHeader label="Time" ResultPropSelector={result => result.total_time} filterMenuContentsComponent={<FilterComparisons label="Time" kind="time" placeholder="20:00" />} />
+                                    <ResultTableHeader label="Distance" ResultPropSelector={result => result.distance} filterMenuContentsComponent={<FilterComparisons label="Distance" unit="m" placeholder="2000" />} />
+                                    <ResultTableHeader label="Pace" ResultPropSelector={result => result.pretty_average_pace} filterValue={result => parseDuration(result.pretty_average_pace)} filterMenuContentsComponent={<FilterComparisons label="Pace" kind="pace" unit="/500 m" placeholder="2:05.0" />} />
+                                    <ResultTableHeader label="Avg SPM" ResultPropSelector={result => result.stroke_rate} filterMenuContentsComponent={<FilterComparisons label="Avg SPM" unit="spm" placeholder="24" />} />
+                                    <ResultTableHeader label="Calories" ResultPropSelector={result => result.calories_total} filterMenuContentsComponent={<FilterComparisons label="Calories" unit="kcal" placeholder="200" />} />
+                                    <ResultTableHeader label="Avg HR" ResultPropSelector={result => result.heart_rate?.average} filterMenuContentsComponent={<FilterComparisons label="Avg HR" unit="bpm" placeholder="145" />} />
+                                    <th scope="col">Link</th>
                                 </tr>
                             </SortCallbackContext.Provider>
                         </thead>
                         <tbody>
+                            {resultsToDisplay?.length === 0 && (
+                                <tr><td colSpan={9}>No workouts to display.</td></tr>
+                            )}
                             {resultsToDisplay?.map((result) => (
                                 <Result key={result.id}
                                     date={result.date}
@@ -89,6 +89,7 @@ function ResultsTable() {
                             ))}
                         </tbody>
                     </table>
+                    </div>
                 </FilterCallbackContext.Provider>
             </>}
      </div>
@@ -133,44 +134,6 @@ function ResultsTable() {
         return results.meta.pagination;
     }
 
-    function TimeToDeciseconds(time) {
-        if (time === undefined) return undefined;
-
-        var split = FormatTime(time).split(":");
-        
-        return (split.length > 2 ? split[split.length - 3] * 36000 : 0)
-            + split[split.length - 2] * 600 + split[split.length - 1] * 10;
-    }
-
-    function FormatTime(input) {
-        if (!input.includes(":")) input += ":00";
-        if (!input.includes(".")) input += ".0";
-        return input;
-    }
-
-    function FormatPace(input) {
-        if (input === undefined || input === "") return undefined;
-        if (!input.includes(":")) input += ":00";
-        if (input.charAt(1) === ":") input = "0" + input;
-        if (!input.includes(".")) input += ".0";
-        return input;
-    }
-
-    function FormatDate(input)
-    {
-        if (input === undefined) return undefined;
-        return new Date(input);
-    }
-
-    function DatesEqual(a, b) {
-        return a.getFullYear() === b.getFullYear() &&
-			a.getMonth() === b.getMonth() &&
-			a.getDate() === b.getDate();
-    }
-    function FormatNumeric(input) {
-        if (input === undefined) return input;
-        else return + input
-    }
     function GetUniqueWorkoutTypes(results) {
         var map = results?.map(result => result.pretty_workout_type).reduce(function (accumulator, currentValue) {
             accumulator[currentValue] = (accumulator[currentValue] || 0) + 1;

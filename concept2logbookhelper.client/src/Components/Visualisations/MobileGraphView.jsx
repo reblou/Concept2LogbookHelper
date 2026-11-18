@@ -1,20 +1,21 @@
-import { useLocation } from 'react-router-dom'
-import ResultGraph from './ResultGraph.jsx'
+import { Link, useLocation } from 'react-router-dom';
+import ResultGraph from './ResultGraph.jsx';
 
 function MobileGraphView() {
-	const { state } = useLocation()
-	const { results } = state
+    const { state } = useLocation();
+    const results = state?.results;
 
-	const display = (
-			results == undefined ? <p>No Results to display</p> :
-				<ResultGraph resultsInView={results} />
-	)
-
-	return (
-		<div style={{width:"150%", height:600, overflowX:"scroll", overflowY:"hidden", display: "block", flexShrink:0, flexFlow: "Flex-start"}}>
-			{display}
-		</div>
-  );
+    return (
+        <main>
+            <Link to="/logbook">Back to Logbook</Link>
+            <h1 className="logTitle">Results</h1>
+            <div className="graph-panel">
+                {results?.length ? (
+                    <div className="graph-canvas"><ResultGraph resultsInView={results} /></div>
+                ) : <p>No results to display.</p>}
+            </div>
+        </main>
+    );
 }
 
 export default MobileGraphView;

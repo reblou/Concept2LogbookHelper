@@ -1,42 +1,23 @@
 .ActiveFilters {
     display: flex;
-    flex-flow: row wrap;
+    flex-wrap: wrap;
     align-items: center;
-    align-content: space-between;
+    gap: .5rem;
+    margin-top: 1rem;
 }
-
-.ActiveFilters > p {
-    font-weight: bold;
-    margin: 2px;
-    padding: 0.4em .6em;
-}
-
+.ActiveFilters > p { margin: 0; color: var(--muted); font-weight: 650; }
 .Filter {
-    border: 2px solid var(--highlight);
-    border-radius: 8px;
-    height: fit-content;
-    margin: 2px;
-    padding: 0.4em .6em;
-    aspect-ratio: unset;
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: .2rem .3rem .2rem .7rem;
+    font-size: .85rem;
 }
-
-.Filter > p {
-    height: min-content;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-}
-
-.x {
-    cursor: pointer;
-    margin: 0 0 0 .25em;
-    font-weight: bold;
-}
-
-.x:hover {
-    color: var(--highlight)
-}
-
-.ClearButton {
-    margin: 0 0 0 10px;
+.x, .ClearButton {
+    color: var(--accent);
+    background: transparent;
+    padding: .25rem .5rem;
 }

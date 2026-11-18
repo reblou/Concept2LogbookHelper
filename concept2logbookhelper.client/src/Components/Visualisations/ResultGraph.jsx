@@ -1,6 +1,5 @@
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import "../../css/ResultGraph.css";
-import { useState, useEffect } from 'react';
 import moment from 'moment';
 
 function formatPace(averagePace) {
@@ -15,7 +14,7 @@ function formatPace(averagePace) {
 }
 
 function ResultGraph({ resultsInView }) {
-    const CustomTooltip = ({ active, payload, label }) => {
+    const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             let result = payload[0].payload;
 
@@ -33,12 +32,12 @@ function ResultGraph({ resultsInView }) {
     };
 
     const renderLineChart = (
-        <ResponsiveContainer className="ResultContainer" width="100%" height="100%" minHeight={200} minWidth={300} >
+        <ResponsiveContainer className="ResultContainer" width="100%" height="100%" >
 			<LineChart className="ResultLineGraph" data={resultsInView}>
-				<Line className="ResultLine" type="monotone" dataKey="average_pace" stroke="var(--highlight)" />
-                <CartesianGrid stroke="light-dark(#ccc, #d6d6d6)" opacity="0.6" />
-                <XAxis className="ResultAxis" dataKey="date" reversed={true} tickFormatter={d => moment(d).format('YYYY-MM-DD')} angle={-45} tickCount={50} textAnchor={'end'} height={70} stroke={"light-dark(#10151B, #ffffff)"} />
-                <YAxis className="ResultAxis" tickFormatter={formatPace} scale={"auto"} allowDataOverflow={true} domain={['dataMin-5', 'dataMax+5']} interval={0} tickCount={10} stroke={"light-dark(#10151B, #ffffff)"} />
+				<Line className="ResultLine" type="monotone" dataKey="average_pace" stroke="var(--accent)" strokeWidth={2} />
+                <CartesianGrid stroke="var(--line)" vertical={false} />
+                <XAxis className="ResultAxis" dataKey="date" reversed={true} tickFormatter={d => moment(d).format('YYYY-MM-DD')} angle={-45} tickCount={50} textAnchor={'end'} height={75} stroke="var(--muted)" />
+                <YAxis className="ResultAxis" tickFormatter={formatPace} scale={"auto"} allowDataOverflow={true} domain={['dataMin-5', 'dataMax+5']} interval={0} tickCount={10} stroke="var(--muted)" />
 				<Tooltip content={<CustomTooltip />} />
 			</LineChart>
         </ResponsiveContainer>
