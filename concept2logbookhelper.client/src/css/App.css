@@ -44,7 +44,13 @@
     color: var(--muted);
 }
 
-.login-intro button { margin-top: 1.5rem; }
+.login-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem 1rem;
+    margin-top: 1.5rem;
+}
 .login-note { font-size: .875rem; }
 
 .login-example {

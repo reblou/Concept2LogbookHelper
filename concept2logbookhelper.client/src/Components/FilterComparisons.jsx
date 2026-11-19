@@ -60,7 +60,8 @@ function FilterComparisons({ label, kind = 'number', unit, placeholder }) {
             '2': [value => value <= lower, `${comparisons[kind][2]} ${first}`],
             '3': [value => value >= lower && value <= upper, isRange ? `Between ${first} and ${format(upper, maximum)}` : ''],
         }[comparison];
-        applyFilter(value => value != null && condition(value), `${label} · ${description}`);
+        const dateRange = isDate && isRange ? { from: lower, to: upper } : undefined;
+        applyFilter(value => value != null && condition(value), `${label} · ${description}`, dateRange);
     }
 
     function applyDateShortcut(shortcut, startOfYear) {
@@ -70,7 +71,7 @@ function FilterComparisons({ label, kind = 'number', unit, placeholder }) {
         else start.setDate(start.getDate() - 29);
         const from = dateKey(start);
         const to = dateKey(today);
-        applyFilter(value => value >= from && value <= to, `Date · ${shortcut}`);
+        applyFilter(value => value >= from && value <= to, `Date · ${shortcut}`, { from, to });
     }
 
     function renderInput(field, fieldLabel, value, setValue) {

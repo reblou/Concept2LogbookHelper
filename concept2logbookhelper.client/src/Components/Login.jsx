@@ -1,11 +1,9 @@
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import ResultGraph from './Visualisations/ResultGraph.jsx'
+import { exampleWorkouts } from './exampleWorkouts.js'
 
-const exampleWorkouts = [
-    { date: '2026-11-17', time_formatted: '10:25', average_pace: 125, pretty_average_pace: '2:05.0' },
-    { date: '2026-11-10', time_formatted: '10:35', average_pace: 127, pretty_average_pace: '2:07.0' },
-    { date: '2026-11-03', time_formatted: '10:50', average_pace: 130, pretty_average_pace: '2:10.0' },
-].map(workout => ({ ...workout, pretty_workout_type: 'Fixed distance', total_distance: 2500 }));
+const comparisonWorkouts = exampleWorkouts.filter(workout => workout.distance === 2500);
+const shortDate = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' });
 
 function Login() {
     const navigate = useNavigate();
@@ -20,7 +18,10 @@ function Login() {
               <section className="login-intro">
                   <h1>Compare your Concept2 workouts</h1>
                   <p>Find similar sessions in your logbook and see how your pace has changed over time.</p>
-                  <button onClick={Login}>Sign in with Concept2</button>
+                  <div className="login-actions">
+                      <button onClick={Login}>Sign in with Concept2</button>
+                      <Link to="/example">Try an example</Link>
+                  </div>
                   <p className="login-note">Sign in on Concept2 to give Logbook Helper access to your workout history.</p>
               </section>
               <section className="login-example" aria-labelledby="login-example-title">
@@ -36,9 +37,9 @@ function Login() {
                           </tr>
                       </thead>
                       <tbody>
-                          {exampleWorkouts.map(workout => (
-                              <tr key={workout.date}>
-                                  <td>{Number(workout.date.slice(-2))} Nov</td>
+                          {comparisonWorkouts.map(workout => (
+                              <tr key={workout.id}>
+                                  <td>{shortDate.format(workout.date)}</td>
                                   <td>{workout.time_formatted}</td>
                                   <td>{workout.pretty_average_pace}</td>
                               </tr>
@@ -48,7 +49,7 @@ function Login() {
                   <figure className="login-graph">
                       <figcaption>Average pace per 500 m over time</figcaption>
                       <div className="login-graph-chart">
-                          <ResultGraph resultsInView={exampleWorkouts} compact />
+                          <ResultGraph resultsInView={comparisonWorkouts} compact />
                       </div>
                   </figure>
                   <p className="login-note">You can also filter by date, time, pace, stroke rate, calories and heart rate.</p>

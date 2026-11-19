@@ -3,16 +3,14 @@ import MobileWarning from "./MobileWarning";
 import ActiveFiltersBar from "./ActiveFiltersBar";
 import MovablePopup from "./MovablePopup.jsx";
 import ResultGraph from "./Visualisations/ResultGraph.jsx";
+import WorkoutSummary from "./WorkoutSummary.jsx";
 import { useState } from "react";
 import '../css/ResultTableTopMenu.css';
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
 
-function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap, sortFunction, applyFilters }) {
+function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap, sortFunction, applyFilters, example }) {
     const [isGraphOpen, setIsGraphOpen] = useState(false);
-    const maxHR = Math.max(
-        fullResults?.map(result => result.heart_rate?.max ?? 0)
-            ?.reduce((a, b) => Math.max(a, b), 0)) || 'N/A';
     const navigate = useNavigate();
     const isTouchScreenDevice = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0));
 
@@ -20,19 +18,18 @@ function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap,
         <div className='results-table-topmenu'>
             <MobileWarning />    
             <div className='topmenu-infobar'>
-                {!loading ? <Loading /> : (
-                    <dl className="workout-summary">
-                        <div><dt>Total workouts</dt><dd>{fullResults?.length.toLocaleString()}</dd></div>
-                        <div><dt>Total meters</dt><dd>{fullResults?.reduce((total, result) => total + result.total_distance, 0).toLocaleString()} m</dd></div>
-                        <div><dt>Max HR</dt><dd>{maxHR}</dd></div>
-                    </dl>
+                {!loading || !displayedResults ? <Loading /> : (
+                    <WorkoutSummary results={displayedResults} totalCount={fullResults.length}
+                        filtered={filterMap.size > 0} dateRange={filterMap.get('Date')?.dateRange} />
                 )}
-                <div className="table-actions">
-                    <button onClick={OpenGraph}>View Graph</button>
-                    <button className="secondary-button" onClick={Export}>Export CSV</button>
+                <div className="table-toolbar">
+                    <ActiveFiltersBar filterMap={filterMap} sortFunction={sortFunction} applyFilters={applyFilters} />
+                    <div className="table-actions">
+                        <button onClick={OpenGraph}>View Graph</button>
+                        <button className="secondary-button" onClick={Export}>Export CSV</button>
+                    </div>
                 </div>
-			</div>
-				<ActiveFiltersBar filterMap={filterMap} sortFunction={sortFunction} applyFilters={applyFilters} />
+            </div>
             <MovablePopup isOpen={isGraphOpen} onClose={() => setIsGraphOpen(false)} title={"Results"}>
                 {displayedResults?.length ? (
                     <ResultGraph resultsInView={displayedResults} />
@@ -43,7 +40,7 @@ function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap,
 
     function OpenGraph() {
         if (isTouchScreenDevice) {
-            navigate("/graph", { state: { results: displayedResults } } );
+            navigate(example ? "/example/graph" : "/graph", { state: { results: displayedResults } });
         } else {
             setIsGraphOpen(true);
         }
@@ -62,7 +59,7 @@ function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap,
         const url = URL.createObjectURL(blob);
 
         link.setAttribute('href', url);
-        link.setAttribute('download', 'workout_data.csv'); // Set your desired filename
+        link.setAttribute('download', example ? 'example_workouts.csv' : 'workout_data.csv');
         link.style.visibility = 'hidden';
 
         // Append to body, click, and cleanup

@@ -1,34 +1,50 @@
 .topmenu-infobar {
     display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: end;
     gap: 1rem;
 }
 
 .workout-summary {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1.25fr) repeat(2, minmax(0, 1fr));
     gap: .75rem;
-    margin: 0;
 }
-.workout-summary > div {
+.summary-group {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 12px;
     padding: clamp(.65rem, 2vw, 1.15rem);
+    min-width: 0;
 }
+.summary-group h2 { margin: 0 0 .65rem; font-size: 1rem; }
+.summary-group dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.75rem), 1fr));
+    gap: .65rem;
+    margin: 0;
+}
+.summary-heart-rate h2 { color: var(--accent); }
+.summary-heart-rate p { margin: .65rem 0 0; color: var(--muted); font-size: .82rem; }
 .workout-summary dt { color: var(--muted); font-size: .82rem; font-weight: 650; }
 .workout-summary dd {
     margin: .15rem 0 0;
-    font-size: clamp(1rem, 2.5vw, 1.7rem);
+    font-size: clamp(1.15rem, 2vw, 1.6rem);
     font-weight: 750;
     font-variant-numeric: tabular-nums;
     overflow-wrap: anywhere;
 }
-.table-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.workout-summary dd small { font-size: .8rem; font-weight: 600; color: var(--muted); }
+.workout-summary .summary-compact-time { white-space: nowrap; }
+.table-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem 1rem;
+}
+.table-toolbar > .ActiveFilters { flex: 1 1 16rem; min-width: 0; margin: 0; }
+.table-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-inline-start: auto; }
 .mobilemessagediv { display: none; }
-@media (max-width: 850px) {
-    .topmenu-infobar { grid-template-columns: 1fr; }
+@media (max-width: 650px) {
+    .workout-summary { grid-template-columns: 1fr; }
 }
 @media (max-width: 1050px) {
     .mobilemessagediv { display: block; color: var(--muted); font-size: .85rem; }

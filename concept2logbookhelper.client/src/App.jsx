@@ -9,9 +9,11 @@ function App() {
     return (
         <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="/logbook" element={<Logbook />} />
+            <Route path="/logbook" element={<Logbook key="personal" />} />
+            <Route path="/example" element={<Logbook key="example" example />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/graph" element={<MobileGraphView/>}/>
+            <Route path="/example/graph" element={<MobileGraphView example />} />
         </Routes>
     );
 }

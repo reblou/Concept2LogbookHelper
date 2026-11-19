@@ -23,9 +23,9 @@ function ResultTableHeader({ label, filterMenuContentsComponent, ResultPropSelec
         menu.style.maxHeight = `${Math.max(0, Math.min(410, (openAbove ? bounds.top : spaceBelow) - 18))}px`;
     }
 
-    function applyFilter(condition, description) {
+    function applyFilter(condition, description, dateRange) {
         menuRef.current.hidePopover();
-        filterResults(filterValue, condition, label, description);
+        filterResults(filterValue, condition, label, description, dateRange);
     }
 
     return (
