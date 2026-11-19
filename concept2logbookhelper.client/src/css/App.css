@@ -13,31 +13,112 @@
 }
 .brand img { width: 28px; height: 28px; }
 
-.login-card {
-    margin: clamp(1rem, 9vh, 7rem) auto;
-    max-width: 850px;
-    overflow: hidden;
-    border-radius: 24px;
+.login-page {
+    max-width: 960px;
+    margin-inline: auto;
+}
+
+.login-page > header {
+    display: flex;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.login-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(1.5rem, 6vw, 4rem);
+    margin-block: clamp(2rem, 8vh, 5rem);
+}
+
+.login-intro h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    line-height: 1.12;
+    letter-spacing: -.025em;
+}
+
+.login-content p {
+    margin: .75rem 0 0;
+    color: var(--muted);
+}
+
+.login-intro button { margin-top: 1.5rem; }
+.login-note { font-size: .875rem; }
+
+.login-example {
+    padding: clamp(1rem, 3vw, 1.5rem);
     border: 1px solid var(--line);
+    border-radius: 8px;
     background: var(--surface);
-    box-shadow: var(--shadow);
 }
-.login-hero {
-    padding: clamp(1.5rem, 6vw, 4.5rem);
-    background: radial-gradient(ellipse at top right, #176357, transparent 65%), #132837;
-    color: #f1fbfa;
+
+.login-example h2 {
+    margin: 0;
+    font-size: 1.125rem;
 }
-.login-hero h1 {
-    margin: 1.5rem 0 0;
-    max-width: 12ch;
-    font-size: clamp(2.6rem, 7vw, 5.5rem);
-    line-height: .98;
-    letter-spacing: -.055em;
+
+.login-example table {
+    width: 100%;
+    margin-top: 1rem;
+    border-collapse: collapse;
+    font-size: .875rem;
+    font-variant-numeric: tabular-nums;
 }
-.login-body { padding: clamp(1.5rem, 6vw, 4.5rem); }
-.login-body h2 { margin: 0; }
-.login-body p { max-width: 61ch; color: var(--muted); }
-.login-body button { margin-top: .75rem; }
+
+.login-example caption {
+    padding-bottom: .375rem;
+    color: var(--muted);
+    text-align: left;
+}
+
+.login-example th,
+.login-example td {
+    padding: .5rem clamp(.25rem, 1vw, .5rem);
+    border-bottom: 1px solid var(--line);
+    text-align: right;
+}
+
+.login-example tr > :first-child { text-align: left; }
+.login-example thead { background: var(--subtle); }
+
+.login-graph {
+    margin: 1.25rem 0 0;
+}
+
+.login-graph figcaption {
+    font-size: .875rem;
+    font-weight: 650;
+}
+
+.login-graph-chart {
+    height: 190px;
+    font-size: .75rem;
+}
+
+.login-details {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 6vw, 4rem);
+    border-top: 1px solid var(--line);
+    padding-block: 1.5rem;
+}
+
+.login-details h2 {
+    margin: 0;
+    font-size: 1.125rem;
+}
+
+.login-details p {
+    margin: .75rem 0 0;
+    color: var(--muted);
+}
+
+@media (max-width: 700px) {
+    .login-content,
+    .login-details { grid-template-columns: 1fr; }
+}
 
 .secondary-button {
     color: var(--ink);

@@ -13,14 +13,14 @@ function formatPace(averagePace) {
     return `${formattedMinutes}:${formattedSeconds}.${tenths}`;
 }
 
-function ResultGraph({ resultsInView }) {
+function ResultGraph({ resultsInView, compact = false }) {
     const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             let result = payload[0].payload;
 
             return (
                 <div className="custom-tooltip">
-                    <p className="label">{`${moment(result.date).format('YYYY-MM-DD HH:mm')} - ${result.pretty_workout_type}`}</p>
+                    <p className="label">{`${moment(result.date).format(compact ? 'D MMM' : 'YYYY-MM-DD HH:mm')} - ${result.pretty_workout_type}`}</p>
                     <p className="pace">{`Pace: ${result.pretty_average_pace}`}</p>
                     <p className="time">{`Time: ${result.time_formatted}`}</p>
                     <p className="distance">{`Distance: ${result.total_distance}m`}</p>
@@ -36,8 +36,8 @@ function ResultGraph({ resultsInView }) {
 			<LineChart className="ResultLineGraph" data={resultsInView}>
 				<Line className="ResultLine" type="monotone" dataKey="average_pace" stroke="var(--accent)" strokeWidth={2} />
                 <CartesianGrid stroke="var(--line)" vertical={false} />
-                <XAxis className="ResultAxis" dataKey="date" reversed={true} tickFormatter={d => moment(d).format('YYYY-MM-DD')} angle={-45} tickCount={50} textAnchor={'end'} height={75} stroke="var(--muted)" />
-                <YAxis className="ResultAxis" tickFormatter={formatPace} scale={"auto"} allowDataOverflow={true} domain={['dataMin-5', 'dataMax+5']} interval={0} tickCount={10} stroke="var(--muted)" />
+                <XAxis className="ResultAxis" dataKey="date" reversed={true} tickFormatter={d => moment(d).format(compact ? 'D MMM' : 'YYYY-MM-DD')} angle={compact ? 0 : -45} tickCount={50} textAnchor={compact ? 'middle' : 'end'} height={compact ? 30 : 75} stroke="var(--muted)" padding={compact ? { left: 22, right: 22 } : undefined} />
+                <YAxis className="ResultAxis" tickFormatter={formatPace} scale={"auto"} allowDataOverflow={true} domain={['dataMin-5', 'dataMax+5']} interval={0} tickCount={compact ? 4 : 10} stroke="var(--muted)" />
 				<Tooltip content={<CustomTooltip />} />
 			</LineChart>
         </ResponsiveContainer>
