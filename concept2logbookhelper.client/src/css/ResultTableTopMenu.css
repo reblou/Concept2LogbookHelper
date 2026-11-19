@@ -22,7 +22,6 @@
     gap: .65rem;
     margin: 0;
 }
-.summary-heart-rate h2 { color: var(--accent); }
 .summary-heart-rate p { margin: .65rem 0 0; color: var(--muted); font-size: .82rem; }
 .workout-summary dt { color: var(--muted); font-size: .82rem; font-weight: 650; }
 .workout-summary dd {
