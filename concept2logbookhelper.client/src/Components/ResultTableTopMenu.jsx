@@ -4,13 +4,16 @@ import ActiveFiltersBar from "./ActiveFiltersBar";
 import MovablePopup from "./MovablePopup.jsx";
 import ResultGraph from "./Visualisations/ResultGraph.jsx";
 import WorkoutSummary from "./WorkoutSummary.jsx";
-import { useState } from "react";
+import HeartRateZones from "./HeartRateZones.jsx";
+import { useId, useState } from "react";
 import '../css/ResultTableTopMenu.css';
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
 
 function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap, sortFunction, applyFilters, example }) {
     const [isGraphOpen, setIsGraphOpen] = useState(false);
+    const [zonesOpen, setZonesOpen] = useState(false);
+    const zonesId = useId();
     const navigate = useNavigate();
     const isTouchScreenDevice = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0));
 
@@ -20,7 +23,13 @@ function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap,
             <div className='topmenu-infobar'>
                 {!loading || !displayedResults ? <Loading /> : (
                     <WorkoutSummary results={displayedResults} totalCount={fullResults.length}
-                        filtered={filterMap.size > 0} dateRange={filterMap.get('Date')?.dateRange} />
+                        filtered={filterMap.size > 0} dateRange={filterMap.get('Date')?.dateRange}
+                        zoneToggle={!example && (
+                            <button type="button" className="secondary-button zone-toggle" aria-expanded={zonesOpen}
+                                aria-controls={zonesId} onClick={() => setZonesOpen(open => !open)}>
+                                Time in HR zones
+                            </button>
+                        )} />
                 )}
                 <div className="table-toolbar">
                     <ActiveFiltersBar filterMap={filterMap} sortFunction={sortFunction} applyFilters={applyFilters} />
@@ -29,6 +38,7 @@ function ResultTableTopMenu({ fullResults, displayedResults, loading, filterMap,
                         <button className="secondary-button" onClick={Export}>Export CSV</button>
                     </div>
                 </div>
+                {!example && <HeartRateZones id={zonesId} open={zonesOpen} results={displayedResults} />}
             </div>
             <MovablePopup isOpen={isGraphOpen} onClose={() => setIsGraphOpen(false)} title={"Results"}>
                 {displayedResults?.length ? (

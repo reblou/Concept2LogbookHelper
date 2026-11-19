@@ -11,7 +11,7 @@ function Login() {
   return (
       <main className="login-page">
           <header className="brand">
-              <img src="/assets/icon.svg" alt="" />
+              <img src="/assets/logbook-icon.svg" alt="" />
               Logbook Helper
           </header>
           <div className="login-content">

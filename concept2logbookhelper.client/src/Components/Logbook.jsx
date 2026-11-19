@@ -9,7 +9,7 @@ function Logbook({ example = false }) {
     return (
         <main className="logbook-container">
             <header className="header">
-                <span className="brand"><img src="/assets/icon.svg" alt="" /> Logbook Helper</span>
+                <span className="brand"><img src="/assets/logbook-icon.svg" alt="" /> Logbook Helper</span>
                 {example ? <Link to="/">Back to home</Link> : (
                     <button className="secondary-button" onClick={LogOut}>Log Out</button>
                 )}

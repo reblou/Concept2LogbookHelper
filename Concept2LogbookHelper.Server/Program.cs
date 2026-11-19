@@ -18,6 +18,7 @@ internal class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddHttpClient();
+        builder.Services.AddMemoryCache();
 
         IConfiguration configuration = builder.Configuration;
         builder.Services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));

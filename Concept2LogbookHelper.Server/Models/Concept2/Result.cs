@@ -29,7 +29,7 @@
         public bool ranked { get; set; }
         public string comments { get; set; }
         public string privacy { get; set; }
-        public bool stroke_data { get; set; }
+        public bool? stroke_data { get; set; }
         public int calories_total { get; set; }
         public int drag_factor { get; set; }
         public int stroke_count { get; set; }

@@ -1,11 +1,4 @@
-function formatDuration(deciseconds, precision = 0) {
-    const scale = 10 ** precision;
-    const totalSeconds = Math.round(deciseconds / 10 * scale) / scale;
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor(totalSeconds / 60) % 60;
-    const seconds = (totalSeconds % 60).toFixed(precision).padStart(precision ? 4 : 2, '0');
-    return hours ? `${hours}:${String(minutes).padStart(2, '0')}:${seconds}` : `${minutes}:${seconds}`;
-}
+import { formatDuration } from './formatDuration.js';
 
 const dayMs = 86_400_000;
 const wholeNumber = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
@@ -29,7 +22,7 @@ function HoursAndMinutes({ deciseconds }) {
     );
 }
 
-function WorkoutSummary({ results, totalCount, filtered, dateRange }) {
+function WorkoutSummary({ results, totalCount, filtered, dateRange, zoneToggle }) {
     const count = results.length;
     const countLabel = wholeNumber.format(count);
     const first = results[0];
@@ -102,6 +95,7 @@ function WorkoutSummary({ results, totalCount, filtered, dateRange }) {
                     <div><dt>Highest HR</dt><dd>{maxHr ? <>{wholeNumber.format(maxHr)} <small>bpm</small></> : '—'}</dd></div>
                 </dl>
                 <p>{wholeNumber.format(averageHrCount)} of {countLabel} workouts with average HR</p>
+                {zoneToggle}
             </section>
         </div>
     );
