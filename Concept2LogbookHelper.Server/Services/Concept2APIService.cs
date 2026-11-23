@@ -14,7 +14,7 @@ using System.Net.Http.Headers;
 
 namespace Concept2LogbookHelper.Server.Services
 {
-    public class Concept2APIService : IConcept2APIService
+    public partial class Concept2APIService : IConcept2APIService
     {
         // Concept2 API limit on paged results
         const int max_returned_per_page = 250;
@@ -29,12 +29,14 @@ namespace Concept2LogbookHelper.Server.Services
             HttpClient httpClient,
             IOptions<AuthenticationOptions> authOptions,
             ISessionService authenticationService,
-            ILogger<Concept2APIService> logger)
+            ILogger<Concept2APIService> logger,
+            Microsoft.Extensions.Caching.Memory.IMemoryCache cache)
         {
             this._httpClient = httpClient;
             this._auth = authOptions.Value;
             _sessionService = authenticationService;
             this.logger = logger;
+            _zoneCache = cache;
         }
 
         private async Task<string> GetAccessToken(string sessionId)

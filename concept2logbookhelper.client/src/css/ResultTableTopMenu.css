@@ -1,40 +1,50 @@
-.results-table-topmenu {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-
 .topmenu-infobar {
-    width: 100%;
+    display: grid;
+    gap: 1rem;
+}
+
+.workout-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+}
+.summary-group {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: clamp(.65rem, 2vw, 1.15rem);
+    min-width: 0;
+}
+.summary-group h2 { margin: 0 0 .65rem; font-size: 1rem; }
+.summary-group dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.75rem), 1fr));
+    gap: .65rem;
+    margin: 0;
+}
+.summary-heart-rate p { margin: .65rem 0 0; color: var(--muted); font-size: .82rem; }
+.workout-summary dt { color: var(--muted); font-size: .82rem; font-weight: 650; }
+.workout-summary dd {
+    margin: .15rem 0 0;
+    font-size: clamp(1.15rem, 2vw, 1.6rem);
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+.workout-summary dd small { font-size: .8rem; font-weight: 600; color: var(--muted); }
+.workout-summary .summary-compact-time { white-space: nowrap; }
+.table-toolbar {
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 1em;
+    gap: .75rem 1rem;
 }
-
-.mobilemessagediv {
-    display: none;
-    background-color: var(--highlight);
-    width: 100%;
-    border-radius: 8px;
-    padding: 2px;
+.table-toolbar > .ActiveFilters { flex: 1 1 16rem; min-width: 0; margin: 0; }
+.table-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-inline-start: auto; }
+.mobilemessagediv { display: none; }
+@media (max-width: 650px) {
+    .workout-summary { grid-template-columns: 1fr; }
 }
-
-@media screen and (max-width:480px) {
-    .mobilemessagediv {
-        display: block;
-    }
-
-    .results-table-topmenu {
-        display: flex;
-        justify-content: flex-start;
-        flex-direction: column;
-        align-self: flex-start;
-        align-items: center;
-    }
-
+@media (max-width: 1050px) {
+    .mobilemessagediv { display: block; color: var(--muted); font-size: .85rem; }
 }

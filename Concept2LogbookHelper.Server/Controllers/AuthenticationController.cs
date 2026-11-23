@@ -66,6 +66,7 @@ namespace Concept2LogbookHelper.Server.Controllers
             Response.Headers.Append("Set-Cookie", $"session-id=\"\"; Secure; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/api");
 
             await _sessionService.LogOutAsync(sessionId);
+            _concept2APIService.ClearHeartRateZones(sessionId);
 
             return Ok();
         }

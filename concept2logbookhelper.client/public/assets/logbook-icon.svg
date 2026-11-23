@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <circle cx="32" cy="32" r="31.25" fill="#086759"/>
+  <!-- Segoe UI Bold outlines keep the lettering consistent across browsers. -->
+  <path fill="#fff" d="M13 20.1h5.4v19.4h8.8v4.4H13z
+    M30.4 20.1h5.3v9.5h9.9v-9.5H51v23.8h-5.4v-9.7h-9.9v9.7h-5.3z"/>
+</svg>

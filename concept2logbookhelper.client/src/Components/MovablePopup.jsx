@@ -2,11 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import "../css/MovablePopup.css";
 
 function MovablePopup({ title = 'Popup Window', isOpen = false, onClose, children}) {
-    const defaultSize = { width: 800, height: 500 };
-    const defaultPos = { x: 800, y: 300 }
-    const [position, setPosition] = useState({ x: defaultPos.x, y: defaultPos.y });
+    const [position, setPosition] = useState({ x: 16, y: 16 });
     const [isDragging, setIsDragging] = useState(false);
-    const [size, setSize] = useState({ width: defaultSize.width, height: defaultSize.height });
+    const [size, setSize] = useState({ width: 800, height: 500 });
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [isResizing, setIsResizing] = useState(false);
 
@@ -57,8 +55,11 @@ function MovablePopup({ title = 'Popup Window', isOpen = false, onClose, childre
     }, [isDragging, isResizing, position]);
 
     useEffect(() => {
-        setSize({ width: defaultSize.width, height: defaultSize.height });
-        setPosition({ x: defaultPos.x, y: defaultPos.y });
+        if (!isOpen) return;
+        const width = Math.min(800, window.innerWidth - 32);
+        const height = Math.min(500, window.innerHeight - 32);
+        setSize({ width, height });
+        setPosition({ x: (window.innerWidth - width) / 2, y: (window.innerHeight - height) / 2 });
     }, [isOpen]);
 
     if (!isOpen) return null;
@@ -74,13 +75,13 @@ function MovablePopup({ title = 'Popup Window', isOpen = false, onClose, childre
                 }}
 			>
                 <div className="popup-header" onMouseDown={handleMouseDown}>
-                <h2 onMouseDown={handleMouseDown}>{title}</h2>
-                    <button onClick={onClose} className="popup-close-btn">
-                        X
+                <h2>{title}</h2>
+                    <button onClick={onClose} onMouseDown={event => event.stopPropagation()} className="popup-close-btn" aria-label="Close graph">
+                        ×
                     </button>
                 </div>
 
-				{children}
+                <div className="popup-content">{children}</div>
 				<div className="resize" onMouseDown={startResizing} /> 
 
             </div>
